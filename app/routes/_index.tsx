@@ -1,4 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
+import { MetaFunction } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import MasterPage from "~/components/master-page/MasterPage";
+import { routes } from "~/components/navigation/navigationItems";
 
 export const meta: MetaFunction = () => {
   return [
@@ -8,34 +11,20 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
+
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
-    </div>
+    <MasterPage>
+      <MasterPage.ContentDefault>
+        <div className="box-border flex flex-wrap justify-around gap-2">
+          {
+            Object.entries(routes).map(([item, value]) => (
+              <div key={item} className="flex-shrink-0 inline-block p-2 text-white bg-blue-900 h-14">
+                <Link to={value}>{item}</Link>
+              </div>
+            ))
+          }
+        </div>
+      </MasterPage.ContentDefault>
+    </MasterPage>
   );
 }

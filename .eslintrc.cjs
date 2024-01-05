@@ -62,6 +62,9 @@ module.exports = {
           },
         },
       },
+      "rules": {
+       "import/no-unresolved": "off",
+     },
       extends: [
         "plugin:@typescript-eslint/recommended",
         "plugin:import/recommended",
