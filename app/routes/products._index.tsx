@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ComboBox, ComboBoxListType } from "~/components/combo-box/comboBox";
 import { DataTable } from "~/components/data-table/DataTable";
 import MasterPage from "~/components/master-page/MasterPage";
+import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
 interface Product {
@@ -143,15 +144,6 @@ const productsColumnsDefinition: ColumnDef<Product>[] = [
     accessorKey: "code",
     header: "Código",
   },
-
-  // {
-  //   accessorKey: "stock",
-  //   header: "Estoque",
-  // },
-  // {
-  //   accessorKey: "id",
-  //   header: "ID",
-  // },
 ]
 
 export const meta: MetaFunction = () => {
@@ -204,7 +196,7 @@ export default function Products() {
             <Label className="mb-2 text-sm font-semibold">Categoria:</Label>
             <ComboBox options={statuses} />
           </div>
-
+          <Button type="submit" className="h-10">Filtrar</Button>
         </div>
 
         <div className="border rounded-md">
