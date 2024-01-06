@@ -25,7 +25,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="bg-customBg h-screen">
+      <body className="h-screen bg-customBg">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
