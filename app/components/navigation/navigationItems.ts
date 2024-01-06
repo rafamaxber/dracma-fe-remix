@@ -18,7 +18,7 @@ export const routes = {
 };
 
 export const navigationItems = [
-  { id: 'dashboard', label: 'Dashboard', subItems: [], url: routes.dashboard },
+  { id: 'dashboard', label: 'Dashboard', url: routes.dashboard },
   {
     id: 'register',
     label: 'Cadastros',
@@ -33,10 +33,10 @@ export const navigationItems = [
       { label: "Outras receitas", url: routes.other_revenues },
     ]
   },
-  { id: 'sales', label: 'Vendas', subItems: [], url: routes.sales },
-  { id: 'purchases', label: 'Compras', subItems: [], url: routes.purchases },
-  { id: 'stock', label: 'Estoque', subItems: [], url: routes.stock },
-  { id: 'financial', label: 'Financeiro', subItems: [], url: routes.financial },
-  { id: 'reports', label: 'Relatórios', subItems: [], url: routes.reports },
-  { id: 'settings', label: 'Configurações', subItems: [], url: routes.settings },
+  { id: 'sales', label: 'Vendas', url: routes.sales },
+  { id: 'purchases', label: 'Compras', url: routes.purchases },
+  { id: 'stock', label: 'Estoque', url: routes.stock },
+  { id: 'financial', label: 'Financeiro', url: routes.financial },
+  { id: 'reports', label: 'Relatórios', url: routes.reports },
+  { id: 'settings', label: 'Configurações', url: routes.settings },
 ];

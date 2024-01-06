@@ -4,6 +4,7 @@ import { SideBarProps } from "./SideBarProps";
 import { routes } from "./navigationItems";
 import { useState } from "react";
 import { CommandBar } from "./CommandBar";
+import { Link } from "@remix-run/react";
 
 export function DesktopSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userName = 'John Doe', hasNewMessages = false }: SideBarProps = {}) {
   const [openedMenu, setOpenedMenu] = useState(true);
@@ -18,12 +19,12 @@ export function DesktopSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNa
 
         {openedMenu && (
           <div className="flex items-center avatar-container">
-            <a className="w-10 h-10 mr-2 avatar-icon" href={routes.profile}>
+            <Link className="w-10 h-10 mr-2 avatar-icon" to={routes.profile}>
               <img className="rounded-full" src={avatarUrl} alt={userName} />
-            </a>
+            </Link>
             <div className="avatar-name">
-              <a className="block text-ms text-ellipsis" href={routes.profile}>{userName}</a>
-              <a className="block text-xs underline text-cyan-600" href={routes.profile}>Ver perfil</a>
+              <Link className="block text-ms text-ellipsis" to={routes.profile}>{userName}</Link>
+              <Link className="block text-xs underline text-cyan-600" to={routes.profile}>Ver perfil</Link>
             </div>
           </div>
         )}
