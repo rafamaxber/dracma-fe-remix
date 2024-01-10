@@ -3,7 +3,7 @@ import { DesktopSideBar } from "../navigation/DesktopSideBar";
 
 function MasterPage({ children }: { children: React.ReactNode }) {
   return (
-    <main className="sm:flex">
+    <main className="lg:flex">
 
       <DesktopSideBar />
       <MobileSideBar />
@@ -25,5 +25,34 @@ function ContentDefault({ children }: { children: React.ReactNode }) {
 }
 ContentDefault.displayName = "ContentDefault";
 MasterPage.ContentDefault = ContentDefault;
+
+function ContentFull({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="w-full">
+      {children}
+    </div>
+  )
+}
+ContentFull.displayName = "ContentFull";
+MasterPage.ContentFull = ContentFull;
+
+function HeaderDefault({
+  title,
+  children
+}: {
+  title: string,
+  children?: React.ReactNode
+}) {
+  return (
+    <div className="flex items-center justify-between mb-4">
+      <h1 className="text-lg font-semibold sm:text-2xl">{title}</h1>
+      <div className="flex flex-row flex-wrap justify-end gap-3">
+        {children}
+      </div>
+    </div>
+  )
+}
+HeaderDefault.displayName = "HeaderDefault";
+MasterPage.HeaderDefault = HeaderDefault;
 
 export default MasterPage;

@@ -4,12 +4,14 @@ import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from ".
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  className?: string
 }
 
 // function DataTable({ columns, data, filterBar }) {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  className,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -18,7 +20,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <Table>
+    <Table className={className}>
       <TableHeader>
         <DataTable.TableHeader table={table} />
       </TableHeader>

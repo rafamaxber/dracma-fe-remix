@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { LuChevronDown } from "react-icons/lu";
+
 import { Button } from "~/components/ui/button"
 import {
   Command,
@@ -25,23 +27,51 @@ export type ComboBoxListType = {
   label: string
 }
 
-export function ComboBox({ label = "Selecionar", options = [], placeholderText = "Filtre por...", commandEmpty = "Nenhum resultado encontrado" }: { label?: string, options: ComboBoxListType[], placeholderText?: string, commandEmpty?: string }) {
+export function useComboBox<T extends ComboBoxListType>() {
+  const [selectedOption, setSelectedOption] = useState<T | null>(null)
+
+  return {
+    selectedOption,
+    setSelectedOption,
+  }
+}
+
+type ComboBoxProps = {
+  label?: string
+  options?: ComboBoxListType[]
+  name?: string
+  defaultValue?: string
+  placeholderText?: string
+  commandEmpty?: string
+  selectedOption: ComboBoxListType | null
+  setSelectedOption: (status: ComboBoxListType | null) => void
+}
+
+export function ComboBox({
+  label = "Selecionar",
+  name = "combo-box-field",
+  defaultValue = "",
+  options = [],
+  placeholderText = "Filtre por...",
+  commandEmpty = "Nenhum resultado encontrado",
+  selectedOption,
+  setSelectedOption,
+}: ComboBoxProps) {
   const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
-  const [selectedStatus, setSelectedStatus] = useState<ComboBoxListType | null>(
-    null
-  )
 
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="justify-start w-full">
-            {selectedStatus ? <>{selectedStatus.label}</> : <>{label}</>}
+          <Button variant="outline" className="justify-between w-full">
+            {selectedOption ? <>{selectedOption.label}</> : <>{label}</>}
+            <LuChevronDown className="ml-2" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
-          <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedStatus} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
+          <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
+          <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
         </PopoverContent>
       </Popover>
     )
@@ -50,13 +80,15 @@ export function ComboBox({ label = "Selecionar", options = [], placeholderText =
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline" className="justify-start w-full">
-          {selectedStatus ? <>{selectedStatus.label}</> : <>{label}</>}
+        <Button variant="outline" className="justify-between w-full">
+          {selectedOption ? <>{selectedOption.label}</> : <>{label}</>}
+          <LuChevronDown className="ml-2" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mt-4 border-t">
-          <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedStatus} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
+          <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
+          <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
         </div>
       </DrawerContent>
     </Drawer>
