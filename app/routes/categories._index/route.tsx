@@ -1,8 +1,9 @@
 import { Separator } from "@radix-ui/react-separator";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useFetcher, useLoaderData } from "@remix-run/react";
 import { ColumnDef } from "@tanstack/react-table";
-import { LuMoreVertical, LuPlusCircle } from "react-icons/lu";
+import { LuMoreVertical, LuPlusCircle, LuTrash2, LuPenSquare } from "react-icons/lu";
+
 import { DataTable } from "~/components/data-table/DataTable";
 import { FilterBar } from "~/components/filter-bar/FilterBar";
 import MasterPage from "~/components/master-page/MasterPage";
@@ -11,8 +12,10 @@ import { Button } from "~/components/ui/button";
 import { SearchForm } from "./SearchForm";
 import { Drawer, DrawerContent } from "~/components/ui/drawer";
 import { createContext, useContext, useState } from "react";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "~/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "~/components/ui/alert-dialog";
 import { AlertDialogHeader, AlertDialogFooter } from "~/components/ui/alert-dialog";
+import { useMediaQuery } from "~/components/hooks/useMediaQuery";
+import { DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenu } from "~/components/ui/dropdown-menu";
 
 export interface Category {
   category: string;
@@ -29,9 +32,29 @@ export interface QueryType extends PaginationType {
   q?: string;
 }
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  return null;
-};
+function deleteCategory({ id }: { id: string }) {
+  return new Response(JSON.stringify({
+    id,
+    message: 'Categoria excluída com sucesso!'
+  }), {
+    headers: {
+      "content-type": "application/json",
+    },
+    status: 201
+  })
+}
+
+export async function controller({ request }: LoaderFunctionArgs) {
+  const formData = await request.formData();
+  const id = formData.get("id");
+
+  if (String(request.method).toLocaleLowerCase() === "delete") {
+    return deleteCategory({ id: String(id) })
+  }
+}
+
+export const action = async ({ request, context, params }: ActionFunctionArgs) =>
+  controller({ request, context, params })
 
 function getData(): Category[] {
   return [
@@ -123,19 +146,47 @@ const productsColumnsDefinition: ColumnDef<Category>[] = [
     id: 'actions',
 
     cell: (props) => {
-      const { setSelectedItem, setOpenMenu } = useContext(DataTableContext);
+      const isDesktop = useMediaQuery("(min-width: 768px)")
+      const { setSelectedItem, setOpenMenu, setOpenDeleteDialog } = useContext(DataTableContext);
+      const { id } = props.row.original;
 
       function handleOpenMenu() {
-        setSelectedItem(props.row.original.id);
+        setSelectedItem(id);
         setOpenMenu(true)
       }
 
-      return (<div className="flex justify-end">
-        <Button variant="ghost" className="rounded-full" onClick={handleOpenMenu}>
-          <LuMoreVertical size="20" />
-        </Button>
-      </div>
-    )}
+      function handleDeleteDialog() {
+        setSelectedItem(id);
+        setOpenDeleteDialog(true)
+      }
+
+      // if (!isDesktop) {
+      //   return (
+      //     <div className="flex justify-end">
+      //       <Button variant="ghost" className="p-0 rounded-full w-7 h-7" onClick={handleOpenMenu}>
+      //         <LuMoreVertical size="20" />
+      //       </Button>
+      //     </div>
+      //   )
+      // }
+
+      // return (
+      //   <div className="flex justify-end gap-6">
+      //     <Button variant="destructive" onClick={handleDeleteDialog} className="p-0 rounded-full w-7 h-7">
+      //       <LuTrash2 />
+      //     </Button>
+      //     <Button asChild className="p-0 rounded-full w-7 h-7">
+      //       <Link to={`/categories/${id}/edit`}>
+      //         <LuPenSquare />
+      //       </Link>
+      //     </Button>
+      //   </div>
+      // )
+
+      return (
+        <DataTableDropdownMenu id={id} onDeleteDialog={handleDeleteDialog}/>
+      )
+    }
   }
 ]
 
@@ -185,6 +236,7 @@ function DataTableMenuProvider({ children }: { children: React.ReactNode }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [openDropdownMenu, setOpenDropdownMenu] = useState(false);
 
   function onDeleteAction() {
     setOpenDeleteDialog(false)
@@ -199,7 +251,18 @@ function DataTableMenuProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <DataTableContext.Provider value={{ selectedItem, setSelectedItem, openMenu, setOpenMenu, openDeleteDialog, setOpenDeleteDialog, onDeleteAction, onCancelDeleteAction }}>
+    <DataTableContext.Provider value={{
+      selectedItem,
+      setSelectedItem,
+      openMenu,
+      setOpenMenu,
+      openDeleteDialog,
+      setOpenDeleteDialog,
+      onDeleteAction,
+      onCancelDeleteAction,
+      openDropdownMenu,
+      setOpenDropdownMenu
+    }}>
       {children}
     </DataTableContext.Provider>
   )
@@ -233,7 +296,9 @@ function ConfirmDeleteDialog({
   title?: string,
   description?: string,
 }) {
-  const { openDeleteDialog, setOpenDeleteDialog, onDeleteAction, onCancelDeleteAction } = useContext(DataTableContext);
+  const fetcher = useFetcher();
+
+  const { selectedItem, openDeleteDialog, setOpenDeleteDialog, onDeleteAction, onCancelDeleteAction } = useContext(DataTableContext);
 
   return (
     <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
@@ -245,10 +310,40 @@ function ConfirmDeleteDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
+
           <AlertDialogCancel onClick={onCancelDeleteAction} >Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={onDeleteAction}>Continuar</AlertDialogAction>
+
+          <fetcher.Form method="delete" className="w-full">
+            <AlertDialogAction className="w-full" type="submit" name="id" value={selectedItem} onClick={onDeleteAction}>
+              Continuar
+            </AlertDialogAction>
+          </fetcher.Form>
+
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+  )
+}
+
+function DataTableDropdownMenu({ id, onDeleteDialog }: { id: number, onDeleteDialog: () => void }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Button variant="ghost" className="p-0 rounded-full w-7 h-7">
+          <LuMoreVertical size="20" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem asChild>
+          <Link to={`/categories/${id}/edit`}>
+            <LuPenSquare className="w-4 h-4 mr-2" /> Editar
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={onDeleteDialog}>
+          <LuTrash2 className="w-4 h-4 mr-2" /> Deletar
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

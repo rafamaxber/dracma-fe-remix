@@ -17,8 +17,8 @@ export function SearchForm({
   return (
     <Form replace className="flex flex-col space-y-4 md:gap-4 md:items-end md:flex-row md:w-full md:flex-wrap" method="get">
       <fieldset className={`md:w-full md:max-w-xs`}>
-        <Label className="block mb-2 text-sm font-semibold">Pesquisar:</Label>
-        <Input name="q" className="w-full" placeholder="Nome categoria/subcategoria" defaultValue={query?.q} />
+        <Label htmlFor="q" className="block mb-2 text-sm font-semibold">Pesquisar:</Label>
+        <Input name="q" id="q" className="w-full" placeholder="Nome categoria/subcategoria" defaultValue={query?.q} />
       </fieldset>
 
       <div className="flex justify-end md:flex-row">
