@@ -3,6 +3,7 @@ import { Form, Link } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 import { ComboBox, ComboBoxListType } from "~/components/combo-box/comboBox";
+import { FormCard } from "~/components/form-card/FormCard";
 import MasterPage from "~/components/master-page/MasterPage";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -128,7 +129,7 @@ export default function Index() {
         <Form ref={formRef} method="post" className="px-2">
 
           <FormCard>
-            <FormCardTitle>Identificação</FormCardTitle>
+            <FormCard.Title>Identificação</FormCard.Title>
             <fieldset className="flex-grow w-full">
               <Label className="block mb-2 text-sm font-semibold ">Nome:</Label>
               <Input required name="name" className="w-full" placeholder="Nome do produto..." />
@@ -150,7 +151,7 @@ export default function Index() {
           </FormCard>
 
           <FormCard>
-            <FormCardTitle>Códigos</FormCardTitle>
+            <FormCard.Title>Códigos</FormCard.Title>
             <div className="flex flex-col gap-4 my-4 md:flex-row">
               <fieldset className="md:w-full md:max-w-xs">
                 <Label className="block mb-2 text-sm font-semibold ">Código de barras:</Label>
@@ -164,7 +165,7 @@ export default function Index() {
           </FormCard>
 
           <FormCard>
-            <FormCardTitle>Medida</FormCardTitle>
+            <FormCard.Title>Medida</FormCard.Title>
             <div className="flex flex-col gap-4 my-4 md:flex-row">
               <fieldset className="md:w-full md:max-w-xs">
                 <Label className="block mb-2 text-sm font-semibold ">Peso / Quantidade:</Label>
@@ -178,7 +179,7 @@ export default function Index() {
           </FormCard>
 
           <FormCard>
-            <FormCardTitle>Financeiro</FormCardTitle>
+            <FormCard.Title>Financeiro</FormCard.Title>
             <div className="flex flex-col gap-4 my-4 md:flex-row">
               <fieldset className="md:w-full md:max-w-xs">
                 <Label className="block mb-2 text-sm font-semibold ">
@@ -196,7 +197,7 @@ export default function Index() {
           </FormCard>
 
           <FormCard>
-            <FormCardTitle>Estoque</FormCardTitle>
+            <FormCard.Title>Estoque</FormCard.Title>
             <div className="flex flex-col gap-4 my-4 md:flex-row">
               <fieldset className="space-y-4 md:w-full md:max-w-xs">
                 <div className="flex items-center space-x-2">
@@ -224,23 +225,4 @@ export default function Index() {
       </MasterPage.ContentFull>
     </MasterPage>
   );
-}
-
-function FormCardTitle({ children }: { children: React.ReactNode}) {
-  return (
-    <>
-      <div className="flex items-center justify-center my-2 md:justify-between">
-        <h2 className="text-lg font-semibold">{children}</h2>
-      </div>
-      <Separator className="mt-4 mb-7" />
-    </>
-  )
-}
-
-function FormCard({ children }: { children: React.ReactNode}) {
-  return (
-    <div className="w-full max-w-[610px] m-auto mb-4 py-4 bg-white rounded-md shadow-md p-4 relative">
-      {children}
-    </div>
-  )
 }
