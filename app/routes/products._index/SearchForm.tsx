@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import { Form, useNavigation } from "@remix-run/react";
 import { classnames, display } from 'tailwindcss-classnames';
-import { ComboBox, useComboBox } from "~/components/combo-box/comboBox";
+import { ComboBox, useComboBox, ComboBoxListType } from "~/components/combo-box/comboBox";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { LuSettings2 } from "react-icons/lu";
 import { Label } from "~/components/ui/label";
-import { QueryType, statuses } from "./route";
-
+import { QueryType } from "./route";
 interface SearchFormProps {
   showPartial?: boolean;
   onOpenFullForm?: () => void;
   query: QueryType;
+  categoryDataList: ComboBoxListType[]
 }
 export function SearchForm({
-  showPartial = false, onOpenFullForm, query,
+  showPartial = false, onOpenFullForm, query, categoryDataList
 }: SearchFormProps) {
   const { selectedOption, setSelectedOption } = useComboBox();
   const navigation = useNavigation();
@@ -27,7 +27,7 @@ export function SearchForm({
 
   useEffect(() => {
     if (query?.category) {
-      const category = statuses.find((status) => status.value === query.category);
+      const category = categoryDataList.find((status) => status.value === query.category);
       category && setSelectedOption(category);
     }
   }, []);
@@ -41,7 +41,7 @@ export function SearchForm({
 
       <fieldset className={`md:w-full md:max-w-xs ${hidden}`}>
         <Label className="block mb-2 text-sm font-semibold">Categoria:</Label>
-        <ComboBox selectedOption={selectedOption} setSelectedOption={setSelectedOption} options={statuses} />
+        <ComboBox selectedOption={selectedOption} setSelectedOption={setSelectedOption} options={categoryDataList} />
         <input type="hidden" name="category" value={selectedOption?.value} defaultValue={query?.category} />
       </fieldset>
 

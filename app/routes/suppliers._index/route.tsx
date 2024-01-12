@@ -14,16 +14,18 @@ import { DataTableMenuProvider } from "~/components/data-table/DataTableContext"
 import {  DataTableMenu } from "~/components/data-table/DataTableCells";
 import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
-import { pageConfig } from "./";
+import { pageConfig } from ".";
 
-export interface Category {
-  category: string;
-  sub_category: string;
+export interface Customer {
   id: number;
+  name: string;
+  email: string;
+  phone: string;
+  document: string;
 }
 
 interface ResponseType {
-  data: Category[];
+  data: Customer[];
   query: QueryType;
 }
 
@@ -31,10 +33,10 @@ export interface QueryType extends PaginationType {
   q?: string;
 }
 
-function deleteCategory({ id }: { id: string }) {
+function deleteEntity({ id }: { id: string }) {
   return new Response(JSON.stringify({
     id,
-    message: 'Categoria excluída com sucesso!'
+    message: 'Cliente excluído com sucesso!'
   }), {
     headers: {
       "content-type": "application/json",
@@ -48,61 +50,28 @@ export async function controller({ request }: LoaderFunctionArgs) {
   const id = formData.get("id");
 
   if (String(request.method).toLocaleLowerCase() === "delete") {
-    return deleteCategory({ id: String(id) })
+    return deleteEntity({ id: String(id) })
   }
 }
 
 export const action = async ({ request, context, params }: ActionFunctionArgs) =>
   controller({ request, context, params })
 
-function getData(): Category[] {
-  return [
-    {
-      category: "Categoria 1",
-      sub_category: "Sub-Categoria 1",
-      id: 1,
-    },
-    {
-      category: "Categoria 2",
-      sub_category: "Sub-Categoria 2",
-      id: 2,
-    },
-    {
-      category: "Categoria 3",
-      sub_category: "Sub-Categoria 3",
-      id: 3,
-    },
-    {
-      category: "Categoria 4",
-      sub_category: "Sub-Categoria 4",
-      id: 4,
-    },
-    {
-      category: "Categoria 5",
-      sub_category: "Sub-Categoria 5",
-      id: 5,
-    },
-    {
-      category: "Categoria 6",
-      sub_category: "Sub-Categoria 6",
-      id: 6,
-    },
-    {
-      category: "Categoria 7",
-      sub_category: "Sub-Categoria 7",
-      id: 7,
-    },
-    {
-      category: "Categoria 8",
-      sub_category: "Sub-Categoria 8",
-      id: 8,
-    },
-    {
-      category: "Categoria 9",
-      sub_category: "Sub-Categoria 9",
-      id: 9,
-    },
-  ];
+function getData(): Customer[] {
+  return [{
+    id: 1,
+    name: 'João',
+    email: 'j@gmail.com',
+    phone: '999999999',
+    document: '38509845590',
+  },
+  {
+    id: 2,
+    name: 'Maria',
+    email: 'm@gmail.com',
+    phone: '888888888',
+    document: '81509845590',
+  }];
 }
 
 export const loader = async ({ request, params, context }: LoaderFunctionArgs) => {
@@ -132,7 +101,7 @@ export const loader = async ({ request, params, context }: LoaderFunctionArgs) =
   });
 };
 
-const productsColumnsDefinition: ColumnDef<Category>[] = [
+const dataTableColumns: ColumnDef<Customer>[] = [
   ...pageConfig.dataTableColumns,
   {
     id: 'actions',
@@ -170,7 +139,7 @@ export default function Index() {
           }/>
 
           <div className="border rounded-md">
-            <DataTable columns={productsColumnsDefinition} data={dataProducts} />
+            <DataTable columns={dataTableColumns} data={dataProducts} />
           </div>
 
           <Pagination
@@ -189,3 +158,4 @@ export default function Index() {
     </DataTableMenuProvider>
   );
 }
+

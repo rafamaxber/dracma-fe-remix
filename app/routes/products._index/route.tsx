@@ -1,10 +1,9 @@
 import { useState } from "react";
 import type { ActionFunctionArgs , LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { LuPlusCircle, LuMoreVertical } from "react-icons/lu";
+import { LuPlusCircle } from "react-icons/lu";
 import { MetaFunction } from "@remix-run/node";
 import { ColumnDef } from "@tanstack/react-table";
-import { ComboBoxListType } from "~/components/combo-box/comboBox";
 import { DataTable } from "~/components/data-table/DataTable";
 import MasterPage from "~/components/master-page/MasterPage";
 import { Button } from "~/components/ui/button";
@@ -13,6 +12,10 @@ import { FilterBar } from "~/components/filter-bar/FilterBar";
 import { SearchForm } from "./SearchForm";
 import { formatCurrency } from "~/lib/formatCurrency";
 import { Pagination, PaginationType } from "~/components/pagination/Pagination";
+import { DataTableMenuProvider } from "~/components/data-table/DataTableContext";
+import { DataTableMenu } from "~/components/data-table/DataTableCells";
+import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
+import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
 
 interface Product {
   name: string;
@@ -167,9 +170,6 @@ const productsColumnsDefinition: ColumnDef<Product>[] = [
       const { category, name, image, code } = props.row.original;
 
       return (
-        // <div className="relative overflow-hidden rounded-full size-20">
-        //   <img className="absolute object-cover w-full h-full" src={props.row.getValue('image')} alt={props.row.getValue('name')} loading="lazy" />
-        // </div>
         <div className="flex items-center justify-between mb-4 space-x-4">
           <span className="relative flex overflow-hidden rounded-full size-20 shrink-0">
             <img className="w-full h-full aspect-square" alt={name} src={image}/>
@@ -183,18 +183,6 @@ const productsColumnsDefinition: ColumnDef<Product>[] = [
       )
     }
   },
-  // {
-  //   accessorKey: "name",
-  //   header: "Nome",
-  //   cell: (props) => {
-  //     return (
-  //       <div className="flex flex-col">
-  //         <span>{props.row.getValue('name')}</span>
-  //         <span className="text-sm text-gray-500">{props.row.original.category}</span>
-  //       </div>
-  //     )
-  //   }
-  // },
   {
     accessorKey: "price",
     header: "Preço",
@@ -209,13 +197,13 @@ const productsColumnsDefinition: ColumnDef<Product>[] = [
   {
     id: 'actions',
 
-    cell: (props) => (
-      <div className="flex justify-end">
-        <Button variant="ghost" className="rounded-full">
-          <LuMoreVertical size="20" />
-        </Button>
-      </div>
-    )
+    cell: (props) => {
+      const { id } = props.row.original;
+
+      return (
+        <DataTableMenu id={String(id)} />
+      )
+    }
   }
 ]
 
@@ -229,29 +217,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const statuses: ComboBoxListType[] = [
-  {
-    value: "backlog",
-    label: "Backlog",
-  },
-  {
-    value: "todo",
-    label: "Todo",
-  },
-  {
-    value: "in progress",
-    label: "In Progress",
-  },
-  {
-    value: "done",
-    label: "Done",
-  },
-  {
-    value: "canceled",
-    label: "Canceled",
-  },
-]
-
 export default function Index() {
   const [openSheet, setOpenSheet] = useState(false);
   const { data: dataProducts, query } = useLoaderData<ResponseType>();
@@ -261,39 +226,43 @@ export default function Index() {
   }
 
   return (
-    <MasterPage>
-      <MasterPage.ContentDefault>
+    <DataTableMenuProvider editionPathPrefix="/products">
+      <MasterPage>
+        <MasterPage.ContentDefault>
+          <MasterPage.HeaderDefault title="Meus Produtos">
+            <Button asChild variant="outline" className="justify-start">
+              <Link to="/products/create">
+                <LuPlusCircle className="mr-4"/> Novo Produto
+              </Link>
+            </Button>
+          </MasterPage.HeaderDefault>
 
-        <MasterPage.HeaderDefault title="Meus Produtos">
-          <Button asChild variant="outline" className="justify-start">
-            <Link to="/products/create">
-              <LuPlusCircle className="mr-4"/> Novo Produto
-            </Link>
-          </Button>
-        </MasterPage.HeaderDefault>
+          <Separator className="my-4" />
 
-        <Separator className="my-4" />
+          <FilterBar filterForm={
+            <SearchForm showPartial query={query} onOpenFullForm={handleToggleSheet} />
+          }>
+            <FilterBar.Sheet openSheet={openSheet} handleToggleSheet={handleToggleSheet}>
+              <SearchForm query={query} />
+            </FilterBar.Sheet>
+          </FilterBar>
 
-        <FilterBar filterForm={
-          <SearchForm showPartial query={query} onOpenFullForm={handleToggleSheet} />
-        }>
-          <FilterBar.Sheet openSheet={openSheet} handleToggleSheet={handleToggleSheet}>
-            <SearchForm query={query} />
-          </FilterBar.Sheet>
-        </FilterBar>
+          <div className="border rounded-md">
+            <DataTable columns={productsColumnsDefinition} data={dataProducts} />
+          </div>
 
-        <div className="border rounded-md">
-          <DataTable columns={productsColumnsDefinition} data={dataProducts} />
-        </div>
+          <Pagination
+            limit={query.limit}
+            offset={query.offset}
+            page={query.page}
+            total={query.total}
+          />
 
-        <Pagination
-          limit={query.limit}
-          offset={query.offset}
-          page={query.page}
-          total={query.total}
-        />
+        </MasterPage.ContentDefault>
+      </MasterPage>
 
-      </MasterPage.ContentDefault>
-    </MasterPage>
+      <DataTableMobileMenu />
+      <DataTableConfirmDeleteDialog />
+    </DataTableMenuProvider>
   );
 }

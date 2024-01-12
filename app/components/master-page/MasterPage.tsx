@@ -1,3 +1,5 @@
+import { LuArrowLeft } from "react-icons/lu";
+import { Link } from "@remix-run/react";
 import { MobileSideBar } from "../navigation/MobileSideBar";
 import { DesktopSideBar } from "../navigation/DesktopSideBar";
 
@@ -54,5 +56,28 @@ function HeaderDefault({
 }
 HeaderDefault.displayName = "HeaderDefault";
 MasterPage.HeaderDefault = HeaderDefault;
+
+function FormPageHeader({
+  title,
+  backButtonLink
+}: {
+  title: string,
+  backButtonLink: string,
+}) {
+  return (
+    <div className="px-2 bg-blue-950 mb-[-42px] md:mb-[-44px]">
+      <div className="w-full max-w-[610px] m-auto md:py-4 h-28 md:h-48 flex md:flex-col md:pt-10 justify-start">
+        <Link className="flex items-center justify-center w-8 h-8 mt-5 bg-white rounded-full text-blue-950 md:mt-0 md:hidden" to={backButtonLink}>
+          <LuArrowLeft size="20" className="inline-block mr-1"/>
+        </Link>
+        <div className="absolute left-0 w-full text-center md:block md:text-left md:left-auto md:max-w-[610px] md:m-auto">
+          <h1 className="mt-5 text-xl font-semibold text-white md:mt-0 md:text-2xl">{title}</h1>
+        </div>
+      </div>
+    </div>
+  )
+}
+FormPageHeader.displayName = "FormPageHeader";
+MasterPage.FormPageHeader = FormPageHeader;
 
 export default MasterPage;

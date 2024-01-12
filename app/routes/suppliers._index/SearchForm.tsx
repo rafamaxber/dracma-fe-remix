@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { QueryType } from "./route";
-import { pageConfig } from "./";
+import { pageConfig } from ".";
 
 interface SearchFormProps {
   query: QueryType;
@@ -19,7 +19,7 @@ export function SearchForm({
     <Form replace className="flex flex-col space-y-4 md:gap-4 md:items-end md:flex-row md:w-full md:flex-wrap" method="get">
       <fieldset className={`md:w-full md:max-w-xs`}>
         <Label htmlFor="q" className="block mb-2 text-sm font-semibold">Pesquisar:</Label>
-        <Input name="q" id="q" className="w-full" placeholder="Nome categoria/subcategoria" defaultValue={query?.q} />
+        <Input name="q" id="q" className="w-full" placeholder="Nome cliente" defaultValue={query?.q} />
       </fieldset>
 
       <div className="flex justify-end md:flex-row">

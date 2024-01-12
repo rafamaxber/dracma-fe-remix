@@ -10,7 +10,7 @@ export const routes = {
   profile: "/profile",
   categories: "/categories",
   products: "/products",
-  clients: "/clients",
+  customers: "/customers",
   suppliers: "/suppliers",
   sellers: "/sellers",
   other_spending: "/other-spending",
@@ -25,7 +25,7 @@ export const navigationItems = [
     subItems: [
       { label: "Categorias", url: routes.categories },
       { label: "Produtos", url: routes.products },
-      { label: "Clientes", url: routes.clients },
+      { label: "Clientes", url: routes.customers },
       { label: "Fornecedores", url: routes.suppliers },
       { label: "Estoque", url: routes.stock },
       { label: "Vendedores", url: routes.sellers },

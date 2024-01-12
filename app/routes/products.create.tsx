@@ -1,4 +1,4 @@
-import type { LoaderFunctionArgs , ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, Link } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
@@ -8,7 +8,6 @@ import MasterPage from "~/components/master-page/MasterPage";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { Separator } from "~/components/ui/separator";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 
@@ -100,9 +99,6 @@ export default function Index() {
     }
   ]
 
-  function handleSubmit() {
-    formRef.current?.submit();
-  }
 
   function handleChangeSwitch(field: string) {
     return (value: boolean) => {
@@ -113,19 +109,11 @@ export default function Index() {
   return (
     <MasterPage>
       <MasterPage.ContentFull>
-        <div className="px-2 bg-sky-950 mb-[-38px] md:mb-[-45px]">
-          <div className="w-full max-w-[610px] m-auto md:py-4 h-20 md:h-48 flex md:flex-col md:pt-10 justify-between bg-sky-950">
-            <Button asChild className="text-xs text-green-400" variant="link">
-              <Link className="block text-xs md:hidden" to="/products">
-                Voltar
-              </Link>
-            </Button>
-            <h1 className="mt-3 text-sm text-white md:mt-0 md:text-2xl">Cadastro de Produtos</h1>
-            <Button onClick={handleSubmit} className="block text-xs text-green-400 md:hidden" variant="link">
-              Salvar
-            </Button>
-          </div>
-        </div>
+        <MasterPage.FormPageHeader
+          title="Cadastro de Produtos"
+          backButtonLink="/products"
+        />
+
         <Form ref={formRef} method="post" className="px-2">
 
           <FormCard>

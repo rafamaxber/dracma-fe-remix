@@ -6,6 +6,7 @@ import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Error, Errors } from './Error'
+import { Textarea } from '../ui/textarea'
 
 const RemixForm = createForm({ component: FrameworkForm, useNavigation, useSubmit, useActionData })
 
@@ -19,7 +20,7 @@ export function Form<Schema extends FormSchema>(props: FormProps<Schema>) {
       buttonComponent={Button}
       errorComponent={Error}
       globalErrorsComponent={Errors}
-      // multilineComponent={/* your custom Multiline */}
+      multilineComponent={Textarea}
       // selectComponent={/* your custom Select */}
       // checkboxComponent={/* your custom Checkbox */}
       // checkboxWrapperComponent={/* your custom checkbox wrapper */}
