@@ -27,7 +27,6 @@ export const navigationItems = [
       { label: "Produtos", url: routes.products },
       { label: "Clientes", url: routes.customers },
       { label: "Fornecedores", url: routes.suppliers },
-      { label: "Estoque", url: routes.stock },
       { label: "Vendedores", url: routes.sellers },
       { label: "Outros gastos", url: routes.other_spending },
       { label: "Outras receitas", url: routes.other_revenues },

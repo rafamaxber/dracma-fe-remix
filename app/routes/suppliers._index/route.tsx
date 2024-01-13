@@ -15,6 +15,7 @@ import {  DataTableMenu } from "~/components/data-table/DataTableCells";
 import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
 import { pageConfig } from ".";
+import { AuthCookie } from "~/data/auth/user-cookie";
 
 export interface Customer {
   id: number;
@@ -75,6 +76,8 @@ function getData(): Customer[] {
 }
 
 export const loader = async ({ request, params, context }: LoaderFunctionArgs) => {
+  await AuthCookie.requireAuthCookie(request);
+
   const url = request.url;
   const searchParams = new URL(url).searchParams;
 

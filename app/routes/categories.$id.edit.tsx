@@ -8,6 +8,7 @@ import MasterPage from '~/components/master-page/MasterPage'
 import { Category } from "./categories._index/route";
 import { pageConfig, schema } from "./categories._index/page-config";
 import { Form } from "./categories._index/Form";
+import { AuthCookie } from "~/data/auth/user-cookie";
 
 interface ResponseType {
   data: Omit<Category, 'id'>[];
@@ -25,7 +26,9 @@ export const action: ActionFunction = async ({ request }) =>
     successPath: pageConfig.path
   })
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  await AuthCookie.requireAuthCookie(request);
+
   const { id } = params;
 
   console.log({id})

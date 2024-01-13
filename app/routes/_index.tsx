@@ -1,14 +1,24 @@
+import type { LoaderFunctionArgs } from "@remix-run/node";
 import { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import MasterPage from "~/components/master-page/MasterPage";
 import { routes } from "~/components/navigation/navigationItems";
+import { AuthCookie } from "~/data/auth/user-cookie";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
+    { title: "Dracma - Centro de comandos" },
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await AuthCookie.requireAuthCookie(request);
+
+  return null;
+};
+
 
 export default function Index() {
 

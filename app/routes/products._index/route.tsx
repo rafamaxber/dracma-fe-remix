@@ -16,6 +16,7 @@ import { DataTableMenuProvider } from "~/components/data-table/DataTableContext"
 import { DataTableMenu } from "~/components/data-table/DataTableCells";
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
 import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
+import { AuthCookie } from "~/data/auth/user-cookie";
 
 interface Product {
   name: string;
@@ -129,6 +130,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 };
 
 export const loader = async ({ request, params, context }: LoaderFunctionArgs) => {
+  await AuthCookie.requireAuthCookie(request);
+
   const url = request.url;
   const searchParams = new URL(url).searchParams;
   const name = searchParams.get("name") || "";

@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, Link } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
+import { AuthCookie } from "~/data/auth/user-cookie";
 
 export const meta: MetaFunction = () => {
   return [
@@ -53,11 +54,11 @@ console.log(JSON.stringify(result))
   return result;
 };
 
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await AuthCookie.requireAuthCookie(request);
 
-// export const loader = async ({ request }: LoaderFunctionArgs) => {
-//   return null;
-// };
-
+  return null;
+};
 
 
 export default function Index() {
