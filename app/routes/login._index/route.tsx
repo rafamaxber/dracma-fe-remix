@@ -1,5 +1,5 @@
 import { Link, useActionData } from "@remix-run/react";
-import { redirect, ActionFunction } from "@remix-run/node";
+import { redirect, ActionFunction, MetaFunction } from "@remix-run/node";
 import { z } from "zod";
 import { Form } from "~/components/form/Form";
 import { UserRepository } from "~/infra/http-client/user-repository";
@@ -19,7 +19,7 @@ export const meta: MetaFunction = () => [
   { title: "Dracma - Faça login" },
 ];
 
-const mutation = makeDomainFunction(schema)(async (body: any) => {
+const mutation = makeDomainFunction(schema)(async (body) => {
 
   try {
     const userRepository = new UserRepository();

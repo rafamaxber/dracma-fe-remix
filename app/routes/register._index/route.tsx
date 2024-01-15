@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => [
   { title: "Dracma - Criar conta" },
 ];
 
-const mutation = makeDomainFunction(schema)(async (body: any) => {
+const mutation = makeDomainFunction(schema)(async (body) => {
   try {
     const userRepository = new UserRepository();
     await new UserRegister(userRepository).execute(body)

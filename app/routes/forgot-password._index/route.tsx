@@ -1,5 +1,5 @@
-import { Link, useActionData, useLoaderData } from "@remix-run/react";
-import { redirect, ActionFunction, MetaFunction, LoaderFunctionArgs, json } from "@remix-run/node";
+import { Link, useActionData, useSearchParams } from "@remix-run/react";
+import { redirect, ActionFunction, MetaFunction } from "@remix-run/node";
 import { z } from "zod";
 import { Form } from "~/components/form/Form";
 import { UserRepository } from "~/infra/http-client/user-repository";
@@ -17,7 +17,7 @@ export const meta: MetaFunction = () => [
   { title: "Dracma - Esqueci minha senha" },
 ];
 
-const mutation = makeDomainFunction(schema)(async (body: any) => {
+const mutation = makeDomainFunction(schema)(async (body) => {
 
   try {
     const userRepository = new UserRepository();
@@ -43,24 +43,15 @@ export const action: ActionFunction = async ({ request }) => {
   })
 }
 
-export const loader = ({ request }: LoaderFunctionArgs) => {
-  const url = request.url;
-  const searchParams = new URL(url).searchParams;
-  const success = searchParams.get("success") || "";
-
-  return json({ success: success === 'true' });
-}
-
 export default function Index() {
   const actionData = useActionData<typeof action>();
-  const loaderData = useLoaderData<typeof loader>();
-
-  console.log(loaderData);
+  const [searchParams] = useSearchParams(new URLSearchParams('success=false'));
+  const isSuccessPage = searchParams.get("success") === 'true';
 
   return (
     <div className="max-w-[1260px] m-auto px-6">
       {
-        loaderData?.success && (
+        isSuccessPage && (
           <div className="px-4 py-3 text-green-700 bg-green-100 border border-green-400 rounded md:mb-8 md:mt-20">
             <strong className="block font-bold">Sucesso!</strong>
             <span className="block sm:inline">
