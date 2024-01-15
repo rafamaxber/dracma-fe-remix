@@ -1,5 +1,5 @@
-import { Link, useActionData } from "@remix-run/react";
-import { redirect, ActionFunction } from "@remix-run/node";
+import { useActionData, useLoaderData } from "@remix-run/react";
+import { redirect, ActionFunction, MetaFunction, LoaderFunctionArgs, json } from "@remix-run/node";
 import { z } from "zod";
 import { Form } from "~/components/form/Form";
 import { UserRepository } from "~/infra/http-client/user-repository";
@@ -7,27 +7,26 @@ import { Separator } from "~/components/ui/separator";
 import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
-import { UserLogin } from "~/data/auth/user-login";
-import { AuthCookie } from "~/data/auth/user-cookie";
+import { ResetPassword } from "~/data/auth/reset-password";
 
 const schema = z.object({
-  email: z.string().email().max(60),
   password: z.string().min(6).max(32),
+  token: z.string().min(6)
 });
 
 export const meta: MetaFunction = () => [
-  { title: "Dracma - Faça login" },
+  { title: "Dracma - Criar nova senha" },
 ];
 
-const mutation = makeDomainFunction(schema)(async (body: any) => {
-
+const mutation = makeDomainFunction(schema)(async (body) => {
+console.log(body);
   try {
     const userRepository = new UserRepository();
-    const result = await new UserLogin(userRepository).execute(body)
+    const result = await new ResetPassword(userRepository).execute(body)
     return result;
   } catch (error) {
     throw new ResultError({
-      errors: [{ message: 'Usuario ou senha incorretos' }],
+      errors: [{ message: 'Não foi possível atualizar sua senha!' }],
     })
   }
 })
@@ -36,12 +35,7 @@ export const action: ActionFunction = async ({ request }) => {
   const result = await performMutation({ request, schema, mutation })
 
   if (result.success) {
-    const authCookieValue = await (AuthCookie.get()).serialize(result.data?.access_token);
-    return redirect("/", {
-      headers: {
-        "Set-Cookie": authCookieValue,
-      },
-    })
+    return redirect("/login", )
   }
 
   return new Response(JSON.stringify(result), {
@@ -50,8 +44,16 @@ export const action: ActionFunction = async ({ request }) => {
   })
 }
 
+export const loader = ({ params }: LoaderFunctionArgs) => {
+  const { token } = params;
+
+  return json({ token });
+}
+
+
 export default function Index() {
   const actionData = useActionData<typeof action>();
+  const { token } = useLoaderData<typeof loader>();
 
   return (
     <div className="max-w-[1260px] m-auto px-6">
@@ -64,20 +66,18 @@ export default function Index() {
             schema={schema}
             className="w-full px-4 m-auto lg:px-0 lg:w-8/12"
             method="post"
+            values={{ token }}
           >
             {
-              ({ Button, Field, Errors }) => {
+              ({ Button, Field, Errors, register }) => {
                 return (
                   <>
                     <div className="text-center">
                       <h1 className="text-xl font-semibold md:text-3xl">
-                        Faça login
+                        Atualize sua senha
                       </h1>
                       <p className="mt-2 text-sm md:text-sm text-wrap">
-                        Ainda não tem uma conta? {" "}
-                        <Link to="/register" className="text-blue-500 underline text-wrap">
-                          Cadastre-se aqui
-                        </Link>
+                        Crie uma nova senha para sua conta
                       </p>
                     </div>
                     <Separator orientation="horizontal" className="w-full my-4 md:my-8" />
@@ -91,18 +91,15 @@ export default function Index() {
                       </div>
                     )}
 
-                    <div className="space-y-2 md:space-y-4">
-                      <Field name="email" type="email" label="E-mail" />
-                      <Field name="password" type="password" label="Senha" />
-                      <div className="flex justify-end">
-                        <Link to="/forgot-password" className="text-sm text-blue-500 underline text-wrap md:text-sm relative top-[-10px]">
-                          Esqueceu a senha?
-                        </Link>
-                      </div>
-                    </div>
+                    <Field name="password" type="password" label="Senha" />
+                    <Field name="token">
+                      {() => (
+                        <input {...register('token')} defaultValue={token} type="hidden" />
+                      )}
+                    </Field>
 
                     <div className="mt-8">
-                      <Button className="w-full">Entrar</Button>
+                      <Button className="w-full">Atualizar senha</Button>
                     </div>
                   </>
                 )
