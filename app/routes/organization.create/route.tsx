@@ -7,7 +7,6 @@ import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { AuthCookie } from "~/data/auth/user-cookie";
-import { CompanyRepository } from "~/infra/http-client/company-repository";
 import { CompanyCreate } from "~/data/company/company-create";
 
 const schema = z.object({
@@ -22,7 +21,8 @@ export const meta: MetaFunction = () => [
 const mutation = (accessToken: string) => (
   makeDomainFunction(schema)(async (body) => {
     try {
-      await new CompanyCreate().create(accessToken, body)
+      const result = new CompanyCreate().create(accessToken, body)
+      return result;
     } catch (error) {
       throw new ResultError({
         errors: [{ message: 'Usuario já cadastrado' }],
@@ -34,10 +34,19 @@ const mutation = (accessToken: string) => (
 export const action: ActionFunction = async ({ request }) => {
   const accessToken = await AuthCookie.requireAuthCookie(request);
 
-  const result = await performMutation({ request, schema, mutation: mutation(String(accessToken)) })
+  const result = await performMutation({
+    mutation: mutation(String(accessToken)),
+    request,
+    schema,
+  })
 
   if (result.success) {
-    return redirect("/")
+    const authCookieValue = await (AuthCookie.get()).serialize(result.data?.access_token);
+    return redirect("/", {
+      headers: {
+        "Set-Cookie": authCookieValue,
+      },
+    })
   }
 
   return new Response(JSON.stringify(result), {
