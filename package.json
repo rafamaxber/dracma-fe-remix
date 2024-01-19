@@ -20,10 +20,10 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
-    "@remix-run/css-bundle": "2.5.0",
-    "@remix-run/node": "2.5.0",
-    "@remix-run/react": "2.5.0",
-    "@remix-run/serve": "2.5.0",
+    "@remix-run/css-bundle": "2.5.1",
+    "@remix-run/node": "2.5.1",
+    "@remix-run/react": "2.5.1",
+    "@remix-run/serve": "2.5.1",
     "@tanstack/react-table": "^8.11.3",
     "axios": "^1.6.5",
     "class-variance-authority": "^0.7.0",
@@ -45,7 +45,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@remix-run/dev": "2.5.0",
+    "@remix-run/dev": "2.5.1",
     "@tailwindcss/forms": "^0.5.7",
     "@testing-library/react": "^14.1.2",
     "@types/jest": "^29.5.11",
