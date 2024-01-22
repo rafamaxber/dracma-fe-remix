@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export const dracmaApiClient = axios.create({
-  baseURL: 'http://localhost:4000',
+  baseURL: process.env.DRACMA_API_URL,
 });
