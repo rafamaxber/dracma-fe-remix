@@ -1,4 +1,12 @@
-import { ForgotPasswordRepository, LoginResponse, LoginUserDto, RegisterUserType, ResetPasswordRepository, UserLoginRepository, UserRegisterRepository } from "~/data/auth/protocols";
+import {
+  ForgotPasswordRepository,
+  LoginResponse,
+  LoginUserDto,
+  RegisterUserType,
+  ResetPasswordRepository,
+  UserLoginRepository,
+  UserRegisterRepository
+} from "~/data/auth/protocols";
 import { dracmaApiClient } from './setup';
 
 export class UserRepository implements UserRegisterRepository, UserLoginRepository, ForgotPasswordRepository, ResetPasswordRepository {
