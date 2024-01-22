@@ -1947,6 +1947,13 @@ var require_categories_id_edit = __commonJS({
   }
 });
 
+// routes-module:routes/organization.create/route.tsx?worker
+var require_route3 = __commonJS({
+  "routes-module:routes/organization.create/route.tsx?worker"(exports, module) {
+    module.exports = {};
+  }
+});
+
 // routes-module:routes/customers.$id.edit.tsx?worker
 var require_customers_id_edit = __commonJS({
   "routes-module:routes/customers.$id.edit.tsx?worker"(exports, module) {
@@ -1955,7 +1962,7 @@ var require_customers_id_edit = __commonJS({
 });
 
 // routes-module:routes/categories._index/route.tsx?worker
-var require_route3 = __commonJS({
+var require_route4 = __commonJS({
   "routes-module:routes/categories._index/route.tsx?worker"(exports, module) {
     module.exports = {};
   }
@@ -1969,7 +1976,7 @@ var require_categories_create = __commonJS({
 });
 
 // routes-module:routes/customers._index/route.tsx?worker
-var require_route4 = __commonJS({
+var require_route5 = __commonJS({
   "routes-module:routes/customers._index/route.tsx?worker"(exports, module) {
     module.exports = {};
   }
@@ -1983,14 +1990,14 @@ var require_customers_create = __commonJS({
 });
 
 // routes-module:routes/suppliers._index/route.tsx?worker
-var require_route5 = __commonJS({
+var require_route6 = __commonJS({
   "routes-module:routes/suppliers._index/route.tsx?worker"(exports, module) {
     module.exports = {};
   }
 });
 
 // routes-module:routes/products._index/route.tsx?worker
-var require_route6 = __commonJS({
+var require_route7 = __commonJS({
   "routes-module:routes/products._index/route.tsx?worker"(exports, module) {
     module.exports = {};
   }
@@ -2004,14 +2011,14 @@ var require_products_create = __commonJS({
 });
 
 // routes-module:routes/register._index/route.tsx?worker
-var require_route7 = __commonJS({
+var require_route8 = __commonJS({
   "routes-module:routes/register._index/route.tsx?worker"(exports, module) {
     module.exports = {};
   }
 });
 
 // routes-module:routes/login._index/route.tsx?worker
-var require_route8 = __commonJS({
+var require_route9 = __commonJS({
   "routes-module:routes/login._index/route.tsx?worker"(exports, module) {
     module.exports = {};
   }
@@ -6034,7 +6041,7 @@ var RemixCache = class {
       await this._lruCleanup();
       return await cache.put(request, toBeCachedRes.clone());
     } catch (error) {
-      if (false)
+      if (true)
         console.error("Failed to put to cache:", error);
     }
   }
@@ -6308,7 +6315,7 @@ var methodToColorMap = {
   groupEnd: null
   // No colored prefix on groupEnd
 };
-var logger = true ? (() => {
+var logger = false ? (() => {
   const api = {};
   const loggerMethods = Object.keys(methodToColorMap);
   for (const key of loggerMethods) {
@@ -6465,7 +6472,7 @@ var PrecacheHandler = class extends MessageHandler {
     const routes2 = Object.values(manifest?.routes || {});
     for (const route of routes2) {
       if (route.id.includes("$")) {
-        if (false)
+        if (true)
           logger.info("Skipping parametrized route:", route.id);
         continue;
       }
@@ -6508,7 +6515,7 @@ var PrecacheHandler = class extends MessageHandler {
           if (map.includes(true))
             continue;
         } else {
-          if (false)
+          if (true)
             logger.error("Invalid ignoredRoutes type:", this._ignoredFiles);
         }
       } else if (typeof this._ignoredFiles === "function") {
@@ -6529,7 +6536,7 @@ var PrecacheHandler = class extends MessageHandler {
       }
       if (route.imports) {
         for (const assetUrl of route.imports) {
-          if (false) {
+          if (true) {
             logger.groupCollapsed("Caching asset: ", assetUrl);
             logger.log("Is index:", route.index || false);
             logger.log("Parent ID:", route.parentId);
@@ -6543,7 +6550,7 @@ var PrecacheHandler = class extends MessageHandler {
           cachePromises.set(assetUrl, cacheAsset(assetUrl));
         }
       }
-      if (false)
+      if (true)
         logger.info("Caching document:", pathname);
       const response = await fetch(pathname);
       cachePromises.set(
@@ -6551,13 +6558,13 @@ var PrecacheHandler = class extends MessageHandler {
         // @ts-expect-error
         documentCache2.put(pathname, response).catch((error) => {
           if (error instanceof TypeError) {
-            if (false)
+            if (true)
               logger.error(`TypeError when caching document ${pathname}:`, error.message);
           } else if (error instanceof DOMException) {
-            if (false)
+            if (true)
               logger.error(`DOMException when caching document ${pathname}:`, error.message);
           } else {
-            if (false)
+            if (true)
               logger.error(`Failed to cache document ${pathname}:`, error);
           }
         })
@@ -6575,13 +6582,13 @@ var PrecacheHandler = class extends MessageHandler {
           // @ts-expect-error
           dataCache2.put(url, data2).catch((error) => {
             if (error instanceof TypeError) {
-              if (false)
+              if (true)
                 logger.error(`TypeError when caching data ${pathname}:`, error.message);
             } else if (error instanceof DOMException) {
-              if (false)
+              if (true)
                 logger.error(`DOMException when caching data ${pathname}:`, error.message);
             } else {
-              if (false)
+              if (true)
                 logger.error(`Failed to cache data ${pathname}:`, error);
             }
           })
@@ -6598,13 +6605,13 @@ var PrecacheHandler = class extends MessageHandler {
       const response = await fetch(assetUrl);
       return assetCache2.put(assetUrl, response).catch((error) => {
         if (error instanceof TypeError) {
-          if (false)
+          if (true)
             logger.error(`TypeError when caching asset ${assetUrl}:`, error.message);
         } else if (error instanceof DOMException) {
-          if (false)
+          if (true)
             logger.error(`DOMException when caching asset ${assetUrl}:`, error.message);
         } else {
-          if (false)
+          if (true)
             logger.error(`Failed to cache asset ${assetUrl}:`, error);
         }
       });
@@ -6687,20 +6694,21 @@ var route1 = __toESM(require_route());
 var route2 = __toESM(require_manifest_webmanifest());
 var route3 = __toESM(require_route2());
 var route4 = __toESM(require_categories_id_edit());
-var route5 = __toESM(require_customers_id_edit());
-var route6 = __toESM(require_route3());
-var route7 = __toESM(require_categories_create());
-var route8 = __toESM(require_route4());
-var route9 = __toESM(require_customers_create());
-var route10 = __toESM(require_route5());
+var route5 = __toESM(require_route3());
+var route6 = __toESM(require_customers_id_edit());
+var route7 = __toESM(require_route4());
+var route8 = __toESM(require_categories_create());
+var route9 = __toESM(require_route5());
+var route10 = __toESM(require_customers_create());
 var route11 = __toESM(require_route6());
-var route12 = __toESM(require_products_create());
-var route13 = __toESM(require_route7());
+var route12 = __toESM(require_route7());
+var route13 = __toESM(require_products_create());
 var route14 = __toESM(require_route8());
-var route15 = __toESM(require_index());
+var route15 = __toESM(require_route9());
+var route16 = __toESM(require_index());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-6ZZ3JHI4.js", "/build/manifest-D0B8ACA0.js", "/build/entry.client-M4NT6F72.js", "/build/routes/suppliers._index-NWLNEIOR.js", "/build/routes/reset-password.$token-P5IGJHPY.js", "/build/routes/register._index-LQJZCRNY.js", "/build/routes/products.create-GVBRQCSD.js", "/build/routes/products._index-UF47QALV.js", "/build/routes/manifest[.]webmanifest-HMFRU2W3.js", "/build/routes/login._index-FJAE3COB.js", "/build/routes/forgot-password._index-QXP6V3TR.js", "/build/routes/customers.create-QPIOYM5H.js", "/build/routes/customers._index-XWB6L7TP.js", "/build/routes/customers.$id.edit-UWHPCJPB.js", "/build/routes/categories.create-4KBS3L32.js", "/build/routes/categories._index-ARLKLM4Y.js", "/build/routes/categories.$id.edit-6CMTR5LD.js", "/build/routes/_index-WYXGX3FR.js", "/build/_shared/chunk-ZSMNTMG3.js", "/build/_shared/chunk-YXES6RJA.js", "/build/_shared/chunk-T36URGAI.js", "/build/_shared/chunk-QQ6YPPWT.js", "/build/_shared/chunk-PSDAJZST.js", "/build/_shared/chunk-NGRXEWO3.js", "/build/_shared/chunk-LAVUQHHF.js", "/build/_shared/chunk-KHGPHQ4U.js", "/build/_shared/chunk-J4OA7U66.js", "/build/_shared/chunk-ICTHCLVW.js", "/build/_shared/chunk-ELFNII5N.js", "/build/_shared/chunk-D47RLX6Y.js", "/build/_shared/chunk-AZSQD3CK.js", "/build/_shared/chunk-AYCDLXTJ.js", "/build/_shared/chunk-ATOYGZ3A.js", "/build/_shared/chunk-7A735WDQ.js", "/build/_shared/chunk-6IIBZWI7.js", "/build/_shared/chunk-3PVO7ERE.js", "/build/_shared/chunk-2XSAUJMN.js", "/build/_assets/tailwind-3O3NRI7I.css", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg"];
+var assets = ["/build/root-7DIAPPXW.js", "/build/manifest-AFD28A86.js", "/build/entry.client-R6CAT3XR.js", "/build/__remix_entry_dev-34MVS2X4.js", "/build/routes/suppliers._index-N65W67AV.js", "/build/routes/reset-password.$token-UEYUFJPW.js", "/build/routes/register._index-MWZUTQEF.js", "/build/routes/products.create-6R4P7ZLW.js", "/build/routes/products._index-FYOLV6LL.js", "/build/routes/organization.create-AXNRV4O7.js", "/build/routes/manifest[.]webmanifest-J3KYYY3Q.js", "/build/routes/login._index-LQKHSBDX.js", "/build/routes/forgot-password._index-HDC76MJ7.js", "/build/routes/customers.create-N545HS57.js", "/build/routes/customers._index-MJZGSEKE.js", "/build/routes/customers.$id.edit-3QD4IPRP.js", "/build/routes/categories.create-D7MOPRUU.js", "/build/routes/categories._index-YHASMXVJ.js", "/build/routes/categories.$id.edit-AB2BNSZB.js", "/build/routes/_index-3LEUIE56.js", "/build/_assets/tailwind-JIBDFHBN.css", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/_shared/runtime-GC7QIU56.js", "/build/_shared/remix_hmr-FPLV6WAP.js", "/build/_shared/react-dom-BEFB7ICU.js", "/build/_shared/react-3OYUNTOK.js", "/build/_shared/jsx-runtime-RUQ4LI2K.js", "/build/_shared/jsx-dev-runtime-RDH4Y5YT.js", "/build/_shared/esm-CQ7E5EOY.js", "/build/_shared/client-DFZR44C7.js", "/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-WI5TER22.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-U5ZURNL5.js", "/build/_shared/chunk-R5MJZ4YR.js", "/build/_shared/chunk-PNG5AS42.js", "/build/_shared/chunk-OT56DHPM.js", "/build/_shared/chunk-NMZL6IDN.js", "/build/_shared/chunk-NIRAYCSW.js", "/build/_shared/chunk-MCC5GMKV.js", "/build/_shared/chunk-JBFX6IAL.js", "/build/_shared/chunk-IPREKIPX.js", "/build/_shared/chunk-GUAPIB6U.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-G7CHZRZX.js", "/build/_shared/chunk-CREB6RCB.js", "/build/_shared/chunk-C5GU2YRX.js", "/build/_shared/chunk-C3DKYIII.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-AWDXQ3RU.js", "/build/_shared/chunk-AODHXXJH.js", "/build/_shared/chunk-7QELWNBP.js", "/build/_shared/chunk-6S6YQ75A.js", "/build/_shared/chunk-67KHH4IV.js", "/build/_shared/chunk-526BT4NM.js"];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {
@@ -6744,13 +6752,21 @@ var routes = {
     caseSensitive: void 0,
     module: route4
   },
+  "routes/organization.create": {
+    id: "routes/organization.create",
+    parentId: "root",
+    path: "organization/create",
+    index: void 0,
+    caseSensitive: void 0,
+    module: route5
+  },
   "routes/customers.$id.edit": {
     id: "routes/customers.$id.edit",
     parentId: "root",
     path: "customers/:id/edit",
     index: void 0,
     caseSensitive: void 0,
-    module: route5
+    module: route6
   },
   "routes/categories._index": {
     id: "routes/categories._index",
@@ -6758,7 +6774,7 @@ var routes = {
     path: "categories",
     index: true,
     caseSensitive: void 0,
-    module: route6
+    module: route7
   },
   "routes/categories.create": {
     id: "routes/categories.create",
@@ -6766,7 +6782,7 @@ var routes = {
     path: "categories/create",
     index: void 0,
     caseSensitive: void 0,
-    module: route7
+    module: route8
   },
   "routes/customers._index": {
     id: "routes/customers._index",
@@ -6774,7 +6790,7 @@ var routes = {
     path: "customers",
     index: true,
     caseSensitive: void 0,
-    module: route8
+    module: route9
   },
   "routes/customers.create": {
     id: "routes/customers.create",
@@ -6782,7 +6798,7 @@ var routes = {
     path: "customers/create",
     index: void 0,
     caseSensitive: void 0,
-    module: route9
+    module: route10
   },
   "routes/suppliers._index": {
     id: "routes/suppliers._index",
@@ -6790,7 +6806,7 @@ var routes = {
     path: "suppliers",
     index: true,
     caseSensitive: void 0,
-    module: route10
+    module: route11
   },
   "routes/products._index": {
     id: "routes/products._index",
@@ -6798,7 +6814,7 @@ var routes = {
     path: "products",
     index: true,
     caseSensitive: void 0,
-    module: route11
+    module: route12
   },
   "routes/products.create": {
     id: "routes/products.create",
@@ -6806,7 +6822,7 @@ var routes = {
     path: "products/create",
     index: void 0,
     caseSensitive: void 0,
-    module: route12
+    module: route13
   },
   "routes/register._index": {
     id: "routes/register._index",
@@ -6814,7 +6830,7 @@ var routes = {
     path: "register",
     index: true,
     caseSensitive: void 0,
-    module: route13
+    module: route14
   },
   "routes/login._index": {
     id: "routes/login._index",
@@ -6822,7 +6838,7 @@ var routes = {
     path: "login",
     index: true,
     caseSensitive: void 0,
-    module: route14
+    module: route15
   },
   "routes/_index": {
     id: "routes/_index",
@@ -6830,7 +6846,7 @@ var routes = {
     path: void 0,
     index: true,
     caseSensitive: void 0,
-    module: route15
+    module: route16
   }
 };
 var entry = { module: entry_worker_exports };
@@ -7075,7 +7091,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/mode.js:
   (**
-   * @remix-run/server-runtime v2.5.0
+   * @remix-run/server-runtime v2.5.1
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7087,7 +7103,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/errors.js:
   (**
-   * @remix-run/server-runtime v2.5.0
+   * @remix-run/server-runtime v2.5.1
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7099,7 +7115,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/responses.js:
   (**
-   * @remix-run/server-runtime v2.5.0
+   * @remix-run/server-runtime v2.5.1
    *
    * Copyright (c) Remix Software Inc.
    *
