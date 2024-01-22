@@ -26,6 +26,8 @@ const mutation = makeDomainFunction(schema)(async (body) => {
     const result = await new UserLogin(userRepository).execute(body)
     return result;
   } catch (error) {
+    console.log('process.env.DRACMA_API_URL:: ', process.env.DRACMA_API_URL)
+    console.error('login:makeDomainFunction:: ', error)
     throw new ResultError({
       errors: [{ message: 'Usuario ou senha incorretos' }],
     })
