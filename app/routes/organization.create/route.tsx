@@ -6,11 +6,11 @@ import { Separator } from "~/components/ui/separator";
 import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
-import { AuthCookie } from "~/data/auth/user-cookie";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
 import { CompanyCreate } from "~/data/company/company-create";
 
 const schema = z.object({
-  companyName: z.string().min(3).max(32).nullable(),
+  companyName: z.string().min(3).max(32),
   role: z.string().min(3).max(32).nullable(),
 });
 
@@ -21,7 +21,10 @@ export const meta: MetaFunction = () => [
 const mutation = (accessToken: string) => (
   makeDomainFunction(schema)(async (body) => {
     try {
-      const result = new CompanyCreate().create(accessToken, body)
+      const result = new CompanyCreate().create(accessToken, {
+        companyName: String(body.companyName),
+        role: String(body?.role || ''),
+      })
       return result;
     } catch (error) {
       throw new ResultError({

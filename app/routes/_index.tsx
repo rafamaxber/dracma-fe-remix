@@ -3,7 +3,7 @@ import { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import MasterPage from "~/components/master-page/MasterPage";
 import { routes } from "~/components/navigation/navigationItems";
-import { AuthCookie } from "~/data/auth/user-cookie";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
 
 export const meta: MetaFunction = () => {
   return [
