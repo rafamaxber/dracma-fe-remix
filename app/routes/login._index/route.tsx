@@ -1,5 +1,5 @@
 import { Link, useActionData } from "@remix-run/react";
-import { redirect, ActionFunction, MetaFunction } from "@remix-run/node";
+import { redirect, ActionFunction, MetaFunction, LoaderFunction } from "@remix-run/node";
 import { z } from "zod";
 import { Form } from "~/components/form/Form";
 import { UserRepository } from "~/infra/http-client/user-repository";
@@ -10,6 +10,7 @@ import { performMutation } from "remix-forms";
 import { UserLogin } from "~/data/auth/user-login";
 import { AuthCookie, UserAuthType } from "~/data/auth/user-auth-cookie";
 import { JwtService } from "~/data/auth/jtw";
+import { routes } from "~/components/navigation/navigationItems";
 
 const schema = z.object({
   email: z.string().email().max(60),
@@ -44,14 +45,14 @@ export const action: ActionFunction = async ({ request }) => {
 
     const accessTokenJwt: UserAuthType = JwtService.format(accessTokenKey);
     if (accessTokenJwt.companyId) {
-      return redirect("/", {
+      return redirect(routes.dashboard, {
         headers: {
           "Set-Cookie": authCookieValue,
         },
       })
     }
 
-    return redirect("/organization/create", {
+    return redirect(routes.create_organization, {
       headers: {
         "Set-Cookie": authCookieValue,
       },
@@ -62,6 +63,10 @@ export const action: ActionFunction = async ({ request }) => {
     status: 400,
     headers: { "Content-Type": "application/json" },
   })
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  await AuthCookie.redirectIfAuthenticated(request);
 }
 
 export default function Index() {

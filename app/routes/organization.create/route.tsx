@@ -6,8 +6,10 @@ import { Separator } from "~/components/ui/separator";
 import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
-import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { AuthCookie, UserAuthType } from "~/data/auth/user-auth-cookie";
 import { CompanyCreate } from "~/data/company/company-create";
+import { JwtService } from "~/data/auth/jtw";
+import { routes } from "~/components/navigation/navigationItems";
 
 const schema = z.object({
   companyName: z.string().min(3).max(32),
@@ -45,7 +47,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (result.success) {
     const authCookieValue = await (AuthCookie.get()).serialize(result.data?.access_token);
-    return redirect("/", {
+    return redirect(routes.dashboard, {
       headers: {
         "Set-Cookie": authCookieValue,
       },
@@ -59,7 +61,11 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await AuthCookie.requireAuthCookie(request);
+  const accessTokenKey = await AuthCookie.requireAuthCookie(request);
+  if (typeof accessTokenKey === 'string') {
+    const accessTokenJwt: UserAuthType = JwtService.format(accessTokenKey);
+    accessTokenJwt.companyId && redirect(routes.dashboard);
+  }
 
   return null;
 };

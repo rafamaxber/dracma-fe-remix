@@ -1,5 +1,5 @@
 import { Link, useActionData, useSearchParams } from "@remix-run/react";
-import { redirect, ActionFunction, MetaFunction } from "@remix-run/node";
+import { redirect, ActionFunction, MetaFunction, LoaderFunction } from "@remix-run/node";
 import { z } from "zod";
 import { Form } from "~/components/form/Form";
 import { UserRepository } from "~/infra/http-client/user-repository";
@@ -8,6 +8,7 @@ import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { ForgotPassword } from "~/data/auth/user-forgot-password";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
 
 const schema = z.object({
   email: z.string().email().max(60),
@@ -41,6 +42,10 @@ export const action: ActionFunction = async ({ request }) => {
     status: 400,
     headers: { "Content-Type": "application/json" },
   })
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  await AuthCookie.redirectIfAuthenticated(request);
 }
 
 export default function Index() {

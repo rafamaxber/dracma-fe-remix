@@ -8,7 +8,7 @@ export class CompanyRepository implements CompanyCreateRepository {
       description: "",
       initialBalanceDate: new Date().toISOString(),
       name: createCompanyDto.companyName,
-      role: createCompanyDto.role,
+      role: createCompanyDto.role, // não esta sendo utilizado
     }, {
       headers: {
         'Content-Type': 'application/json',

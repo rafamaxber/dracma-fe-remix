@@ -1,4 +1,5 @@
 import { TypedResponse, createCookie, redirect } from "@remix-run/node";
+import { routes } from "~/components/navigation/navigationItems";
 
 export interface UserAuthType {
   id: string;
@@ -35,16 +36,25 @@ export class AuthCookie {
     const authCookie = request.headers.get("Cookie");
     const accessToken = await AuthCookie.get().parse(authCookie);
 
-    if (!accessToken) {
-      throw redirect("/login", {
-        headers: {
-          "Set-Cookie": await AuthCookie.get().serialize("", {
-            maxAge: 0,
-          }),
-        },
-      });
+    if (accessToken) {
+      return accessToken;
     }
 
-    return accessToken;
+    throw redirect(routes.login, {
+      headers: {
+        "Set-Cookie": await AuthCookie.get().serialize("", {
+          maxAge: 0,
+        }),
+      },
+    });
+  }
+
+  static async redirectIfAuthenticated(request: Request): Promise<void | TypedResponse<never>> {
+    const authCookie = request.headers.get("Cookie");
+    const accessToken = await AuthCookie.get().parse(authCookie);
+
+    if (accessToken) {
+      return redirect(routes.dashboard)
+    }
   }
 }
