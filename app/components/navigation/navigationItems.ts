@@ -15,7 +15,9 @@ export const routes = {
   sellers: "/sellers",
   other_spending: "/other-spending",
   other_revenues: "/other-revenues",
-};
+  login: "/login",
+  create_organization: "/organization/create",
+} as const;
 
 export const navigationItems = [
   { id: 'dashboard', label: 'Dashboard', url: routes.dashboard },

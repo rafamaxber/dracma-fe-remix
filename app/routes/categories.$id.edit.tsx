@@ -8,7 +8,7 @@ import MasterPage from '~/components/master-page/MasterPage'
 import { Category } from "./categories._index/route";
 import { pageConfig, schema } from "./categories._index/page-config";
 import { Form } from "./categories._index/Form";
-import { AuthCookie } from "~/data/auth/user-cookie";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
 
 interface ResponseType {
   data: Omit<Category, 'id'>[];

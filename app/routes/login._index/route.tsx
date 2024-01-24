@@ -1,5 +1,5 @@
 import { Link, useActionData } from "@remix-run/react";
-import { redirect, ActionFunction, MetaFunction } from "@remix-run/node";
+import { redirect, ActionFunction, MetaFunction, LoaderFunction } from "@remix-run/node";
 import { z } from "zod";
 import { Form } from "~/components/form/Form";
 import { UserRepository } from "~/infra/http-client/user-repository";
@@ -8,7 +8,9 @@ import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { UserLogin } from "~/data/auth/user-login";
-import { AuthCookie } from "~/data/auth/user-cookie";
+import { AuthCookie, UserAuthType } from "~/data/auth/user-auth-cookie";
+import { JwtService } from "~/data/auth/jtw";
+import { routes } from "~/components/navigation/navigationItems";
 
 const schema = z.object({
   email: z.string().email().max(60),
@@ -38,8 +40,19 @@ export const action: ActionFunction = async ({ request }) => {
   const result = await performMutation({ request, schema, mutation })
 
   if (result.success) {
-    const authCookieValue = await (AuthCookie.get()).serialize(result.data?.access_token);
-    return redirect("/", {
+    const accessTokenKey = result.data?.access_token;
+    const authCookieValue = await (AuthCookie.get()).serialize(accessTokenKey);
+
+    const accessTokenJwt: UserAuthType = JwtService.format(accessTokenKey);
+    if (accessTokenJwt.companyId) {
+      return redirect(routes.dashboard, {
+        headers: {
+          "Set-Cookie": authCookieValue,
+        },
+      })
+    }
+
+    return redirect(routes.create_organization, {
       headers: {
         "Set-Cookie": authCookieValue,
       },
@@ -50,6 +63,10 @@ export const action: ActionFunction = async ({ request }) => {
     status: 400,
     headers: { "Content-Type": "application/json" },
   })
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  await AuthCookie.redirectIfAuthenticated(request);
 }
 
 export default function Index() {

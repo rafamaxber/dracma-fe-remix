@@ -6,7 +6,7 @@ import { useLoaderData } from '@remix-run/react'
 import { formAction } from '~/form-action.server'
 import { Form, schema, pageConfig, Customer } from './customers._index'
 import MasterPage from '~/components/master-page/MasterPage'
-import { AuthCookie } from "~/data/auth/user-cookie";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
 
 interface ResponseType {
   data: Omit<Customer, 'id'>[];

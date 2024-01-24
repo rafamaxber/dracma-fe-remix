@@ -8,6 +8,8 @@ import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { ResetPassword } from "~/data/auth/reset-password";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { routes } from "~/components/navigation/navigationItems";
 
 const schema = z.object({
   password: z.string().min(6).max(32),
@@ -35,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
   const result = await performMutation({ request, schema, mutation })
 
   if (result.success) {
-    return redirect("/login", )
+    return redirect(routes.login)
   }
 
   return new Response(JSON.stringify(result), {
@@ -44,12 +46,12 @@ export const action: ActionFunction = async ({ request }) => {
   })
 }
 
-export const loader = ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({ params, request }: LoaderFunctionArgs) => {
+  await AuthCookie.redirectIfAuthenticated(request);
   const { token } = params;
 
   return json({ token });
 }
-
 
 export default function Index() {
   const actionData = useActionData<typeof action>();

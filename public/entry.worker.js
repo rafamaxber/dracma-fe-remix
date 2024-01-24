@@ -6708,7 +6708,7 @@ var route15 = __toESM(require_route9());
 var route16 = __toESM(require_index());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-7DIAPPXW.js", "/build/manifest-14342A7D.js", "/build/entry.client-DBONV3WH.js", "/build/_shared/runtime-GC7QIU56.js", "/build/_shared/remix_hmr-FPLV6WAP.js", "/build/_shared/react-dom-BEFB7ICU.js", "/build/_shared/react-3OYUNTOK.js", "/build/_shared/jsx-runtime-RUQ4LI2K.js", "/build/_shared/jsx-dev-runtime-RDH4Y5YT.js", "/build/_shared/esm-CQ7E5EOY.js", "/build/_shared/client-DFZR44C7.js", "/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-U5ZURNL5.js", "/build/_shared/chunk-SJSAM5UN.js", "/build/_shared/chunk-RE7CA4VY.js", "/build/routes/suppliers._index-3LNXPQZQ.js", "/build/routes/reset-password.$token-BIJPWUB3.js", "/build/routes/register._index-FYC7B2R3.js", "/build/routes/products.create-YUDLBLD2.js", "/build/routes/products._index-UPP3KVMD.js", "/build/routes/organization.create-UF5WAGOV.js", "/build/routes/manifest[.]webmanifest-J3KYYY3Q.js", "/build/routes/login._index-FIAKIH7O.js", "/build/routes/forgot-password._index-WSXCANEW.js", "/build/routes/customers.create-HNGVRUI2.js", "/build/routes/customers._index-SMNUTRXV.js", "/build/routes/customers.$id.edit-IAATCBRL.js", "/build/routes/categories.create-C5OZMGTH.js", "/build/routes/categories._index-GNNTVERH.js", "/build/routes/categories.$id.edit-2XX2AO3E.js", "/build/routes/_index-GYONGUAE.js"];
+var assets = [];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {

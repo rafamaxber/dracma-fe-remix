@@ -1,5 +1,5 @@
 import { Link, useActionData, MetaFunction } from "@remix-run/react";
-import { redirect, type ActionFunction } from "@remix-run/node";
+import { redirect, type ActionFunction, LoaderFunction } from "@remix-run/node";
 import { z } from "zod";
 import { Form } from "~/components/form/Form";
 import { UserRegister } from "~/data/auth/user-register";
@@ -8,6 +8,8 @@ import { Separator } from "~/components/ui/separator";
 import teamImage from './images/img1.svg';
 import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { routes } from "~/components/navigation/navigationItems";
 
 const schema = z.object({
   firstName: z.string().min(3).max(32),
@@ -36,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
   const result = await performMutation({ request, schema, mutation })
 
   if (result.success) {
-    return redirect("/login")
+    return redirect(routes.login)
   }
 
   return new Response(JSON.stringify(result), {
@@ -45,9 +47,12 @@ export const action: ActionFunction = async ({ request }) => {
   })
 }
 
+export const loader: LoaderFunction = async ({ request }) => {
+  await AuthCookie.redirectIfAuthenticated(request);
+}
+
 export default function Index() {
   const actionData = useActionData<typeof action>();
-console.log(actionData)
 
   return (
     <div className="max-w-[1260px] m-auto px-6">
