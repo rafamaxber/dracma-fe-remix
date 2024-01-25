@@ -1,4 +1,4 @@
-import { dracmaApiClient } from './setup';
+import { dracmaApiClient } from './setup.server';
 import { CompanyCreateRepository, CompanyCreateDto } from "~/data/company/protocols";
 
 export class CompanyRepository implements CompanyCreateRepository {

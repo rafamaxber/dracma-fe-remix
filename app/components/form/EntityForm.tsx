@@ -37,47 +37,52 @@ export function EntityForm<T>({
 
   return (
     <Form schema={schema} values={formData}>
-      {({ Field, Button, submit }) => {
+      {({ Field, Errors, Button, submit }) => {
         const isLast = (index: number) => index === formConfig.length - 1
 
-        return (
-          formConfig.map((row, i) => (
-            <FormCard className='space-y-4 ' key={i}>
-              {row?.sectionTitle && <FormCard.Title>{row.sectionTitle}</FormCard.Title>}
-              <Layout type={row.layout}>
-                {row.fields.map((field, i) => {
-                  const isMultiline = field.type === 'textarea'
+        const formFields = formConfig.map((row, i) => (
+          <FormCard className='space-y-4 ' key={i}>
+            {row?.sectionTitle && <FormCard.Title>{row.sectionTitle}</FormCard.Title>}
+            <Layout type={String(row.layout)}>
+              {row.fields.map((field, i) => {
+                const isMultiline = field.type === 'textarea'
 
-                  return (
-                    <Field
-                      multiline={isMultiline}
-                      className={field.className}
-                      name={field.name}
-                      label={field.label}
-                      type={field?.type || 'text'}
-                      placeholder={field.placeholder}
-                      key={i}
-                      onKeyDown={(event) => {
-                        if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
-                          isMultiline && submit()
-                        }
-                      }}
-                    />
-                  )
-                })}
-              </Layout>
-
-              {
-                isLast(i) && (
-                  <div className="flex justify-end">
-                    <Button type="submit" className="mt-2" name="intent" value={customFormData.intent}>
-                      {customFormData.submit}
-                    </Button>
-                  </div>
+                return (
+                  <Field
+                    multiline={isMultiline}
+                    className={field.className}
+                    name={field.name}
+                    label={field.label}
+                    type={field?.type || 'text'}
+                    placeholder={field.placeholder}
+                    key={i}
+                    onKeyDown={(event) => {
+                      if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
+                        isMultiline && submit()
+                      }
+                    }}
+                  />
                 )
-              }
-            </FormCard>
-          ))
+              })}
+            </Layout>
+
+            {
+              isLast(i) && (
+                <div className="flex justify-end">
+                  <Button type="submit" className="mt-2" name="intent" value={customFormData.intent}>
+                    {customFormData.submit}
+                  </Button>
+                </div>
+              )
+            }
+          </FormCard>
+        ))
+
+        return (
+          <>
+            <Errors />
+            {formFields}
+          </>
         )
       }}
     </Form>

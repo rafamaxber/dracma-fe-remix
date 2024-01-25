@@ -64,7 +64,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const accessTokenKey = await AuthCookie.requireAuthCookie(request);
   if (typeof accessTokenKey === 'string') {
     const accessTokenJwt: UserAuthType = JwtService.format(accessTokenKey);
-    accessTokenJwt.companyId && redirect(routes.dashboard);
+    if (accessTokenJwt.companyId) return redirect(routes.dashboard)
   }
 
   return null;

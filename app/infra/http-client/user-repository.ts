@@ -7,7 +7,7 @@ import {
   UserLoginRepository,
   UserRegisterRepository
 } from "~/data/auth/protocols";
-import { dracmaApiClient } from './setup';
+import { dracmaApiClient } from './setup.server';
 
 export class UserRepository implements UserRegisterRepository, UserLoginRepository, ForgotPasswordRepository, ResetPasswordRepository {
   async register(createUserDto: Omit<RegisterUserType, 'id'>): Promise<Omit<RegisterUserType, 'password'>> {

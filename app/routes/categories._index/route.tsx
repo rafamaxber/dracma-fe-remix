@@ -1,6 +1,6 @@
 import { Separator } from "@radix-ui/react-separator";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { LuPlusCircle } from "react-icons/lu";
 
@@ -14,8 +14,11 @@ import { DataTableMenuProvider } from "~/components/data-table/DataTableContext"
 import {  DataTableMenu } from "~/components/data-table/DataTableCells";
 import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
-import { pageConfig } from "./";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { CategoryListAll } from "~/data/category/category-list-all";
+import { ProductCategoryResponse } from "~/data/category/protocols";
+import { CategoryDeleteById } from "~/data/category/category-delete-by-id";
+import { pageConfig } from "./page-config";
 
 export interface Category {
   category: string;
@@ -23,123 +26,53 @@ export interface Category {
   id: number;
 }
 
-interface ResponseType {
-  data: Category[];
-  query: QueryType;
-}
-
 export interface QueryType extends PaginationType {
   q?: string;
 }
 
-function deleteCategory({ id }: { id: string }) {
-  return new Response(JSON.stringify({
+async function deleteCategory(accessToken: string, id: number) {
+  await new CategoryDeleteById().delete(accessToken, id);
+
+  return json({
     id,
     message: 'Categoria excluída com sucesso!'
-  }), {
-    headers: {
-      "content-type": "application/json",
-    },
-    status: 201
-  })
+  });
 }
 
-export async function controller({ request }: LoaderFunctionArgs) {
-  const formData = await request.formData();
-  const id = formData.get("id");
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const accessToken = await AuthCookie.requireAuthCookie(request);
 
   if (String(request.method).toLocaleLowerCase() === "delete") {
-    return deleteCategory({ id: String(id) })
+    const formData = await request.formData();
+    const id = formData.get("id");
+
+    if (id) {
+      return deleteCategory(String(accessToken), +id )
+    }
   }
+
+  return null;
 }
 
-export const action = async ({ request, context, params }: ActionFunctionArgs) =>
-  controller({ request, context, params })
-
-function getData(): Category[] {
-  return [
-    {
-      category: "Categoria 1",
-      sub_category: "Sub-Categoria 1",
-      id: 1,
-    },
-    {
-      category: "Categoria 2",
-      sub_category: "Sub-Categoria 2",
-      id: 2,
-    },
-    {
-      category: "Categoria 3",
-      sub_category: "Sub-Categoria 3",
-      id: 3,
-    },
-    {
-      category: "Categoria 4",
-      sub_category: "Sub-Categoria 4",
-      id: 4,
-    },
-    {
-      category: "Categoria 5",
-      sub_category: "Sub-Categoria 5",
-      id: 5,
-    },
-    {
-      category: "Categoria 6",
-      sub_category: "Sub-Categoria 6",
-      id: 6,
-    },
-    {
-      category: "Categoria 7",
-      sub_category: "Sub-Categoria 7",
-      id: 7,
-    },
-    {
-      category: "Categoria 8",
-      sub_category: "Sub-Categoria 8",
-      id: 8,
-    },
-    {
-      category: "Categoria 9",
-      sub_category: "Sub-Categoria 9",
-      id: 9,
-    },
-  ];
-}
-
-export const loader = async ({ request, params, context }: LoaderFunctionArgs) => {
-  await AuthCookie.requireAuthCookie(request);
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const accessToken = await AuthCookie.requireAuthCookie(request);
 
   const url = request.url;
   const searchParams = new URL(url).searchParams;
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const data = getData()
-
-      resolve(
-        new Response(JSON.stringify({
-          data,
-          total: 1000,
-          offset: 0,
-          limit: 50,
-          query: {
-            q: searchParams.get("q") || null,
-          },
-        }), {
-          headers: {
-            "content-type": "application/json",
-          },
-        })
-      );
-    }, 1000);
+  const result = await new CategoryListAll().listAll(String(accessToken), {
+    name: String(searchParams.get('q') || ''),
+    page: Number(searchParams.get('page') || 1),
+    perPage: Number(searchParams.get('perPage') || 10),
   });
+
+  return json(result);
 };
 
-const productsColumnsDefinition: ColumnDef<Category>[] = [
+const productsColumnsDefinition: ColumnDef<ProductCategoryResponse>[] = [
   ...pageConfig.dataTableColumns,
   {
     id: 'actions',
-
     cell: (props) => {
       const { id } = props.row.original;
 
@@ -151,7 +84,8 @@ const productsColumnsDefinition: ColumnDef<Category>[] = [
 ]
 
 export default function Index() {
-  const { data: dataProducts, query } = useLoaderData<ResponseType>();
+  const { results, pagination } = useLoaderData<typeof loader>();
+  const [query] = useSearchParams();
 
   return (
     <DataTableMenuProvider editionPathPrefix={pageConfig.path}>
@@ -160,7 +94,7 @@ export default function Index() {
 
           <MasterPage.HeaderDefault title={pageConfig.listTitleTxt}>
             <Button asChild variant="outline" className="justify-start">
-              <Link to={`${pageConfig.path}/create`}>
+              <Link to={`${pageConfig.path}/create`} prefetch="intent">
                 <LuPlusCircle className="mr-4"/> {pageConfig.createBtnTxt}
               </Link>
             </Button>
@@ -169,20 +103,20 @@ export default function Index() {
           <Separator className="my-4" />
 
           <FilterBar filterForm={
-            <SearchForm query={query} />
+            <SearchForm query={{
+              q: query.get('q') || '',
+            }} />
           }/>
 
           <div className="border rounded-md">
-            <DataTable columns={productsColumnsDefinition} data={dataProducts} />
+            <DataTable columns={productsColumnsDefinition} data={results} />
           </div>
 
           <Pagination
-            limit={query.limit}
-            offset={query.offset}
-            page={query.page}
-            total={query.total}
+            page={pagination.page}
+            total={pagination.total}
+            perPage={pagination.perPage}
           />
-
 
         </MasterPage.ContentDefault>
       </MasterPage>

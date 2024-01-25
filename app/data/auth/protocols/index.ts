@@ -1,5 +1,4 @@
 export interface RegisterUserType {
-  id: string;
   firstName: string;
   lastName: string;
   nickName: string;

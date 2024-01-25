@@ -1,10 +1,8 @@
+import { ListAllFilterType } from "~/data/types";
 import { Pagination as PaginationBase, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../ui/pagination";
 
-export interface PaginationType {
-  page: number;
-  limit: number;
-  offset: number;
-  total: number;
+export interface PaginationType extends ListAllFilterType {
+  total?: number;
 }
 
 export interface PaginationProps extends PaginationType {
@@ -12,12 +10,14 @@ export interface PaginationProps extends PaginationType {
 }
 
 export function Pagination({
-  total = 0,
-  limit = 50,
   page = 1,
+  perPage = 10,
+  total = 0,
 }: PaginationProps) {
-  const totalPages = Math.ceil(total / limit);
+  const totalPages = Math.ceil(total / perPage);
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  if (pages.length === 1) return null;
 
   return (
     <PaginationBase className="mt-4">

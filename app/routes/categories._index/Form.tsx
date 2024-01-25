@@ -1,15 +1,15 @@
-import { z } from "zod"
 import { EntityForm } from "~/components/form/EntityForm"
-import { pageConfig, schema, formConfig } from "./"
+import { ProductCategoryResponse } from "~/data/category/protocols"
+import { pageConfig, schema, formConfig } from "./page-config"
 
 interface Props {
   isEditing?: boolean,
-  formData?: Partial<z.infer<typeof schema>>
+  formData?: ProductCategoryResponse
 }
 
 export const Form = ({ isEditing, formData }: Props) => {
   return (
-    <EntityForm
+    <EntityForm<ProductCategoryResponse>
       isEditing={isEditing}
       formData={formData}
       pageConfig={pageConfig}

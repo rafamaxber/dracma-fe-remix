@@ -26,7 +26,13 @@ export const meta: MetaFunction = () => [
 const mutation = makeDomainFunction(schema)(async (body) => {
   try {
     const userRepository = new UserRepository();
-    await new UserRegister(userRepository).execute(body)
+    await new UserRegister(userRepository).execute({
+      email: body.email,
+      password: body.password,
+      firstName: body.firstName,
+      lastName: body.lastName,
+      nickName: body?.nickName || '',
+    })
   } catch (error) {
     throw new ResultError({
       errors: [{ message: 'Usuario já cadastrado' }],
@@ -49,6 +55,8 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   await AuthCookie.redirectIfAuthenticated(request);
+
+  return null;
 }
 
 export default function Index() {

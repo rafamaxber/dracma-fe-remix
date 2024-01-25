@@ -67,6 +67,8 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   await AuthCookie.redirectIfAuthenticated(request);
+
+  return null;
 }
 
 export default function Index() {
