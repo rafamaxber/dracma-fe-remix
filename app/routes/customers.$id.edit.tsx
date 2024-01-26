@@ -53,7 +53,7 @@ export default function Index() {
           title={pageConfig.formEditTitleTxt}
           backButtonLink={pageConfig.path}
         />
-        <Form  isEditing={true} formData={data}/>
+        <Form isEditing={true} formData={data}/>
       </MasterPage.ContentFull>
     </MasterPage>
   )

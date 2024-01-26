@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["system"],
+  darkMode: ['class', '[data-mode="dark"]'],
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -18,7 +18,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        customBg: "var(--custom-bg)",
+        link: "hsl(var(--link))",
+        customBg: "hsl(var(--custom-bg))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -26,7 +27,10 @@ module.exports = {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          foreground: {
+            DEFAULT: "hsl(var(--primary-foreground))",
+            custom: "hsl(var(--primary-foreground-custom))"
+          }
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -74,6 +78,6 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require('@tailwindcss/forms'),
+  plugins: [require("tailwindcss-animate"),
 ],
 }

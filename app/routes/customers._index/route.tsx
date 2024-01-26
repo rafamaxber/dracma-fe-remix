@@ -141,13 +141,12 @@ export default function Index() {
             <SearchForm query={query} />
           }/>
 
-          <div className="border rounded-md">
+          <div className="border rounded-md bg-card">
             <DataTable columns={dataTableColumns} data={dataProducts} />
           </div>
 
           <Pagination
-            limit={query.limit}
-            offset={query.offset}
+            perPage={query.perPage}
             page={query.page}
             total={query.total}
           />

@@ -255,8 +255,7 @@ export default function Index() {
           </div>
 
           <Pagination
-            limit={query.limit}
-            offset={query.offset}
+            perPage={query.perPage}
             page={query.page}
             total={query.total}
           />

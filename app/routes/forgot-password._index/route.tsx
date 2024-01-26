@@ -9,6 +9,7 @@ import { ResultError, makeDomainFunction } from "domain-functions";
 import { performMutation } from "remix-forms";
 import { ForgotPassword } from "~/data/auth/user-forgot-password";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import Logo from '~/components/logo.svg';
 
 const schema = z.object({
   email: z.string().email().max(60),
@@ -46,6 +47,8 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   await AuthCookie.redirectIfAuthenticated(request);
+
+  return null;
 }
 
 export default function Index() {
@@ -54,10 +57,10 @@ export default function Index() {
   const isSuccessPage = searchParams.get("success") === 'true';
 
   return (
-    <div className="max-w-[1260px] m-auto px-6">
+    <div className="mx-4">
       {
         isSuccessPage && (
-          <div className="px-4 py-3 text-green-700 bg-green-100 border border-green-400 rounded md:mb-8 md:mt-20">
+          <div className="max-w-[440px] sm:max-w-[1260px] m-auto shadow-2xl overflow-hidden mt-8 px-4 py-3 text-green-700 bg-green-100 border border-green-400 rounded md:mb-8 md:mt-10">
             <strong className="block font-bold">Sucesso!</strong>
             <span className="block sm:inline">
               Enviamos um e-mail para você com as instruções para recuperar sua senha.
@@ -65,58 +68,60 @@ export default function Index() {
           </div>
         )
       }
-      <div className="flex flex-row justify-center shadow-2xl md:min-h-[600px] md:mt-20 mt-8">
-        <div className="bg-white flex-col rounded-l-lg w-full md:w-auto md:flex-[2] flex py-10 md:py-0">
-          <Form
-            schema={schema}
-            className="w-full px-4 m-auto lg:px-0 lg:w-8/12"
-            method="post"
-          >
-            {
-              ({ Button, Field, Errors }) => {
-                return (
-                  <>
-                    <div className="text-center">
-                      <h1 className="text-xl font-semibold md:text-3xl">
-                        Esqueceu sua senha?
-                      </h1>
-                      <p className="mt-2 text-sm md:text-sm text-wrap">
-                        Não, pode fazer o login aqui {" "}
-                        <Link to="/login" className="text-blue-500 underline text-wrap">
-                          login
-                        </Link>
-                        {" "} ou {" "}
-                        <Link to="/register" className="text-blue-500 underline text-wrap">
-                          cadastre-se
-                        </Link>
-                      </p>
-                    </div>
-                    <Separator orientation="horizontal" className="w-full my-4 md:my-8" />
+      <div className="max-w-[440px] sm:max-w-[1260px] m-auto rounded-2xl shadow-2xl overflow-hidden md:mt-20 mt-8">
+        <div className="flex flex-row justify-center md:min-h-[600px] text-card-foreground">
+          <div className="w-full max-w-[400px] md:max-w-none md:w-auto md:flex-[2] pb-10 md:pb-0 bg-card">
 
-                    {actionData?.errors && (
-                      <div className="relative px-4 py-3 text-red-700 bg-red-100 border border-red-400 rounded md:mb-8">
-                        <strong className="font-bold">Ops!</strong>
-                        <span className="block sm:inline">
-                          <Errors />
-                        </span>
+            <div className="w-full px-4 m-auto my-8 lg:px-0 lg:w-8/12">
+              <img src={Logo} alt="logo" className="left-[-14px] relative w-40 md:w-48" />
+            </div>
+
+            <Form
+              schema={schema}
+              className="w-full px-4 pb-12 m-auto lg:px-0 lg:w-8/12"
+              method="post"
+            >
+              {
+                ({ Button, Field, Errors }) => {
+                  return (
+                    <>
+                      <div>
+                        <h1 className="text-lg font-semibold md:text-xl">
+                          Esqueceu sua senha?
+                        </h1>
+                        <p className="mt-2 text-sm md:text-sm text-wrap">
+                          Não, pode fazer o login aqui {" "}
+                          <Link to="/login" className="font-semibold underline text-link">
+                            login
+                          </Link>
+                          {" "} ou {" "}
+                          <Link to="/register" className="font-semibold underline text-link">
+                            cadastre-se
+                          </Link>
+                        </p>
                       </div>
-                    )}
+                      <Separator orientation="horizontal" className="w-full my-4 md:my-8" />
 
-                    <div className="space-y-2 md:space-y-4">
-                      <Field name="email" type="email" label="E-mail" />
-                    </div>
+                      {actionData?.errors && (
+                        <Errors />
+                      )}
 
-                    <div className="mt-8">
-                      <Button className="w-full">Recuperar senha</Button>
-                    </div>
-                  </>
-                )
+                      <div className="space-y-2 md:space-y-4">
+                        <Field name="email" type="email" label="E-mail" />
+                      </div>
+
+                      <div className="mt-8">
+                        <Button className="w-full">Recuperar senha</Button>
+                      </div>
+                    </>
+                  )
+                }
               }
-            }
-          </Form>
-        </div>
-        <div className="bg-black flex-[2] rounded-r-lg hidden md:flex justify-center items-center">
-          <img src={teamImage} alt="register" className="object-cover h-2/3" />
+            </Form>
+          </div>
+          <div className="bg-black flex-[2] hidden sm:flex justify-center items-center">
+            <img src={teamImage} alt="register" className="object-cover h-2/3" />
+          </div>
         </div>
       </div>
     </div>

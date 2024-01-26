@@ -3,7 +3,7 @@ import { Separator } from "../ui/separator";
 
 export function FormCard({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
-    <div className={cn("w-full max-w-[610px] m-auto mb-4 py-4 bg-white rounded-md shadow-md p-4 relative", className)}>
+    <div className={cn("w-full max-w-[610px] m-auto mb-4 py-4 bg-card border rounded-md shadow-md p-4 relative", className)}>
       {children}
     </div>
   )

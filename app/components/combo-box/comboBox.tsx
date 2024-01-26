@@ -64,7 +64,7 @@ export function ComboBox({
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="justify-between w-full">
+          <Button variant="outline" className="justify-between w-full shadow">
             {selectedOption ? <>{selectedOption.label}</> : <>{label}</>}
             <LuChevronDown className="ml-2" />
           </Button>

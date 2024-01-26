@@ -16,15 +16,15 @@ export function SideBarNavigation() {
         {navigationItems.map((item) => (
           <li key={item.id}>
             {item?.subItems ? (
-              <button type="button" className="inline-block pt-6 pb-2 text-sm font-semibold text-gray-800" data-id={item.id} onClick={handleNavigationVisibility}>{item.label}</button>
+              <button type="button" className="inline-block pt-6 pb-2 text-sm font-semibold" data-id={item.id} onClick={handleNavigationVisibility}>{item.label}</button>
             ) : (
-              <NavLink className="inline-block pt-6 pb-2 text-sm font-semibold text-gray-800" data-id={item.id} to={item.url}>{item.label}</NavLink>
+              <NavLink className="inline-block pt-6 pb-2 text-sm font-semibold" data-id={item.id} to={item.url}>{item.label}</NavLink>
             )}
             {navigationState?.[item.id]?.visibility && item?.subItems && (
               <ul>
                 {item?.subItems.map((subItem) => (
                   <li key={subItem.label} className="py-2 pl-6">
-                    <NavLink className="inline-block text-sm text-gray-800" to={subItem.url}>{subItem.label}</NavLink>
+                    <NavLink className="inline-block text-sm" to={subItem.url}>{subItem.label}</NavLink>
                   </li>
                 ))}
               </ul>

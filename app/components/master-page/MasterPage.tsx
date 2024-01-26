@@ -19,7 +19,7 @@ MasterPage.displayName = "MasterPage";
 function ContentDefault({ children }: { children: React.ReactNode }) {
   return (
     <div className="sm:max-w-[2070px] mx-auto sm:min-w-[800px] w-[100%]">
-      <div className="p-2 mx-2 mt-2 bg-white rounded sm:mt-4 sm:p-8 sm:mx-4">
+      <div className="p-2 mx-2 mt-2 rounded sm:mt-4 sm:py-8 sm:mx-4">
         {children}
       </div>
     </div>

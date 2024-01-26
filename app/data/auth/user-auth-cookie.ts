@@ -54,7 +54,7 @@ export class AuthCookie {
     const accessToken = await AuthCookie.get().parse(authCookie);
 
     if (accessToken) {
-      return redirect(routes.dashboard)
+      throw redirect(routes.dashboard);
     }
   }
 }
