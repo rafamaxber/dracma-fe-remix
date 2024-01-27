@@ -10,32 +10,48 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { useSWEffect , LiveReload } from '@remix-pwa/sw'
+import { useSWEffect , LiveReload } from '@remix-pwa/sw';
+import { useChangeLanguage } from "remix-i18next";
+import { useTranslation } from "react-i18next";
+
 import { themeSessionResolver } from "./sessions.server";
 import styles from "~/components/styles/tailwind.css";
 import { cn } from "~/lib/utils";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
 import { UserDataProvider } from "~/components/user-auth-data";
+import i18next from "~/i18next.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ]
 
+export const handle = {
+  // In the handle export, we can add a i18n key with namespaces our route
+  // will need to load. This key can be a single string or an array of strings.
+  // TIP: In most cases, you should set this to your defaultNS from your i18n config
+  // or if you did not set one, set it to the i18next default namespace "translation"
+  i18n: "common",
+};
+
 export async function loader({ request }: LoaderFunctionArgs) {
-  const [accessToken, { getTheme }] = await Promise.all([
+  const [userData, { getTheme }, locale] = await Promise.all([
     AuthCookie.getUserAuthData(request),
-    themeSessionResolver(request)
+    themeSessionResolver(request),
+    i18next.getLocale(request)
   ])
 
   return {
-    userData: accessToken,
+    userData,
+    locale,
     theme: getTheme(),
   }
 }
 
 export default function AppWithProviders() {
   const data = useLoaderData<typeof loader>()
+
+  useChangeLanguage(data.locale);
 
   return (
     <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
@@ -50,10 +66,11 @@ export function App() {
   useSWEffect();
 
   const data = useLoaderData<typeof loader>()
+  const { i18n } = useTranslation();
   const [theme] = useTheme()
 
   return (
-    <html lang="pt-br" className={cn(theme)} style={{ colorScheme: String(theme) }}>
+    <html lang={data.locale} dir={i18n.dir()} className={cn(theme)} style={{ colorScheme: String(theme) }}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

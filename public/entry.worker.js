@@ -2003,13 +2003,6 @@ var require_route6 = __commonJS({
   }
 });
 
-// routes-module:routes/categories.$id_.tsx?worker
-var require_categories_id = __commonJS({
-  "routes-module:routes/categories.$id_.tsx?worker"(exports, module) {
-    module.exports = {};
-  }
-});
-
 // routes-module:routes/products._index/route.tsx?worker
 var require_route7 = __commonJS({
   "routes-module:routes/products._index/route.tsx?worker"(exports, module) {
@@ -2027,6 +2020,13 @@ var require_products_create = __commonJS({
 // routes-module:routes/register._index/route.tsx?worker
 var require_route8 = __commonJS({
   "routes-module:routes/register._index/route.tsx?worker"(exports, module) {
+    module.exports = {};
+  }
+});
+
+// routes-module:routes/categories.$id.tsx?worker
+var require_categories_id = __commonJS({
+  "routes-module:routes/categories.$id.tsx?worker"(exports, module) {
     module.exports = {};
   }
 });
@@ -6716,15 +6716,15 @@ var route9 = __toESM(require_action_set_theme());
 var route10 = __toESM(require_route5());
 var route11 = __toESM(require_customers_create());
 var route12 = __toESM(require_route6());
-var route13 = __toESM(require_categories_id());
-var route14 = __toESM(require_route7());
-var route15 = __toESM(require_products_create());
-var route16 = __toESM(require_route8());
+var route13 = __toESM(require_route7());
+var route14 = __toESM(require_products_create());
+var route15 = __toESM(require_route8());
+var route16 = __toESM(require_categories_id());
 var route17 = __toESM(require_route9());
 var route18 = __toESM(require_index());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-SPW2XRB7.js", "/build/manifest-438F5B4D.js", "/build/entry.client-XPKKS52W.js", "/build/__remix_entry_dev-XEVAE6YX.js", "/build/routes/suppliers._index-CR4NVPEI.js", "/build/routes/reset-password.$token-ENVVSJI6.js", "/build/routes/register._index-IEFINGY2.js", "/build/routes/products.create-P36SP35S.js", "/build/routes/products._index-HZTFLTB6.js", "/build/routes/organization.create-7YNQCS5O.js", "/build/routes/manifest[.]webmanifest-J3KYYY3Q.js", "/build/routes/login._index-GL7E2OQG.js", "/build/routes/forgot-password._index-UKODV6H2.js", "/build/routes/customers.create-HF6SNJI7.js", "/build/routes/customers._index-RIPKGD7L.js", "/build/routes/customers.$id_.edit-S54KFEMG.js", "/build/routes/categories.create-L3BMDNOK.js", "/build/routes/categories._index-YHEWV3FM.js", "/build/routes/categories.$id_.edit-A35YWGN7.js", "/build/routes/categories.$id_-7MROKM7C.js", "/build/routes/action.set-theme-JDBUG4AI.js", "/build/routes/_index-RCNIISW7.js", "/build/_assets/tailwind-TF34GF2O.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/_shared/runtime-GC7QIU56.js", "/build/_shared/remix_hmr-FPLV6WAP.js", "/build/_shared/react-dom-BEFB7ICU.js", "/build/_shared/react-3OYUNTOK.js", "/build/_shared/jsx-runtime-RUQ4LI2K.js", "/build/_shared/jsx-dev-runtime-RDH4Y5YT.js", "/build/_shared/esm-WV47PGC4.js", "/build/_shared/client-DFZR44C7.js", "/build/_shared/chunk-ZWGWGGVF.js", "/build/_shared/chunk-ZR3HDHUT.js", "/build/_shared/chunk-Z266MJA2.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XU7DNSPJ.js", "/build/_shared/chunk-VQVP5MWR.js", "/build/_shared/chunk-V3SK3VEY.js", "/build/_shared/chunk-UWV35TSL.js", "/build/_shared/chunk-UW7QL3TY.js", "/build/_shared/chunk-T4DIEA4S.js", "/build/_shared/chunk-T2A6XAXF.js", "/build/_shared/chunk-R5NUWII2.js", "/build/_shared/chunk-R2NV7LJB.js", "/build/_shared/chunk-QWVLLYQV.js", "/build/_shared/chunk-PNG5AS42.js", "/build/_shared/chunk-PLS6O2UJ.js", "/build/_shared/chunk-PJLGDNII.js", "/build/_shared/chunk-OCFC4SPE.js", "/build/_shared/chunk-NMZL6IDN.js", "/build/_shared/chunk-N3II6W45.js", "/build/_shared/chunk-M6LVTPPH.js", "/build/_shared/chunk-KHGYBGFG.js", "/build/_shared/chunk-J2BB3PXF.js", "/build/_shared/chunk-IHUVMBHR.js", "/build/_shared/chunk-GIAAE3CH.js", "/build/_shared/chunk-G7CHZRZX.js", "/build/_shared/chunk-DTAHGJB7.js", "/build/_shared/chunk-DCDD6TXM.js", "/build/_shared/chunk-C5GU2YRX.js", "/build/_shared/chunk-BOXFZXVX.js", "/build/_shared/chunk-7QPTVNJE.js", "/build/_shared/chunk-7G6AG6AJ.js", "/build/_shared/chunk-5W6XIRV3.js"];
+var assets = ["/build/root-ORN7HIYG.js", "/build/manifest-D7CA6A61.js", "/build/entry.client-4I727F3P.js", "/build/__remix_entry_dev-4WK62Q6K.js", "/build/routes/suppliers._index-4KGNGRCZ.js", "/build/routes/reset-password.$token-STULW2YF.js", "/build/routes/register._index-ZDZEMHNL.js", "/build/routes/products.create-34ZMQJCR.js", "/build/routes/products._index-KY6A6KWA.js", "/build/routes/organization.create-QBCPQVWI.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/login._index-54O7SRY7.js", "/build/routes/forgot-password._index-NZX26O7G.js", "/build/routes/customers.create-WTJVJ3ET.js", "/build/routes/customers._index-M5Q5RVIT.js", "/build/routes/customers.$id_.edit-THVOFIZY.js", "/build/routes/categories.create-DVW3I4MJ.js", "/build/routes/categories._index-Z3R7NLQN.js", "/build/routes/categories.$id_.edit-S5AKOFVS.js", "/build/routes/categories.$id-UAKVWI2I.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-CZA7V3PQ.js", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-RIBBQ5Y7.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XWKQK6A6.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-XI4UB3S5.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-VR7AF7GK.js", "/build/_shared/chunk-UW7QL3TY.js", "/build/_shared/chunk-QA2Z5E2E.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-OEW5Z7T3.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-O4N3PYUH.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-LCHI3VDA.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-JFWMEVXC.js", "/build/_shared/chunk-JC22WYVK.js", "/build/_shared/chunk-IW6DAMVU.js", "/build/_shared/chunk-IOM4H53A.js", "/build/_shared/chunk-HWFPIN6U.js", "/build/_shared/chunk-HUNCMSO6.js", "/build/_shared/chunk-D756UEQ4.js", "/build/_shared/chunk-D6X4IHH5.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-CEHSY5YA.js", "/build/_shared/chunk-CDJ74ZYN.js", "/build/_shared/chunk-BUMV7MHQ.js", "/build/_shared/chunk-7SGMGUUY.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-64ZTRKS2.js", "/build/_shared/chunk-2QJY4JOV.js", "/build/_assets/tailwind-TF34GF2O.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg"];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {
@@ -6762,8 +6762,8 @@ var routes = {
   },
   "routes/categories.$id_.edit": {
     id: "routes/categories.$id_.edit",
-    parentId: "routes/categories.$id_",
-    path: "edit",
+    parentId: "root",
+    path: "categories/:id/edit",
     index: void 0,
     caseSensitive: void 0,
     module: route4
@@ -6832,21 +6832,13 @@ var routes = {
     caseSensitive: void 0,
     module: route12
   },
-  "routes/categories.$id_": {
-    id: "routes/categories.$id_",
-    parentId: "root",
-    path: "categories/:id",
-    index: void 0,
-    caseSensitive: void 0,
-    module: route13
-  },
   "routes/products._index": {
     id: "routes/products._index",
     parentId: "root",
     path: "products",
     index: true,
     caseSensitive: void 0,
-    module: route14
+    module: route13
   },
   "routes/products.create": {
     id: "routes/products.create",
@@ -6854,13 +6846,21 @@ var routes = {
     path: "products/create",
     index: void 0,
     caseSensitive: void 0,
-    module: route15
+    module: route14
   },
   "routes/register._index": {
     id: "routes/register._index",
     parentId: "root",
     path: "register",
     index: true,
+    caseSensitive: void 0,
+    module: route15
+  },
+  "routes/categories.$id": {
+    id: "routes/categories.$id",
+    parentId: "root",
+    path: "categories/:id",
+    index: void 0,
     caseSensitive: void 0,
     module: route16
   },

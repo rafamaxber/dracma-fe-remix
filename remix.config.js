@@ -12,6 +12,7 @@ export default {
     '@remix-pwa/sync',
     '@remix-pwa/cache',
     'idb',
+    "remix-i18next",
   ],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
