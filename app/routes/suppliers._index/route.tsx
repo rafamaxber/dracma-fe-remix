@@ -14,7 +14,7 @@ import { DataTableMenuProvider } from "~/components/data-table/DataTableContext"
 import {  DataTableMenu } from "~/components/data-table/DataTableCells";
 import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
-import { pageConfig } from ".";
+import { pageConfig } from "./page-config";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
 
 export interface Customer {

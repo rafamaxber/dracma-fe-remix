@@ -6,7 +6,7 @@ import { NotificationIcon } from "./NotificationIcon";
 import { SideBarNavigation } from "./SideBarNavigation";
 import { SideBarProps } from "./SideBarProps";
 
-export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userName = 'John Doe', hasNewMessages = true }: SideBarProps = {}) {
+export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userName = 'John Doe', hasNewMessages = false }: SideBarProps = {}) {
   const [openedMenu, setOpenedMenu] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -31,7 +31,7 @@ export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNam
   return (
     <div>
       <div className="flex items-center justify-between h-12 p-2 rounded-bl-lg rounded-br-lg bg-accent lg:hidden hamburguer-menu">
-        <LuMenu size="25px" className="text-primary" onClick={handleOpenMenu} />
+        <LuMenu size="25px" className="text-slate-300" onClick={handleOpenMenu} />
         <CommandBar />
         <NotificationIcon hasNewMessages={hasNewMessages} />
         <AvatarIcon avatarUrl={avatarUrl} userName={userName} />

@@ -23,6 +23,7 @@ export interface PageConfigType {
     delete: string,
     search: string,
   },
+  formViewTitleTxt: string,
   formEditTitleTxt: string,
   formCreateTitleTxt: string,
   formSubtitleTxt: string,

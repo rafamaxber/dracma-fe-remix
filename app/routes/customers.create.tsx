@@ -3,8 +3,9 @@ import { ActionFunction, LoaderFunctionArgs } from '@remix-run/node'
 
 import { formAction } from '~/form-action.server'
 import MasterPage from '~/components/master-page/MasterPage'
-import { pageConfig, schema, Form } from './customers._index'
 import { AuthCookie } from '~/data/auth/user-auth-cookie'
+import { pageConfig, schema } from './customers._index/page-config'
+import { Form } from './customers._index/Form'
 
 const mutation = makeDomainFunction(schema)(async (values) => (
   console.log(values) /* or anything else, like saveMyValues(values) */

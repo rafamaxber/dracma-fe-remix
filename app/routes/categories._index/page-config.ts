@@ -15,6 +15,7 @@ export const pageConfig: PageConfigType = {
     delete: `delete-${entity}`,
     search: `search-${entity}`,
   },
+  formViewTitleTxt: 'Categoria',
   formEditTitleTxt: 'Editar categoria',
   formCreateTitleTxt: 'Cadastro de categoria',
   formSubtitleTxt: 'Preencha os campos abaixo para cadastrar uma nova categoria',

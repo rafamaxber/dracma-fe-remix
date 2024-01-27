@@ -4,9 +4,10 @@ import { ActionFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
 import { formAction } from '~/form-action.server'
-import { Form, schema, pageConfig, Customer } from './customers._index'
 import MasterPage from '~/components/master-page/MasterPage'
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { Customer } from "./customers._index/route";
+import { pageConfig, schema } from "./customers._index/page-config";
 
 interface ResponseType {
   data: Omit<Customer, 'id'>[];

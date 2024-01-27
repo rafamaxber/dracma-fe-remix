@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { pageConfig, schema, formConfig } from "."
 import { EntityForm } from "~/components/form/EntityForm"
+import { formConfig, pageConfig, schema } from "./page-config"
 
 interface Props {
   isEditing?: boolean,

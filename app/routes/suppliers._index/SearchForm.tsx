@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { QueryType } from "./route";
-import { pageConfig } from ".";
+import { pageConfig } from "./page-config";
 
 interface SearchFormProps {
   query: QueryType;
