@@ -1,5 +1,6 @@
 import { TypedResponse, createCookie, redirect } from "@remix-run/node";
 import { routes } from "~/components/navigation/navigationItems";
+import { JwtService } from "./jtw";
 
 export interface UserAuthType {
   id: string;
@@ -10,6 +11,8 @@ export interface UserAuthType {
   iat?: number;
   exp?: number;
 }
+
+export type UserDataType = Pick<UserAuthType, 'firstName' | 'nickName'>;
 
 export class AuthCookie {
   static get() {
@@ -56,5 +59,17 @@ export class AuthCookie {
     if (accessToken) {
       throw redirect(routes.dashboard);
     }
+  }
+
+  static async getUserAuthData(request: Request): Promise<UserDataType> {
+    const authCookie = request.headers.get("Cookie");
+    const accessToken = await AuthCookie.get().parse(authCookie);
+
+    if (accessToken) {
+      const accessTokenJwt: UserAuthType = JwtService.format(accessToken);
+      return { firstName: accessTokenJwt.firstName, nickName: accessTokenJwt.nickName } ;
+    }
+
+    return { firstName: "", nickName: "" };
   }
 }

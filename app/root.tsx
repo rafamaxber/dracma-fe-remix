@@ -13,7 +13,9 @@ import {
 import { useSWEffect , LiveReload } from '@remix-pwa/sw'
 import { themeSessionResolver } from "./sessions.server";
 import styles from "~/components/styles/tailwind.css";
-import { cn } from "./lib/utils";
+import { cn } from "~/lib/utils";
+import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { UserDataProvider } from "~/components/user-auth-data";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -21,8 +23,13 @@ export const links: LinksFunction = () => [
 ]
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const { getTheme } = await themeSessionResolver(request)
+  const [accessToken, { getTheme }] = await Promise.all([
+    AuthCookie.getUserAuthData(request),
+    themeSessionResolver(request)
+  ])
+
   return {
+    userData: accessToken,
     theme: getTheme(),
   }
 }
@@ -32,7 +39,9 @@ export default function AppWithProviders() {
 
   return (
     <ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
-      <App />
+      <UserDataProvider userData={data.userData}>
+        <App />
+      </UserDataProvider>
     </ThemeProvider>
   )
 }
