@@ -30,15 +30,6 @@ export interface QueryType extends PaginationType {
   q?: string;
 }
 
-async function deleteCategory(accessToken: string, id: number) {
-  await new CategoryDeleteById().delete(accessToken, id);
-
-  return json({
-    id,
-    message: 'Categoria excluída com sucesso!'
-  });
-}
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   const accessToken = await AuthCookie.requireAuthCookie(request);
 
@@ -47,7 +38,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const id = formData.get("id");
 
     if (id) {
-      return deleteCategory(String(accessToken), +id )
+      return new CategoryDeleteById().delete(String(accessToken), +id)
     }
   }
 
