@@ -42,7 +42,7 @@ export function DataTableDropdownMenu({ id, onDeleteDialog }: { id: string, onDe
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="float-right">
         <Button variant="ghost" className="p-0 rounded-full w-7 h-7">
           <LuMoreVertical size="20" />
         </Button>

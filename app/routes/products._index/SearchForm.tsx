@@ -7,12 +7,14 @@ import { Input } from "~/components/ui/input";
 import { LuSettings2 } from "react-icons/lu";
 import { Label } from "~/components/ui/label";
 import { QueryType } from "./route";
+
 interface SearchFormProps {
   showPartial?: boolean;
   onOpenFullForm?: () => void;
   query: QueryType;
   categoryDataList: ComboBoxListType[]
 }
+
 export function SearchForm({
   showPartial = false, onOpenFullForm, query, categoryDataList
 }: SearchFormProps) {
@@ -51,7 +53,7 @@ export function SearchForm({
       </fieldset>
 
       <div className="flex flex-row-reverse justify-end md:flex-row">
-        <Button type="submit" name="intent" value="search-product" className="sticky bottom-0 left-0 w-full h-10 md:w-28">{buttonTxt}</Button>
+        <Button type="submit" variant="outline" name="intent" value="search-product" className="sticky bottom-0 left-0 w-full h-10 md:w-28">{buttonTxt}</Button>
         {showPartial && <Button variant="link" type="button" onClick={onOpenFullForm} className="flex items-center px-4 py-2 text-blue-500 underline">
           <LuSettings2 className="mr-2" /> Mais Filtros
         </Button>}

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { ActionFunctionArgs , LoaderFunctionArgs } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { LuPlusCircle } from "react-icons/lu";
-import { MetaFunction } from "@remix-run/node";
+import { MetaFunction, json } from "@remix-run/node";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "~/components/data-table/DataTable";
 import MasterPage from "~/components/master-page/MasterPage";
@@ -17,21 +17,10 @@ import { DataTableMenu } from "~/components/data-table/DataTableCells";
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
 import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
-
-interface Product {
-  name: string;
-  category: string;
-  price: number;
-  code: string;
-  stock: number;
-  id: number;
-  image: string;
-}
-
-interface ResponseType {
-  data: Product[];
-  query: QueryType;
-}
+import { ProductDataTable } from "~/data/product/protocols";
+import { ProductListAll } from "~/data/product/product-list-all";
+import { Badge } from "~/components/ui/badge";
+import { CategoryListAll } from "~/data/category/category-list-all";
 
 export interface QueryType extends PaginationType {
   name?: string;
@@ -39,162 +28,116 @@ export interface QueryType extends PaginationType {
   code?: string;
 }
 
-function getProductsData(): Product[] {
-  return [
-    {
-      name: "Produto 1",
-      category: "Categoria 1",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 1,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 2",
-      category: "Categoria 2",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 2,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 3",
-      category: "Categoria 3",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 3,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 4",
-      category: "Categoria 4",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 4,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 5",
-      category: "Categoria 5",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 5,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 6",
-      category: "Categoria 6",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 6,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 7",
-      category: "Categoria 7",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 7,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 8",
-      category: "Categoria 8",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 8,
-      image: "https://via.placeholder.com/80",
-    },
-    {
-      name: "Produto 9",
-      category: "Categoria 9",
-      price: 10.0,
-      code: "123456",
-      stock: 10,
-      id: 9,
-      image: "https://via.placeholder.com/80",
-    }
-  ]
-}
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   return null;
 };
 
-export const loader = async ({ request, params, context }: LoaderFunctionArgs) => {
-  await AuthCookie.requireAuthCookie(request);
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const accessToken = await AuthCookie.requireAuthCookie(request);
 
   const url = request.url;
   const searchParams = new URL(url).searchParams;
   const name = searchParams.get("name") || "";
+  const category = searchParams.get("category") || "";
+  const code = searchParams.get("code") || "";
 
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const data = name ? getProductsData().filter((product) => product.name.toLowerCase().includes(name.toLowerCase())) : getProductsData();
-      const categories = data.map((product) => product.category).filter((category, index, self) => self.indexOf(category) === index);
+  const [data, categoryDataList] = await Promise.all([
+    new ProductListAll().listAll(String(accessToken), {
+      name,
+      category,
+      code,
+      page: Number(searchParams.get("page")) || 1,
+      perPage: Number(searchParams.get("perPage")) || 10,
+    }),
+    new CategoryListAll().listAll(String(accessToken), {
+      page: 1,
+      perPage: 200,
+    }).then((data) => data.results.map((category) => ({
+      label: category.name,
+      value: String(category.id),
+    })))
+  ]);
 
-      resolve(
-        new Response(JSON.stringify({
-          data,
-          categories,
-          total: 1000,
-          offset: 0,
-          limit: 50,
-          query: {
-            name,
-            category: searchParams.get("category") || null,
-            code: searchParams.get("code") || null,
-            page: searchParams.get("page") || null,
-            limit: searchParams.get("limit") || null,
-          },
-        }), {
-          headers: {
-            "content-type": "application/json",
-          },
-        })
-      );
-    }, 1000);
-  });
+  return json({...data, categoryDataList });
 };
 
-const productsColumnsDefinition: ColumnDef<Product>[] = [
+const productsColumnsDefinition: ColumnDef<ProductDataTable>[] = [
   {
     id: "data-view",
     header: "Produto",
     cell: (props) => {
-      const { category, name, image, code } = props.row.original;
+      const { categories, name, image, code, supplier } = props.row.original;
 
       return (
         <div className="flex items-center justify-between mb-4 space-x-4">
-          <span className="relative flex overflow-hidden rounded-full size-20 shrink-0">
-            <img className="w-full h-full aspect-square" alt={name} src={image}/>
+          <span className="relative flex overflow-hidden border rounded-full shadow-sm size-20 shrink-0">
+            <img className="" alt={name} src={image}/>
           </span>
-          <div className="grow">
-            <span className="block font-semibold">{name}</span>
-            <span className="block text-sm text-gray-500">{category}</span>
-            <span className="block text-sm text-gray-500">{code}</span>
+          <div className="space-y-2 grow">
+            <div className="block font-semibold">{name}</div>
+            <div className="block text-sm text-gray-500">{supplier}</div>
+            <div className="block text-sm text-gray-500">{code}</div>
+            <div className="block text-sm text-gray-500">
+              {
+                categories.map((category, index) => {
+                  return (
+                    <Badge variant="outline" key={index} className="mr-2">
+                      {category}
+                    </Badge>
+                  )
+                })
+              }
+            </div>
           </div>
         </div>
       )
     }
   },
   {
-    accessorKey: "price",
-    header: "Preço",
+    accessorKey: "price_sell",
+    header: "Preço de venda",
     cell: (props) => {
-      const formatted = formatCurrency({
-        value: props.row.getValue("price")
-      })
+      const value = props.row.getValue("price_sell");
+      const formatted = value ? formatCurrency({
+        value: String(value)
+      }) : '-'
 
       return <span className="block font-semibold text-emerald-600">{formatted}</span>
+    }
+  },
+  {
+    accessorKey: "price_cost",
+    header: "Preço de custo",
+    cell: (props) => {
+      const value = props.row.getValue("price_cost");
+      const formatted = value ? formatCurrency({
+        value: String(value)
+      }) : '-'
+
+      return <span className="block font-semibold text-emerald-600">{formatted}</span>
+    }
+  },
+  {
+    accessorKey: "stock_quantity",
+    header: "Quantidade",
+    cell: (props) => {
+      const { stock_max, stock_min, stock_quantity } = props.row.original;
+      const formatted = stock_quantity || '-'
+
+      if (stock_quantity >= stock_max) {
+        return <span className="block font-semibold text-emerald-600">{stock_quantity}</span>
+      }
+
+      if (stock_quantity <= stock_min) {
+        return <span className="block font-semibold text-red-700">{stock_quantity}</span>
+      }
+
+      if (stock_quantity >= (stock_min + 10 ) && stock_quantity <= (stock_max - 10)) {
+        return <span className="block font-semibold text-yellow-700">{stock_quantity}</span>
+      }
+
+      return <span className="block font-semibold text-red-700">{stock_quantity}</span>
+
     }
   },
   {
@@ -222,7 +165,8 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const [openSheet, setOpenSheet] = useState(false);
-  const { data: dataProducts, query } = useLoaderData<ResponseType>();
+  const { pagination, results, categoryDataList } = useLoaderData<typeof loader>();
+  const query = useSearchParams();
 
   function handleToggleSheet() {
     setOpenSheet(!openSheet);
@@ -243,21 +187,21 @@ export default function Index() {
           <Separator className="my-4" />
 
           <FilterBar filterForm={
-            <SearchForm showPartial query={query} onOpenFullForm={handleToggleSheet} />
+            <SearchForm categoryDataList={categoryDataList} query={query} onOpenFullForm={handleToggleSheet} />
           }>
             <FilterBar.Sheet openSheet={openSheet} handleToggleSheet={handleToggleSheet}>
-              <SearchForm query={query} />
+              <SearchForm categoryDataList={categoryDataList} query={query} />
             </FilterBar.Sheet>
           </FilterBar>
 
           <div className="border rounded-md">
-            <DataTable columns={productsColumnsDefinition} data={dataProducts} />
+            <DataTable columns={productsColumnsDefinition} data={results} />
           </div>
 
           <Pagination
-            perPage={query.perPage}
-            page={query.page}
-            total={query.total}
+            perPage={pagination.perPage}
+            page={pagination.page}
+            total={pagination.total}
           />
 
         </MasterPage.ContentDefault>

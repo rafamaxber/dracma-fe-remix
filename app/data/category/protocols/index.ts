@@ -1,4 +1,4 @@
-import { ListAllFilterType, ListAllResponse } from "~/data/types";
+import { ListAllFilterType, ListAllResponse } from "~/domain/general-types";
 
 export type CategoryCreateDto = {
   name: string;

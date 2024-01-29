@@ -14,7 +14,7 @@ export function DesktopSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNa
   }
 
   return (
-    <aside className={`sticky top-0 bottom-0 hidden h-screen p-2 overflow-y-auto bg-card text-card-foreground side-bar border-r lg:block lg:left-0 ${openedMenu && 'w-80'}`}>
+    <aside className={`sticky top-0 bottom-0 hidden h-screen p-2 overflow-y-auto bg-card text-muted-foreground side-bar border-r lg:block lg:left-0 ${openedMenu && 'w-80'}`}>
 
       <div className="flex justify-between gap-1 pb-2 profile-menu">
 

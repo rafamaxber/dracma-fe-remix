@@ -1,4 +1,4 @@
-import { ListAllFilterType } from "~/data/types";
+import { ListAllFilterType } from "~/domain/general-types";
 import { Pagination as PaginationBase, PaginationContent, PaginationItem, PaginationPrevious, PaginationLink, PaginationNext } from "../ui/pagination";
 
 export interface PaginationType extends ListAllFilterType {
