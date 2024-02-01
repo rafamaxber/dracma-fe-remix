@@ -1,11 +1,12 @@
-import { LuMenu, LuPanelLeftClose } from "react-icons/lu";
+import { LuMenu, LuPanelLeftClose, LuPower } from "react-icons/lu";
 import { SideBarNavigation } from "./SideBarNavigation";
 import { SideBarProps } from "./SideBarProps";
 import { routes } from "./navigationItems";
 import { useState } from "react";
 import { CommandBar } from "./CommandBar";
-import { Link } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import { ModeToggle } from "./ModeToggle";
+import { Button } from "../ui/button";
 
 export function DesktopSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userName = 'John Doe', hasNewMessages = false }: SideBarProps = {}) {
   const [openedMenu, setOpenedMenu] = useState(true);
@@ -40,9 +41,20 @@ export function DesktopSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNa
         </div>
       </div>
 
-      <ModeToggle />
       {openedMenu && <div className="py-3 mt-3"><CommandBar /></div>}
       {openedMenu && <SideBarNavigation />}
+
+      <div className="absolute bottom-0 w-full pb-5">
+        <div className="flex justify-between">
+          <ModeToggle />
+
+          <Form action="/logout" method="post">
+            <Button variant="outline" className="relative left-[-16px]" type="submit">
+              <LuPower className="w-4 h-4 mr-2" /> Sair
+            </Button>
+          </Form>
+        </div>
+      </div>
     </aside>
   );
 }

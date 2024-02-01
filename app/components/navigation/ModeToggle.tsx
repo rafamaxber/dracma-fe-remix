@@ -1,4 +1,4 @@
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@radix-ui/react-dropdown-menu"
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "~/components/ui/dropdown-menu"
 import { LuMoon, LuSun } from "react-icons/lu"
 import { Theme, useTheme } from "remix-themes"
 import { Button } from "../ui/button"
@@ -10,7 +10,7 @@ export function ModeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="icon">
+        <Button variant="outline" size="icon">
           {
             theme === Theme.LIGHT ? (
               <LuSun className="h-[1.2rem] w-[1.2rem] rotate-0 transition-all" />
@@ -22,11 +22,11 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme(Theme.LIGHT)}>
-          Light
+        <DropdownMenuItem onClick={() => setTheme(Theme.LIGHT)} className="gap-2">
+          <LuSun className="h-[1.2rem] w-[1.2rem] rotate-0 transition-all" /> <span>Light</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme(Theme.DARK)}>
-          Dark
+        <DropdownMenuItem onClick={() => setTheme(Theme.DARK)} className="gap-2">
+          <LuMoon className="h-[1.2rem] w-[1.2rem] rotate-0 transition-all" /> <span>Dark</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

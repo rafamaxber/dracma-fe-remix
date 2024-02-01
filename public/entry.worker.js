@@ -2045,6 +2045,13 @@ var require_index = __commonJS({
   }
 });
 
+// routes-module:routes/logout.tsx?worker
+var require_logout = __commonJS({
+  "routes-module:routes/logout.tsx?worker"(exports, module) {
+    module.exports = {};
+  }
+});
+
 // node_modules/@remix-run/router/dist/router.js
 var router_exports = {};
 __export(router_exports, {
@@ -6722,9 +6729,10 @@ var route15 = __toESM(require_route8());
 var route16 = __toESM(require_categories_id());
 var route17 = __toESM(require_route9());
 var route18 = __toESM(require_index());
+var route19 = __toESM(require_logout());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-NXJ3TLRR.js", "/build/manifest-1B205CF3.js", "/build/entry.client-PSZMBAWV.js", "/build/__remix_entry_dev-4WK62Q6K.js", "/build/routes/suppliers._index-GTPR73OZ.js", "/build/routes/reset-password.$token-OUKR4FHV.js", "/build/routes/register._index-7QW2RG4H.js", "/build/routes/products.create-2NUJ3TZF.js", "/build/routes/products._index-JW3YBRYO.js", "/build/routes/organization.create-5TLVI6AE.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/login._index-7SZTKQMZ.js", "/build/routes/forgot-password._index-LK5ECQTA.js", "/build/routes/customers.create-AB3VONXC.js", "/build/routes/customers._index-URUBGH2R.js", "/build/routes/customers.$id_.edit-UE6RNHXJ.js", "/build/routes/categories.create-OZP3S4AE.js", "/build/routes/categories._index-OYQ3XDAM.js", "/build/routes/categories.$id_.edit-6LOQSTU4.js", "/build/routes/categories.$id-7HWVEWXA.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-CBMTEDOE.js", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-RIBBQ5Y7.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XWKQK6A6.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-XI4UB3S5.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-VR7AF7GK.js", "/build/_shared/chunk-UW7QL3TY.js", "/build/_shared/chunk-RZS5T3OE.js", "/build/_shared/chunk-QRXUVKLH.js", "/build/_shared/chunk-QA2Z5E2E.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-O4N3PYUH.js", "/build/_shared/chunk-NSFJWXSK.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-LCHI3VDA.js", "/build/_shared/chunk-KNN6ZIN3.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-IOM4H53A.js", "/build/_shared/chunk-HWFPIN6U.js", "/build/_shared/chunk-HUNCMSO6.js", "/build/_shared/chunk-D756UEQ4.js", "/build/_shared/chunk-D6X4IHH5.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-CEHSY5YA.js", "/build/_shared/chunk-BUMV7MHQ.js", "/build/_shared/chunk-7SGMGUUY.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-64ZTRKS2.js", "/build/_shared/chunk-5V2EYRC4.js", "/build/_shared/chunk-2QJY4JOV.js", "/build/_assets/tailwind-YKNPBCCV.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg"];
+var assets = ["/build/root-NAK54S4Q.js", "/build/manifest-743A225D.js", "/build/entry.client-ADALWST6.js", "/build/__remix_entry_dev-KWQAD3II.js", "/build/_assets/tailwind-YTME636K.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/routes/suppliers._index-J2ZYQIIC.js", "/build/routes/reset-password.$token-EZ2RIDBS.js", "/build/routes/register._index-S3ZYFUYV.js", "/build/routes/products.create-YFG2ANYF.js", "/build/routes/products._index-7NUPXOG5.js", "/build/routes/organization.create-23C3RMEJ.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-UENH3E56.js", "/build/routes/forgot-password._index-GSLSZDRO.js", "/build/routes/customers.create-IF7GLSC7.js", "/build/routes/customers._index-NIGMZL3Z.js", "/build/routes/customers.$id_.edit-I4JDUYZP.js", "/build/routes/categories.create-DBEBRGFG.js", "/build/routes/categories._index-NY5V5N6S.js", "/build/routes/categories.$id_.edit-E6ILHZKT.js", "/build/routes/categories.$id-XBMICLFY.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-MKBDOABG.js", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-XAJQZCI5.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-Z7ND6MVS.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-VPYTEFEV.js", "/build/_shared/chunk-UW7QL3TY.js", "/build/_shared/chunk-RY3JPD7S.js", "/build/_shared/chunk-QSGIVC37.js", "/build/_shared/chunk-QQ4RKHFF.js", "/build/_shared/chunk-QA2Z5E2E.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-PIEKVBAW.js", "/build/_shared/chunk-P7KNW2AN.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-LCHI3VDA.js", "/build/_shared/chunk-LA4F6BJA.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-JHYKNOCW.js", "/build/_shared/chunk-JBSEMO2O.js", "/build/_shared/chunk-IOM4H53A.js", "/build/_shared/chunk-HWFPIN6U.js", "/build/_shared/chunk-H6SORN2S.js", "/build/_shared/chunk-GLFC4DVD.js", "/build/_shared/chunk-CSDSWTOE.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-CEHSY5YA.js", "/build/_shared/chunk-APIXHK7H.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-6WONMTTC.js", "/build/_shared/chunk-2QJY4JOV.js"];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {
@@ -6879,6 +6887,14 @@ var routes = {
     index: true,
     caseSensitive: void 0,
     module: route18
+  },
+  "routes/logout": {
+    id: "routes/logout",
+    parentId: "root",
+    path: "logout",
+    index: void 0,
+    caseSensitive: void 0,
+    module: route19
   }
 };
 var entry = { module: entry_worker_exports };

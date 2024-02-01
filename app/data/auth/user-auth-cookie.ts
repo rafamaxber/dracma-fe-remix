@@ -72,4 +72,14 @@ export class AuthCookie {
 
     return { firstName: "", nickName: "" };
   }
+
+  static async logout() {
+    return redirect("/login", {
+      headers: {
+        "Set-Cookie": await AuthCookie.get().serialize("", {
+          maxAge: 0,
+        }),
+      },
+    });
+  }
 }
