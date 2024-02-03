@@ -4117,7 +4117,8 @@ function createStaticHandler(routes2, opts) {
     mapRouteProperties = defaultMapRouteProperties;
   }
   let future = _extends({
-    v7_relativeSplatPath: false
+    v7_relativeSplatPath: false,
+    v7_throwAbortReason: false
   }, opts ? opts.future : null);
   let dataRoutes = convertRoutesToDataRoutes(routes2, mapRouteProperties, void 0, manifest);
   async function query(request, _temp3) {
@@ -4279,8 +4280,7 @@ function createStaticHandler(routes2, opts) {
         requestContext
       });
       if (request.signal.aborted) {
-        let method = isRouteRequest ? "queryRoute" : "query";
-        throw new Error(method + "() call aborted: " + request.method + " " + request.url);
+        throwStaticHandlerAbortedError(request, isRouteRequest, future);
       }
     }
     if (isRedirectResult(result)) {
@@ -4382,8 +4382,7 @@ function createStaticHandler(routes2, opts) {
       requestContext
     }))]);
     if (request.signal.aborted) {
-      let method = isRouteRequest ? "queryRoute" : "query";
-      throw new Error(method + "() call aborted: " + request.method + " " + request.url);
+      throwStaticHandlerAbortedError(request, isRouteRequest, future);
     }
     let activeDeferreds = /* @__PURE__ */ new Map();
     let context = processRouteLoaderData(matches, matchesToLoad, results, pendingActionError, activeDeferreds);
@@ -4406,12 +4405,19 @@ function createStaticHandler(routes2, opts) {
 }
 function getStaticContextFromError(routes2, context, error) {
   let newContext = _extends({}, context, {
-    statusCode: 500,
+    statusCode: isRouteErrorResponse(error) ? error.status : 500,
     errors: {
       [context._deepestRenderedBoundaryId || routes2[0].id]: error
     }
   });
   return newContext;
+}
+function throwStaticHandlerAbortedError(request, isRouteRequest, future) {
+  if (future.v7_throwAbortReason && request.signal.reason !== void 0) {
+    throw request.signal.reason;
+  }
+  let method = isRouteRequest ? "queryRoute" : "query";
+  throw new Error(method + "() call aborted: " + request.method + " " + request.url);
 }
 function isSubmissionNavigation(opts) {
   return opts != null && ("formData" in opts && opts.formData != null || "body" in opts && opts.body !== void 0);
@@ -6732,7 +6738,7 @@ var route18 = __toESM(require_index());
 var route19 = __toESM(require_logout());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-G7YKFK3L.js", "/build/manifest-2F60ECEA.js", "/build/entry.client-ADALWST6.js", "/build/__remix_entry_dev-KWQAD3II.js", "/build/routes/suppliers._index-P2NF2ZV4.js", "/build/routes/reset-password.$token-6U5HPZJ3.js", "/build/routes/register._index-ELQF4T6V.js", "/build/routes/products.create-L6D4KEDD.js", "/build/routes/products._index-AP6OPT2G.js", "/build/routes/organization.create-DHBC2FXJ.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-IDSBAINT.js", "/build/routes/forgot-password._index-Y4QRNSE4.js", "/build/routes/customers.create-RNUS5POV.js", "/build/routes/customers._index-JW4UX5AL.js", "/build/routes/customers.$id_.edit-SKXDHOMF.js", "/build/routes/categories.create-2GHXL2F4.js", "/build/routes/categories._index-6HRMBLHL.js", "/build/routes/categories.$id_.edit-U2TYHNVZ.js", "/build/routes/categories.$id-OZMO4R4V.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-O2GPJBDD.js", "/build/_assets/tailwind-HT4JVXYS.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-XAJQZCI5.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-ZW2W2IA4.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-UW7QL3TY.js", "/build/_shared/chunk-TGLKBLPD.js", "/build/_shared/chunk-T7ABNIWP.js", "/build/_shared/chunk-RY3JPD7S.js", "/build/_shared/chunk-QA2Z5E2E.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-OCGCNEKI.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NCLUZ4EP.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-MFRNIBPK.js", "/build/_shared/chunk-LCHI3VDA.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-IOM4H53A.js", "/build/_shared/chunk-HWFPIN6U.js", "/build/_shared/chunk-FVVFA6Q5.js", "/build/_shared/chunk-FUMIRTH6.js", "/build/_shared/chunk-CSDSWTOE.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-CEHSY5YA.js", "/build/_shared/chunk-BR2F6NOP.js", "/build/_shared/chunk-APIXHK7H.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-6WONMTTC.js", "/build/_shared/chunk-4CPZMJW7.js", "/build/_shared/chunk-2QJY4JOV.js", "/build/_shared/chunk-2K6PCTXF.js"];
+var assets = ["/build/root-KY3KHQVV.js", "/build/manifest-8817E470.js", "/build/entry.client-PBIECPS3.js", "/build/__remix_entry_dev-6MVRUNKX.js", "/build/routes/suppliers._index-2NMB4GZL.js", "/build/routes/reset-password.$token-ZPBAD4CG.js", "/build/routes/register._index-66GNXZAR.js", "/build/routes/products.create-ZGBBNUNI.js", "/build/routes/products._index-5W4S3SYV.js", "/build/routes/organization.create-OD6KYGHJ.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-77T7M6CN.js", "/build/routes/forgot-password._index-P3H47PWP.js", "/build/routes/customers.create-LIRBY2XP.js", "/build/routes/customers._index-FXRDUSPI.js", "/build/routes/customers.$id_.edit-ST727ENH.js", "/build/routes/categories.create-WXAXDJSD.js", "/build/routes/categories._index-NC23RAAY.js", "/build/routes/categories.$id_.edit-RWPWCZSY.js", "/build/routes/categories.$id-7MIJFPCC.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-JKSCT5K2.js", "/build/_assets/tailwind-MOLRALCQ.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-W245ZYLB.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-YIZHWXKT.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-VQH3DPZS.js", "/build/_shared/chunk-UW7QL3TY.js", "/build/_shared/chunk-RY3JPD7S.js", "/build/_shared/chunk-QZQMSB4Y.js", "/build/_shared/chunk-QA2Z5E2E.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-P7BMDJZQ.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-MTYXSIS6.js", "/build/_shared/chunk-LCHI3VDA.js", "/build/_shared/chunk-LA527BU5.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-IOM4H53A.js", "/build/_shared/chunk-I2NMDIBO.js", "/build/_shared/chunk-HWFPIN6U.js", "/build/_shared/chunk-DVJB45FG.js", "/build/_shared/chunk-D227XKKY.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-CEHSY5YA.js", "/build/_shared/chunk-BCS6UF7M.js", "/build/_shared/chunk-AIMU2G63.js", "/build/_shared/chunk-7VJGUC3D.js", "/build/_shared/chunk-7PYTFG7U.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-66BMFQPH.js", "/build/_shared/chunk-2QJY4JOV.js"];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {
@@ -7127,7 +7133,7 @@ buffer/index.js:
 
 @remix-run/router/dist/router.js:
   (**
-   * @remix-run/router v1.14.2
+   * @remix-run/router v1.15.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7139,7 +7145,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/mode.js:
   (**
-   * @remix-run/server-runtime v2.5.1
+   * @remix-run/server-runtime v2.6.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7151,7 +7157,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/errors.js:
   (**
-   * @remix-run/server-runtime v2.5.1
+   * @remix-run/server-runtime v2.6.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7163,7 +7169,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/responses.js:
   (**
-   * @remix-run/server-runtime v2.5.1
+   * @remix-run/server-runtime v2.6.0
    *
    * Copyright (c) Remix Software Inc.
    *
