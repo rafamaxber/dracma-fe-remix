@@ -1,16 +1,22 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, json, useActionData, useLoaderData } from "@remix-run/react";
 import { useRef, useState } from "react";
 import { z } from "zod";
+import { LuXCircle } from "react-icons/lu";
+
 import { ComboBox, ComboBoxListType } from "~/components/combo-box/comboBox";
 import { FormCard } from "~/components/form-card/FormCard";
 import MasterPage from "~/components/master-page/MasterPage";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { CategoryListAll } from "~/data/category/category-list-all";
+import { MeasurementUnitsListAll } from "~/data/measurement-units/measurement-units-list-all";
+import { ProductCreate } from "~/data/product/product-create";
 
 export const meta: MetaFunction = () => {
   return [
@@ -27,13 +33,13 @@ const schema = z.object({
   category: z.string().min(3),
   sub_category: z.string().min(3).nullable(),
   description: z.string().min(3).nullable(),
-  code: z.number(),
+  code: z.string(),
   sku: z.string().nullable(),
   weight: z.string().nullable(),
   unit: z.string().nullable(),
   sale_value: z.string(),
   cost_value: z.string(),
-  finished_product: z.boolean().default(false),
+  // finished_product: z.boolean().default(false),
   control_stock: z.boolean().default(false),
   min_stock: z.number().nullable(),
   subtracts_from_raw_materials: z.boolean().default(false),
@@ -47,64 +53,98 @@ const schema = z.object({
 })
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  const accessToken = await AuthCookie.requireAuthCookie(request);
   const data = Object.fromEntries(await request.formData())
   const result = schema.safeParse(data);
   console.log(data)
-console.log(JSON.stringify(result))
-  return result;
+
+  if (!result.success) {
+    return json({ error: result.error });
+  }
+
+  const product = await new ProductCreate().create(String(accessToken), {
+    name: result.data.name,
+    category: result.data.category,
+    // sub_category: result.data.sub_category,
+    description: result.data.description,
+    code: result.data.code,
+    sku: result.data.sku,
+    weight: result.data.weight,
+    unit: result.data.unit,
+    sale_value: result.data.sale_value,
+    cost_value: result.data.cost_value,
+    finished_product: result.data.finished_product,
+    control_stock: result.data.control_stock,
+    // min_stock: result.data.min_stock,
+    subtracts_from_raw_materials: result.data.subtracts_from_raw_materials,
+    stock_event: result.data.stock_event,
+    images: result.data.images,
+    image_color: result.data.image_color,
+
+  })
+
+  return json(result);
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await AuthCookie.requireAuthCookie(request);
+  const accessToken = await AuthCookie.requireAuthCookie(request);
+  const unitsFetcher = new MeasurementUnitsListAll().listAll(String(accessToken), {
+    page: 1,
+    perPage: 20
+  }).then((data) => data.results.map((unit) => ({
+    label: unit.name,
+    value: String(unit.id)
+  })));
+  const categoriesFetcher = new CategoryListAll().listAll(String(accessToken), {
+    page: 1,
+    perPage: 50
+  }).then((data) => data.results.map((category) => ({
+    label: category.name,
+    value: String(category.id)
+  })));
 
-  return null;
+  const [units, categories] = await Promise.all([unitsFetcher, categoriesFetcher] as const);
+
+  return json({ units, categories });
 };
 
 
 export default function Index() {
+  const data = useActionData<typeof action>();
   const formRef = useRef<HTMLFormElement>(null);
-  const [selectedCategory, setSelectedCategory] = useState<ComboBoxListType | null>(null);
-  const [selectedSubCategory, setSelectedSubCategory] = useState<ComboBoxListType | null>(null);
+  const { categories, units } = useLoaderData<typeof loader>();
+  const [selectedCategoryList, setSelectedCategoryList] = useState<ComboBoxListType[]>([]);
+  const [categoriesList, setCategoriesList] = useState<Array<{
+    label: string;
+    value: string;
+  }>>(categories);
   const [selectedUnit, setSelectedUnit] = useState<ComboBoxListType | null>(null);
-  const categories = [{
-    value: "1",
-    label: "Categoria 1"
-  }, {
-    value: "2",
-    label: "Categoria 2"
-  }, {
-    value: "3",
-    label: "Categoria 3"
-  }];
-  const subCategories = [{
-    value: "1",
-    label: "Sub-Categoria 1"
-  }, {
-    value: "2",
-    label: "Sub-Categoria 2"
-  }, {
-    value: "3",
-    label: "Sub-Categoria 3"
-  }];
-  const units = [
-    {
-      value: "kg",
-      label: "kg"
-    }, {
-      value: "gr",
-      label: "gr"
-    },
-    {
-      value: "unidades",
-      label: "unidades"
-    }
-  ]
-
-
+  console.log('action:: ', data)
   function handleChangeSwitch(field: string) {
     return (value: boolean) => {
       console.log(field, value)
     }
+  }
+
+  function addCategory(category: ComboBoxListType) {
+    setSelectedCategoryList([...selectedCategoryList, category])
+    setCategoriesList(categoriesList.map((item) => {
+      if (item.value === category.value) {
+        return { ...item, disabled: true }
+      }
+      return item
+    }))
+  }
+
+  function removeCategory(category: ComboBoxListType) {
+    const newSelectedCategoryList = selectedCategoryList.filter((item) => item.value !== category.value)
+    setSelectedCategoryList(newSelectedCategoryList)
+    setCategoriesList(categoriesList.map((item) => {
+      if (item.value === category.value) {
+        return { ...item, disabled: false }
+      }
+      return item
+    }))
   }
 
   return (
@@ -117,22 +157,33 @@ export default function Index() {
 
         <Form ref={formRef} method="post" className="px-2">
 
-          <FormCard>
+          <FormCard className="space-y-3">
             <FormCard.Title>Identificação</FormCard.Title>
             <fieldset className="flex-grow w-full">
               <Label className="block mb-2 text-sm font-semibold ">Nome:</Label>
               <Input required name="name" className="w-full" placeholder="Nome do produto..." />
             </fieldset>
-            <div className="flex flex-col gap-4 my-4 md:flex-row">
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">Categoria:</Label>
-                <ComboBox selectedOption={selectedCategory} name="category" setSelectedOption={setSelectedCategory} options={categories} />
-              </fieldset>
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">Sub-Categoria:</Label>
-                <ComboBox selectedOption={selectedSubCategory} name="sub_category" setSelectedOption={setSelectedSubCategory} options={subCategories} />
-              </fieldset>
-            </div>
+
+            <fieldset className="flex-grow w-full">
+              <Label className="block mb-2 text-sm font-semibold ">Categoria:</Label>
+              <ComboBox selectedOption={{
+                label: "Escolha as categorias...",
+                value: selectedCategoryList.map((category) => category.value).join(",")
+              }} name="category" setSelectedOption={addCategory} options={categoriesList} />
+              {Boolean(selectedCategoryList.length) && (
+                <div className="mt-2 space-x-1 space-y-1">
+                  {
+                    selectedCategoryList.map((category) => (
+                      <Badge variant="outline" className="cursor-pointer animate-in" key={category.value} onClick={() => removeCategory(category)}>
+                        <LuXCircle className="w-4 h-4 mr-1 ml-[-7px]" />
+                        {category.label}
+                      </Badge>
+                    ))
+                  }
+                </div>
+              )}
+            </fieldset>
+
             <fieldset className="w-full">
               <Label className="block mb-2 text-sm font-semibold ">Descrição:</Label>
               <Textarea name="description" className="w-full" placeholder="Texto descrevendo o produto" />
@@ -206,7 +257,7 @@ export default function Index() {
           </FormCard>
 
           <div className="w-full max-w-[610px] m-auto mb-4 py-4 bottom-0 sticky">
-            <Button type="submit" className="block w-full" variant="default" disabled size="lg">
+            <Button type="submit" className="block w-full" variant="default" size="lg">
               Salvar
             </Button>
           </div>

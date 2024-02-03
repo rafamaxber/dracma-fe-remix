@@ -20,7 +20,7 @@ export function SearchForm({
 }: SearchFormProps) {
   const { selectedOption, setSelectedOption } = useComboBox();
   const navigation = useNavigation();
-  const isLoading = navigation.state === "loading";
+  const isLoading = navigation.state === "submitting";
   const buttonTxt = isLoading ? "Filtrando..." : "Filtrar";
 
   const hidden = classnames(
@@ -53,7 +53,7 @@ export function SearchForm({
       </fieldset>
 
       <div className="flex flex-row-reverse justify-end md:flex-row">
-        <Button type="submit" variant="outline" name="intent" value="search-product" className="sticky bottom-0 left-0 w-full h-10 md:w-28">{buttonTxt}</Button>
+        <Button type="submit" variant="secondary" name="intent" value="search-product" className="sticky bottom-0 left-0 w-full h-10 md:w-28">{buttonTxt}</Button>
         {showPartial && <Button variant="link" type="button" onClick={onOpenFullForm} className="flex items-center px-4 py-2 text-blue-500 underline">
           <LuSettings2 className="mr-2" /> Mais Filtros
         </Button>}

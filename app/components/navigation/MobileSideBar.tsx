@@ -30,10 +30,10 @@ export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNam
 
   return (
     <div>
-      <div className="flex items-center justify-between h-12 p-2 rounded-bl-lg rounded-br-lg bg-accent lg:hidden hamburguer-menu">
-        <LuMenu size="25px" className="text-slate-300" onClick={handleOpenMenu} />
+      <div className="flex items-center justify-between gap-2 p-2 rounded-bl-lg rounded-br-lg h-14 bg-accent lg:hidden hamburguer-menu">
+        <LuMenu size="40px" className="text-slate-500" onClick={handleOpenMenu} />
         <CommandBar />
-        <NotificationIcon hasNewMessages={hasNewMessages} />
+        <NotificationIcon size="35px" hasNewMessages={hasNewMessages} />
         <AvatarIcon avatarUrl={avatarUrl} userName={userName} />
       </div>
       {openedMenu && (

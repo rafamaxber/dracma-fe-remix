@@ -43,16 +43,29 @@ export interface ProductType {
 
 interface ProductResponseList extends ListAllResponse<ProductType>{}
 
-export class ProductRepository {
-  // async create(accessToken: string, values: ProductCreateDto) {
-  //   const response = await dracmaApiClient.post('/v1/product', values, {
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`
-  //     }
-  //   });
+export interface ProductCreateDto extends Omit<ProductType, 'id' | 'updatedAt' | 'images' | 'categories' | 'supplier'> {
+  images: Array<{
+    url: string,
+    main: boolean
+  }>
+  categories: Array<{
+    id: number
+  }>
+  supplier: {
+    id: number
+  }
+}
 
-  //   return response.data;
-  // }
+export class ProductRepository {
+  async create(accessToken: string, values: ProductCreateDto) {
+    const response = await dracmaApiClient.post('/v1/product', values, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    return response.data;
+  }
 
   async listAll(accessToken: string, filterDto: ProductQueryFilterDto): Promise<ProductResponseList> {
     const { data } = await dracmaApiClient.get('/v1/product', {

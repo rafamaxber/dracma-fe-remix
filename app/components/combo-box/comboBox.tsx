@@ -25,6 +25,7 @@ import { useMediaQuery } from "~/components/hooks/useMediaQuery"
 export type ComboBoxListType = {
   value: string
   label: string
+  disabled?: boolean
 }
 
 export function useComboBox<T extends ComboBoxListType>() {
@@ -118,6 +119,7 @@ function ComboBoxList({
             <CommandItem
               key={option.value}
               value={option.value}
+              disabled={option.disabled}
               onSelect={(value) => {
                 setSelectedStatus(
                   options.find((priority) => priority.value === value) || null

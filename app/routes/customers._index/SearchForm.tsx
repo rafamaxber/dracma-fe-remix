@@ -12,7 +12,7 @@ export function SearchForm({
   query,
 }: SearchFormProps) {
   const navigation = useNavigation();
-  const isLoading = navigation.state === "loading";
+  const isLoading = navigation.state === "submitting";
   const buttonTxt = isLoading ? "Filtrando..." : "Filtrar";
 
   return (
@@ -23,7 +23,7 @@ export function SearchForm({
       </fieldset>
 
       <div className="flex justify-end md:flex-row">
-        <Button type="submit" name="intent" value={pageConfig.intent.search} className="h-10 md:w-28">{buttonTxt}</Button>
+        <Button type="submit" name="intent" variant="secondary" value={pageConfig.intent.search} className="h-10 md:w-28">{buttonTxt}</Button>
       </div>
     </Form>
   );
