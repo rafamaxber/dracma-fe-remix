@@ -1,22 +1,24 @@
-import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, Link, json, useActionData, useLoaderData } from "@remix-run/react";
-import { useRef, useState } from "react";
+import type { ActionFunction, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import { Link, json, useActionData, useLoaderData } from "@remix-run/react";
+
+import { Form } from '~/components/form/Form'
+
+import { useState } from "react";
 import { z } from "zod";
 import { LuXCircle } from "react-icons/lu";
 
+import MasterPage from "~/components/master-page/MasterPage";
 import { ComboBox, ComboBoxListType } from "~/components/combo-box/comboBox";
 import { FormCard } from "~/components/form-card/FormCard";
-import MasterPage from "~/components/master-page/MasterPage";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
-import { Textarea } from "~/components/ui/textarea";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
 import { CategoryListAll } from "~/data/category/category-list-all";
 import { MeasurementUnitsListAll } from "~/data/measurement-units/measurement-units-list-all";
 import { ProductCreate } from "~/data/product/product-create";
+import { makeDomainFunction } from "domain-functions";
+import { formAction } from "~/form-action.server";
+import { SupplierListAll } from "~/data/supplier/supplier-list-all";
 
 export const meta: MetaFunction = () => {
   return [
@@ -28,63 +30,86 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const environmentSchemaCreate = z.object({
+  accessToken: z.string(),
+})
+
 const schema = z.object({
-  name: z.string().min(3),
-  category: z.string().min(3),
-  sub_category: z.string().min(3).nullable(),
-  description: z.string().min(3).nullable(),
-  code: z.string(),
-  sku: z.string().nullable(),
-  weight: z.string().nullable(),
-  unit: z.string().nullable(),
-  sale_value: z.string(),
-  cost_value: z.string(),
-  // finished_product: z.boolean().default(false),
-  control_stock: z.boolean().default(false),
-  min_stock: z.number().nullable(),
-  subtracts_from_raw_materials: z.boolean().default(false),
-  stock_event: z.enum(["input", "output"]).nullable(),
-  images: z.array(z.string()).nullable(),
-  image_color: z.string().nullable(),
+  name: z.string(),
+  categories: z.array(z.string()).min(1).default([]),
+  description: z.string().nullable(),
+  barcode: z.string().min(10),
+  code: z.string().min(4),
+  weight: stringToNumberSchema(),
+  unitId: stringToNumberSchema(),
+  price_sell: stringToNumberSchema(),
+  price_cost: stringToNumberSchema(),
+  stock: z.boolean().default(false),
+  removeFeedstockFromStock: z.boolean().default(false),
+  quantity: stringToNumberSchema(),
+  stock_min: stringToNumberSchema().nullable(),
+  stock_max: stringToNumberSchema().nullable(),
+  canBeResold: z.boolean().default(false),
+  manufacturer: z.boolean().default(false),
+  // status: z.enum(['active', 'inactive', 'pending', 'blocked']).default('active'),
+  supplierId: stringToNumberSchema().nullable(),
+  // images: z.array(z.object({
+  //   url: z.string(),
+  //   main: z.boolean()
+  // })).nullable(),
+  // stock_event: z.enum(["input", "output"]).nullable(),
+  // image_color: z.string().nullable(),
   // fiscal
   // supplier
   // brand
   // model
 })
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const accessToken = await AuthCookie.requireAuthCookie(request);
-  const data = Object.fromEntries(await request.formData())
-  const result = schema.safeParse(data);
-  console.log(data)
-
-  if (!result.success) {
-    return json({ error: result.error });
-  }
-
-  const product = await new ProductCreate().create(String(accessToken), {
-    name: result.data.name,
-    category: result.data.category,
-    // sub_category: result.data.sub_category,
-    description: result.data.description,
-    code: result.data.code,
-    sku: result.data.sku,
-    weight: result.data.weight,
-    unit: result.data.unit,
-    sale_value: result.data.sale_value,
-    cost_value: result.data.cost_value,
-    finished_product: result.data.finished_product,
-    control_stock: result.data.control_stock,
-    // min_stock: result.data.min_stock,
-    subtracts_from_raw_materials: result.data.subtracts_from_raw_materials,
-    stock_event: result.data.stock_event,
-    images: result.data.images,
-    image_color: result.data.image_color,
-
+function stringToNumberSchema() {
+  return z.string().transform(value => {
+    const numberValue = Number(value);
+    return z.number().parse(numberValue)
   })
+}
 
-  return json(result);
-};
+const mutation = makeDomainFunction(schema, environmentSchemaCreate)(async (data, { accessToken }) => {
+
+  return new ProductCreate().create(String(accessToken), {
+    name: data.name,
+    categories: data.categories.map((category) => Number(category)),
+    description: String(data?.description),
+    barcode: data.barcode,
+    code: data.code,
+    weight: data.weight,
+    unitId: data.unitId ? Number(data.unitId) : null,
+    price_sell: data.price_sell,
+    price_cost: data.price_cost,
+    stock: data.stock,
+    stock_min: data.stock_min,
+    stock_max: data.stock_max,
+    removeFeedstockFromStock: Boolean(data.removeFeedstockFromStock),
+    quantity: data.quantity,
+    canBeResold: data.canBeResold,
+    manufacturer: data.manufacturer,
+    status: data.status,
+    supplierId: data.supplierId ? Number(data.supplierId) : null,
+    images: data?.images || [],
+  })
+})
+
+export const action: ActionFunction = async ({ request }) => {
+  const accessToken = await AuthCookie.requireAuthCookie(request);
+
+  return formAction({
+    request,
+    schema,
+    mutation,
+    environment: {
+      accessToken
+    },
+    successPath: '/products',
+  })
+}
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const accessToken = await AuthCookie.requireAuthCookie(request);
@@ -102,29 +127,31 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     label: category.name,
     value: String(category.id)
   })));
+  const supplierFetcher = new SupplierListAll().listAll(String(accessToken), {
+    page: 1,
+    perPage: 20
+  }).then((data) => data.results.map((supplier) => ({
+    label: supplier.name,
+    value: String(supplier.id)
+  })));
 
-  const [units, categories] = await Promise.all([unitsFetcher, categoriesFetcher] as const);
+  const [units, categories, suppliers] = await Promise.all([unitsFetcher, categoriesFetcher, supplierFetcher] as const);
 
-  return json({ units, categories });
+  return json({ units, categories, suppliers });
 };
 
 
 export default function Index() {
   const data = useActionData<typeof action>();
-  const formRef = useRef<HTMLFormElement>(null);
-  const { categories, units } = useLoaderData<typeof loader>();
+  const { categories, units, suppliers } = useLoaderData<typeof loader>();
   const [selectedCategoryList, setSelectedCategoryList] = useState<ComboBoxListType[]>([]);
   const [categoriesList, setCategoriesList] = useState<Array<{
     label: string;
     value: string;
   }>>(categories);
   const [selectedUnit, setSelectedUnit] = useState<ComboBoxListType | null>(null);
-  console.log('action:: ', data)
-  function handleChangeSwitch(field: string) {
-    return (value: boolean) => {
-      console.log(field, value)
-    }
-  }
+  const [selectedSupplier, setSelectedSupplier] = useState<ComboBoxListType | null>(null);
+  console.log('Index:action:: ', data)
 
   function addCategory(category: ComboBoxListType) {
     setSelectedCategoryList([...selectedCategoryList, category])
@@ -155,112 +182,202 @@ export default function Index() {
           backButtonLink="/products"
         />
 
-        <Form ref={formRef} method="post" className="px-2">
+        <Form schema={schema} >
+          {
+            ({ Field, Errors: GErrors, Button, register, Error: GError, setValue, watch }) => {
+              const categories = watch('categories')
 
-          <FormCard className="space-y-3">
-            <FormCard.Title>Identificação</FormCard.Title>
-            <fieldset className="flex-grow w-full">
-              <Label className="block mb-2 text-sm font-semibold ">Nome:</Label>
-              <Input required name="name" className="w-full" placeholder="Nome do produto..." />
-            </fieldset>
+              return (
+              <>
+                <GErrors />
+                <GError />
+                <FormCard className="space-y-3">
+                  <FormCard.Title>Identificação</FormCard.Title>
+                  <Field name="name" label="Nome:" required placeholder="Nome do produto..." />
+                  <Field name="categories" label="Categoria:" required>
+                    {
+                      ({ Label, Errors, ...props }) => (
+                        <>
+                          <Label>Categoria:</Label>
 
-            <fieldset className="flex-grow w-full">
-              <Label className="block mb-2 text-sm font-semibold ">Categoria:</Label>
-              <ComboBox selectedOption={{
-                label: "Escolha as categorias...",
-                value: selectedCategoryList.map((category) => category.value).join(",")
-              }} name="category" setSelectedOption={addCategory} options={categoriesList} />
-              {Boolean(selectedCategoryList.length) && (
-                <div className="mt-2 space-x-1 space-y-1">
-                  {
-                    selectedCategoryList.map((category) => (
-                      <Badge variant="outline" className="cursor-pointer animate-in" key={category.value} onClick={() => removeCategory(category)}>
-                        <LuXCircle className="w-4 h-4 mr-1 ml-[-7px]" />
-                        {category.label}
-                      </Badge>
-                    ))
-                  }
+                          <ComboBox {...props} label="Escolha as categorias..." options={categoriesList}
+                            setSelectedOption={(value) => {
+                              addCategory(value)
+                              setValue('categories', [...categories, value.value])
+                            }}
+                          />
+                          <div className="mt-2 space-x-1 space-y-1">
+                            {
+                              selectedCategoryList.map((category) => (
+                                <>
+                                  <Badge variant="outline" className="cursor-pointer animate-in" key={category.value} onClick={() => removeCategory(category)}>
+                                    <LuXCircle className="w-4 h-4 mr-1 ml-[-7px]" />
+                                    {category.label}
+                                  </Badge>
+                                  <input type="hidden" name="categories[]" value={category.value} />
+                                </>
+                              ))
+                            }
+                          </div>
+                          <Errors />
+                        </>
+                      )
+                    }
+                  </Field>
+                  <Field name="description" multiline label="Descrição:" placeholder="Texto descrevendo o produto" />
+                </FormCard>
+
+                <FormCard>
+                  <FormCard.Title>Códigos</FormCard.Title>
+                  <div className="flex flex-col gap-4 my-4 md:flex-row">
+                    <Field name="barcode" label="Código de barras:" placeholder="000000000" />
+                    <Field name="code" label="Código interno / SKU:" placeholder="ABCD0000" />
+                  </div>
+                </FormCard>
+
+                <FormCard>
+                  <FormCard.Title>Medida</FormCard.Title>
+                  <div className="flex flex-col gap-4 my-4 md:flex-row">
+                    <Field name="weight" label="Peso / Quantidade:" placeholder="000000000" />
+                    <Field name="unitId" label="Unidade:">
+                      {
+                        ({ Label, Errors, ...props }) => (
+                          <>
+                            <Label>Unidade de medida:</Label>
+                            <ComboBox {...props} options={units} selectedOption={selectedUnit} setSelectedOption={setSelectedUnit} />
+                            <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+                  </div>
+                </FormCard>
+
+                <FormCard>
+                  <FormCard.Title>Financeiro</FormCard.Title>
+                  <div className="flex flex-col gap-4 my-4 md:flex-row">
+                    <Field name="price_sell" label="Valor de venda:" required placeholder="R$ 0,00">
+                      {
+                        ({ Label, Input, Errors }) => (
+                          <>
+                            <Label className="block mb-2 text-sm font-semibold ">
+                              Valor de venda: <Link to="" className="text-[10px] text-blue-600 underline">Precisa de ajuda para calcular?</Link>
+                            </Label>
+                            <Input />
+                            <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+                    <Field name="price_cost" label="Valor de custo:" required placeholder="R$ 0,00">
+                      {
+                        ({ Label, Input, Errors }) => (
+                          <>
+                            <Label className="block mb-2 text-sm font-semibold ">
+                              Valor de custo: <Link to="" className="text-[10px] text-blue-600 underline">Precisa de ajuda para calcular?</Link>
+                            </Label>
+                            <Input />
+                            <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+                  </div>
+                </FormCard>
+
+                <FormCard>
+                  <FormCard.Title>Estoque</FormCard.Title>
+                  <div className="space-y-4 md:w-full md:max-w-xs">
+                    <Field name="stock">
+                      {
+                        ({ Label, Errors }) => (
+                          <>
+                            <div className="flex items-center space-x-2">
+                              <Switch {...register('stock')} />
+                              <Label>Controlar estoque:</Label>
+                            </div>
+                            <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+
+                    <Field name="removeFeedstockFromStock">
+                      {
+                        ({ Label, Errors }) => (
+                          <>
+                            <div className="flex items-center space-x-2">
+                              <Switch {...register('removeFeedstockFromStock')} />
+                              <Label>Subtrair estoque de matéria primas</Label>
+                            </div>
+                            <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+
+                  </div>
+                  <Field className="mt-4" name="quantity" label="Quantidade:" required placeholder="0" />
+                  <div className="flex flex-col gap-4 my-4 md:flex-row">
+                    <Field name="stock_min" label="Estoque mínimo:" required placeholder="0" />
+                    <Field name="stock_max" label="Estoque máximo:" required placeholder="0" />
+                  </div>
+                </FormCard>
+
+                <FormCard>
+                  <FormCard.Title>Devolução</FormCard.Title>
+                    <Field name="canBeResold">
+                      {
+                        ({ Label, Errors }) => (
+                          <>
+                            <div className="flex items-center space-x-2">
+                              <Switch {...register('canBeResold')} />
+                              <Label>Após uma devolução, é possível revender o produto?</Label>
+                            </div>
+                          <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+                </FormCard>
+
+                <FormCard>
+                  <FormCard.Title>Produção</FormCard.Title>
+                    <Field name="manufacturer">
+                      {
+                        ({ Label, Errors }) => (
+                          <>
+                            <div className="flex items-center space-x-2">
+                              <Switch {...register('manufacturer')} />
+                              <Label>O produto é de produção própria?</Label>
+                            </div>
+                            <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+                    <Field name="supplierId" label="Fornecedor:" className="mt-4">
+                      {
+                        ({ Label, Errors, ...props }) => (
+                          <>
+                            <Label>Qual o fornecedor:</Label>
+                            <ComboBox {...props} options={suppliers} selectedOption={selectedSupplier} setSelectedOption={setSelectedSupplier} />
+                            <Errors />
+                          </>
+                        )
+                      }
+                    </Field>
+                </FormCard>
+
+
+                <div className="w-full max-w-[610px] m-auto mb-4 py-4 bottom-0 sticky">
+                  <Button type="submit" className="block w-full" variant="default" size="lg">
+                    Salvar
+                  </Button>
                 </div>
-              )}
-            </fieldset>
-
-            <fieldset className="w-full">
-              <Label className="block mb-2 text-sm font-semibold ">Descrição:</Label>
-              <Textarea name="description" className="w-full" placeholder="Texto descrevendo o produto" />
-            </fieldset>
-          </FormCard>
-
-          <FormCard>
-            <FormCard.Title>Códigos</FormCard.Title>
-            <div className="flex flex-col gap-4 my-4 md:flex-row">
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">Código de barras:</Label>
-                <Input required name="code" className="w-full" placeholder="000000000" />
-              </fieldset>
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">Código interno / SKU:</Label>
-                <Input required name="sku" className="w-full" placeholder="ABCD0000" />
-              </fieldset>
-            </div>
-          </FormCard>
-
-          <FormCard>
-            <FormCard.Title>Medida</FormCard.Title>
-            <div className="flex flex-col gap-4 my-4 md:flex-row">
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">Peso / Quantidade:</Label>
-                <Input required name="code" className="w-full" placeholder="000000000" />
-              </fieldset>
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">Unidade:</Label>
-                <ComboBox selectedOption={selectedUnit} name="unit" setSelectedOption={setSelectedUnit} options={units} />
-              </fieldset>
-            </div>
-          </FormCard>
-
-          <FormCard>
-            <FormCard.Title>Financeiro</FormCard.Title>
-            <div className="flex flex-col gap-4 my-4 md:flex-row">
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">
-                  Valor de venda: <Link to="" className="text-[10px] text-blue-600 underline">Precisa de ajuda para calcular?</Link>
-                </Label>
-                <Input required name="sale_value" className="w-full" placeholder="R$ 0,00" />
-              </fieldset>
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">
-                  Valor de custo: <Link to="" className="text-[10px] text-blue-600 underline">Precisa de ajuda para calcular?</Link>
-                </Label>
-                <Input required name="cost_value" className="w-full" placeholder="R$ 0,00" />
-              </fieldset>
-            </div>
-          </FormCard>
-
-          <FormCard>
-            <FormCard.Title>Estoque</FormCard.Title>
-            <div className="flex flex-col gap-4 my-4 md:flex-row">
-              <fieldset className="space-y-4 md:w-full md:max-w-xs">
-                <div className="flex items-center space-x-2">
-                  <Switch id="control_stock" onCheckedChange={handleChangeSwitch('control_stock')} />
-                  <Label className="text-xs" htmlFor="control_stock">Controlar estoque</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch id="subtracts_from_raw_materials" onCheckedChange={handleChangeSwitch('subtracts_from_raw_materials')} />
-                  <Label className="text-xs" htmlFor="subtracts_from_raw_materials">Subtrair estoque de matéria primas</Label>
-                </div>
-              </fieldset>
-              <fieldset className="md:w-full md:max-w-xs">
-                <Label className="block mb-2 text-sm font-semibold ">Estoque:</Label>
-                <Input required name="name" className="w-full" placeholder="0" />
-              </fieldset>
-            </div>
-          </FormCard>
-
-          <div className="w-full max-w-[610px] m-auto mb-4 py-4 bottom-0 sticky">
-            <Button type="submit" className="block w-full" variant="default" size="lg">
-              Salvar
-            </Button>
-          </div>
+              </>
+            )}
+          }
         </Form>
       </MasterPage.ContentFull>
     </MasterPage>

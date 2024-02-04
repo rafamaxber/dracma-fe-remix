@@ -45,7 +45,7 @@ type ComboBoxProps = {
   placeholderText?: string
   commandEmpty?: string
   selectedOption: ComboBoxListType | null
-  setSelectedOption: (status: ComboBoxListType | null) => void
+  setSelectedOption: (status: ComboBoxListType) => void
 }
 
 export function ComboBox({
@@ -68,11 +68,11 @@ export function ComboBox({
           <Button variant="outline" className="justify-between w-full shadow">
             {selectedOption ? <>{selectedOption.label}</> : <>{label}</>}
             <LuChevronDown className="ml-2" />
+            <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
           <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
-          <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
         </PopoverContent>
       </Popover>
     )
@@ -84,12 +84,12 @@ export function ComboBox({
         <Button variant="outline" className="justify-between w-full">
           {selectedOption ? <>{selectedOption.label}</> : <>{label}</>}
           <LuChevronDown className="ml-2" />
+          <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mt-4 border-t">
           <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
-          <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
         </div>
       </DrawerContent>
     </Drawer>

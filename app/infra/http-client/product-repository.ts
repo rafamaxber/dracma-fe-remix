@@ -1,9 +1,7 @@
-import { ListAllResponse } from "~/domain/general-types";
+import { ListAllResponse, ListAllFilterType } from "~/domain/general-types";
 import { dracmaApiClient } from "./setup.server";
 
-export type ProductQueryFilterDto = {
-  perPage?: number;
-  page?: number;
+export interface ProductQueryFilterDto extends ListAllFilterType {
   name?: string;
   category?: string;
   code?: string;
@@ -17,7 +15,7 @@ export interface ProductType {
   price_sell?: number
   price_cost: number
   manufacturer: boolean
-  barcode: number | null
+  barcode: string
   status: string
   quantity: number
   description: string
@@ -27,6 +25,7 @@ export interface ProductType {
   stock_max: number
   removeFeedstockFromStock: boolean
   updatedAt: string
+  unitId: number | null
   supplier: {
     id?: number
     name?: string
@@ -48,12 +47,8 @@ export interface ProductCreateDto extends Omit<ProductType, 'id' | 'updatedAt' |
     url: string,
     main: boolean
   }>
-  categories: Array<{
-    id: number
-  }>
-  supplier: {
-    id: number
-  }
+  categories: number[]
+  supplierId: number | null
 }
 
 export class ProductRepository {
