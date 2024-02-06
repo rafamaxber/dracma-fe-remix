@@ -38,15 +38,15 @@ export function CommandBar() {
   }, [])
 
   return (
-    <>
-      <Button variant="outline" className="relative justify-start w-full" onClick={() => setOpen(true)}>
+    <div className="flex justify-end w-full">
+      <Button variant="outline" className="relative justify-start w-full md:w-80" onClick={() => setOpen(true)}>
         <LuSearch className="w-4 h-4 mr-2" />
         <span className="hidden lg:inline-flex">Buscar ações</span>
         <span className="inline-flex lg:hidden">Buscar...</span>
         <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-7 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[12px] font-medium opacity-100 sm:flex"><span className="text-sm">⌘</span>K</kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Type a command or search..." />
+        <CommandInput placeholder="Busque o que desejar" />
         <CommandList>
           <CommandEmpty>Nenhum resultado encontrado</CommandEmpty>
           <CommandGroup>
@@ -78,6 +78,6 @@ export function CommandBar() {
           <CommandSeparator />
         </CommandList>
       </CommandDialog>
-    </>
+    </div>
   )
 }

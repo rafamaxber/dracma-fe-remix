@@ -1,22 +1,12 @@
 import { LuArrowLeft } from "react-icons/lu";
 import { Link } from "@remix-run/react";
-import { useMediaQuery } from "~/components/hooks/useMediaQuery"
 import { MobileSideBar } from "../navigation/MobileSideBar";
-import { DesktopSideBar } from "../navigation/DesktopSideBar";
 
 function MasterPage({ children }: { children: React.ReactNode }) {
-  const isDesktop = useMediaQuery("(min-width: 1024px)")
-
   return (
-    <main className="lg:flex">
+    <main className="">
 
-      {
-        isDesktop ? (
-          <DesktopSideBar />
-        ) : (
-          <MobileSideBar />
-        )
-      }
+      <MobileSideBar />
       {children}
     </main>
   )
