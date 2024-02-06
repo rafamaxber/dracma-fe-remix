@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LuCloud, LuLifeBuoy, LuLogOut, LuMenu, LuMoon, LuPlus, LuSun, LuUser, LuUserPlus, LuUsers } from "react-icons/lu";
+import { LuCloud, LuLifeBuoy, LuLogOut, LuMenu, LuMoon, LuPlus, LuSun, LuUser, LuUserPlus, LuUsers, LuX } from "react-icons/lu";
 import { AvatarIcon } from "./AvatarIcon";
 import { CommandBar } from "./CommandBar";
 import { NotificationIcon } from "./NotificationIcon";
@@ -34,7 +34,13 @@ export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNam
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center justify-between gap-4 p-2">
-        <LuMenu size="28px" className="text-slate-500" onClick={handleOpenMenu} />
+        {
+          openedMenu ? (
+            <LuX size="28px" className="text-slate-500 w-7" />
+            ) : (
+            <LuMenu size="28px" className="text-slate-500 w-7" onClick={handleOpenMenu} />
+          )
+        }
         <CommandBar />
         <NotificationIcon size="28px" hasNewMessages={hasNewMessages} />
         <Menu>
@@ -42,7 +48,7 @@ export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNam
         </Menu>
       </div>
       {openedMenu && (
-        <div ref={ref} className="fixed border-r shadow-sm z-10 left-0 top-0 side-bar-mobile h-screen bottom-0 p-2 w-[300px] overflow-y-auto overflow-auto border-border/40 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/95">
+        <div ref={ref} className="fixed border-t border-r shadow-sm z-10 left-0 side-bar-mobile h-screen top-[64px] sm:top-14 p-2 w-[300px] overflow-y-auto overflow-auto border-border/40 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/95">
           <SideBarNavigation />
         </div>
       )}

@@ -16,7 +16,7 @@ MasterPage.displayName = "MasterPage";
 function ContentDefault({ children }: { children: React.ReactNode }) {
   return (
     <div className="sm:max-w-[2070px] mx-auto sm:min-w-[800px] w-[100%]">
-      <div className="p-2 mx-2 mt-2 rounded sm:mt-4 sm:py-8 sm:mx-4">
+      <div className="p-2 py-6 mx-2 rounded lg:py-8 sm:mx-4">
         {children}
       </div>
     </div>
@@ -43,7 +43,7 @@ function HeaderDefault({
   children?: React.ReactNode
 }) {
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center justify-between mb-10">
       <h1 className="text-lg font-semibold sm:text-2xl">{title}</h1>
       <div className="flex flex-row flex-wrap justify-end gap-3">
         {children}
