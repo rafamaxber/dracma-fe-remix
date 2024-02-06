@@ -1,5 +1,5 @@
 import { Separator } from "@radix-ui/react-separator";
-import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { ColumnDef } from "@tanstack/react-table";
 import { LuPlusCircle } from "react-icons/lu";
@@ -16,95 +16,50 @@ import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
 import { pageConfig } from "./page-config";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
+import { SupplierListAll } from "~/data/supplier/supplier-list-all";
+import { SupplierRepository } from "~/infra/http-client/supplier-repository";
 
-export interface Customer {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  document: string;
-}
-
-interface ResponseType {
-  data: Customer[];
-  query: QueryType;
+export interface SupplierType {
+  id: number
+  name: string
+  cnpj: string
+  email: string
+  phone: any
+  createdAt: string
 }
 
 export interface QueryType extends PaginationType {
   q?: string;
 }
 
-function deleteEntity({ id }: { id: string }) {
-  return new Response(JSON.stringify({
-    id,
-    message: 'Cliente excluído com sucesso!'
-  }), {
-    headers: {
-      "content-type": "application/json",
-    },
-    status: 201
-  })
-}
-
-export async function controller({ request }: LoaderFunctionArgs) {
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const accessToken = await AuthCookie.requireAuthCookie(request);
   const formData = await request.formData();
   const id = formData.get("id");
 
   if (String(request.method).toLocaleLowerCase() === "delete") {
-    return deleteEntity({ id: String(id) })
+    return new SupplierRepository().delete(String(accessToken), Number(id));
   }
 }
 
-export const action = async ({ request, context, params }: ActionFunctionArgs) =>
-  controller({ request, context, params })
-
-function getData(): Customer[] {
-  return [{
-    id: 1,
-    name: 'João',
-    email: 'j@gmail.com',
-    phone: '999999999',
-    document: '38509845590',
-  },
-  {
-    id: 2,
-    name: 'Maria',
-    email: 'm@gmail.com',
-    phone: '888888888',
-    document: '81509845590',
-  }];
-}
-
-export const loader = async ({ request, params, context }: LoaderFunctionArgs) => {
-  await AuthCookie.requireAuthCookie(request);
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const accessToken = await AuthCookie.requireAuthCookie(request);
 
   const url = request.url;
   const searchParams = new URL(url).searchParams;
-
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const data = getData()
-
-      resolve(
-        new Response(JSON.stringify({
-          data,
-          total: 1000,
-          offset: 0,
-          limit: 50,
-          query: {
-            q: searchParams.get("q") || null,
-          },
-        }), {
-          headers: {
-            "content-type": "application/json",
-          },
-        })
-      );
-    }, 1000);
+  const query = {
+    q: String(searchParams.get('q') || ''),
+  }
+  const result = await new SupplierListAll().listAll(String(accessToken), {
+    name: String(searchParams.get('q') || ''),
+    page: Number(searchParams.get('page') || 1),
+    perPage: Number(searchParams.get('perPage') || 10),
   });
+
+  return json({...result, query });
 };
 
-const dataTableColumns: ColumnDef<Customer>[] = [
+const dataTableColumns: ColumnDef<SupplierType>[] = [
   ...pageConfig.dataTableColumns,
   {
     id: 'actions',
@@ -120,7 +75,7 @@ const dataTableColumns: ColumnDef<Customer>[] = [
 ]
 
 export default function Index() {
-  const { data: dataProducts, query } = useLoaderData<ResponseType>();
+  const { pagination, results, query } = useLoaderData<typeof loader>();
 
   return (
     <DataTableMenuProvider editionPathPrefix={pageConfig.path}>
@@ -142,13 +97,13 @@ export default function Index() {
           }/>
 
           <div className="border rounded-md">
-            <DataTable columns={dataTableColumns} data={dataProducts} />
+            <DataTable columns={dataTableColumns} data={results} />
           </div>
 
           <Pagination
-            perPage={query.perPage}
-            page={query.page}
-            total={query.total}
+            perPage={pagination.perPage}
+            page={pagination.page}
+            total={pagination.total}
           />
 
         </MasterPage.ContentDefault>

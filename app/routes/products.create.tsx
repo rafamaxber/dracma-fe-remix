@@ -35,24 +35,24 @@ export const environmentSchemaCreate = z.object({
 })
 
 const schema = z.object({
-  name: z.string(),
+  name: z.string().min(3).max(255),
   categories: z.array(z.string()).min(1).default([]),
-  description: z.string().nullable(),
+  description: z.string().optional(),
   barcode: z.string().min(10),
   code: z.string().min(4),
-  weight: stringToNumberSchema(),
-  unitId: stringToNumberSchema(),
-  price_sell: stringToNumberSchema(),
-  price_cost: stringToNumberSchema(),
+  weight: z.number().int().min(0),
+  unitId: z.number().int().min(0),
+  price_sell: z.number().gt(0),
+  price_cost: z.number().gt(0),
   stock: z.boolean().default(false),
   removeFeedstockFromStock: z.boolean().default(false),
-  quantity: stringToNumberSchema(),
-  stock_min: stringToNumberSchema().nullable(),
-  stock_max: stringToNumberSchema().nullable(),
+  quantity: z.number().int().min(0),
+  stock_min: z.number().int().min(0).optional(),
+  stock_max: z.number().int().min(0).optional(),
   canBeResold: z.boolean().default(false),
   manufacturer: z.boolean().default(false),
   // status: z.enum(['active', 'inactive', 'pending', 'blocked']).default('active'),
-  supplierId: stringToNumberSchema().nullable(),
+  supplierId: z.number().int().min(0),
   // images: z.array(z.object({
   //   url: z.string(),
   //   main: z.boolean()
@@ -149,8 +149,12 @@ export default function Index() {
     label: string;
     value: string;
   }>>(categories);
-  const [selectedUnit, setSelectedUnit] = useState<ComboBoxListType | null>(null);
-  const [selectedSupplier, setSelectedSupplier] = useState<ComboBoxListType | null>(null);
+  const defaultComboBox = {
+    value: '',
+    label: ''
+  }
+  const [selectedUnit, setSelectedUnit] = useState<ComboBoxListType>(defaultComboBox);
+  const [selectedSupplier, setSelectedSupplier] = useState<ComboBoxListType>(defaultComboBox);
   console.log('Index:action:: ', data)
 
   function addCategory(category: ComboBoxListType) {
@@ -182,7 +186,7 @@ export default function Index() {
           backButtonLink="/products"
         />
 
-        <Form schema={schema} >
+        <Form schema={schema} pendingButtonLabel="Salvando...">
           {
             ({ Field, Errors: GErrors, Button, register, Error: GError, setValue, watch }) => {
               const categories = watch('categories')
@@ -200,7 +204,9 @@ export default function Index() {
                         <>
                           <Label>Categoria:</Label>
 
-                          <ComboBox {...props} label="Escolha as categorias..." options={categoriesList}
+                          <ComboBox {...props}
+                            label="Escolha as categorias..."
+                            options={categoriesList}
                             setSelectedOption={(value) => {
                               addCategory(value)
                               setValue('categories', [...categories, value.value])
@@ -241,11 +247,19 @@ export default function Index() {
                     <Field name="weight" label="Peso / Quantidade:" placeholder="000000000" />
                     <Field name="unitId" label="Unidade:">
                       {
-                        ({ Label, Errors, ...props }) => (
+                        ({ Label, Errors }) => (
                           <>
                             <Label>Unidade de medida:</Label>
-                            <ComboBox {...props} options={units} selectedOption={selectedUnit} setSelectedOption={setSelectedUnit} />
+                            <ComboBox
+                              options={units}
+                              selectedOption={selectedUnit}
+                              setSelectedOption={(value) => {
+                                setSelectedUnit(value)
+                                setValue('unitId', Number(value.value))
+                              }}
+                            />
                             <Errors />
+                            <input type="hidden" {...register('unitId')} />
                           </>
                         )
                       }
@@ -358,11 +372,19 @@ export default function Index() {
                     </Field>
                     <Field name="supplierId" label="Fornecedor:" className="mt-4">
                       {
-                        ({ Label, Errors, ...props }) => (
+                        ({ Label, Errors }) => (
                           <>
                             <Label>Qual o fornecedor:</Label>
-                            <ComboBox {...props} options={suppliers} selectedOption={selectedSupplier} setSelectedOption={setSelectedSupplier} />
+                            <ComboBox
+                              options={suppliers}
+                              selectedOption={selectedSupplier}
+                              setSelectedOption={(value) => {
+                                setSelectedSupplier(value)
+                                setValue('supplierId', Number(value.value))
+                              }}
+                            />
                             <Errors />
+                            <input type="hidden" {...register('supplierId')} />
                           </>
                         )
                       }

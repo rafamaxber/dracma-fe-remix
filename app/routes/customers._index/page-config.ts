@@ -35,6 +35,15 @@ export const pageConfig: PageConfigType = {
   ]
 }
 
+export const environmentSchemaCreate = z.object({
+  accessToken: z.string(),
+})
+
+export const environmentSchema = z.object({
+  accessToken: z.string(),
+  id: z.number(),
+})
+
 export const schema = z.object({
   name: z.string().min(3),
   email: z.string().email().nullable(),

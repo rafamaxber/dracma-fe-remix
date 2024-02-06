@@ -9,8 +9,8 @@ export interface ProductDataTable {
   stock_quantity: number;
   id: number;
   image: string;
-  stock_min: number;
-  stock_max: number;
+  stock_min?: number;
+  stock_max?: number;
   status: string;
   supplier: string;
   stock: boolean;

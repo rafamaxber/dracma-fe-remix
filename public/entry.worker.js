@@ -1961,6 +1961,13 @@ var require_route3 = __commonJS({
   }
 });
 
+// routes-module:routes/suppliers.$id_.edit.tsx?worker
+var require_suppliers_id_edit = __commonJS({
+  "routes-module:routes/suppliers.$id_.edit.tsx?worker"(exports, module) {
+    module.exports = {};
+  }
+});
+
 // routes-module:routes/categories._index/route.tsx?worker
 var require_route4 = __commonJS({
   "routes-module:routes/categories._index/route.tsx?worker"(exports, module) {
@@ -1999,6 +2006,13 @@ var require_customers_create = __commonJS({
 // routes-module:routes/suppliers._index/route.tsx?worker
 var require_route6 = __commonJS({
   "routes-module:routes/suppliers._index/route.tsx?worker"(exports, module) {
+    module.exports = {};
+  }
+});
+
+// routes-module:routes/suppliers.create.tsx?worker
+var require_suppliers_create = __commonJS({
+  "routes-module:routes/suppliers.create.tsx?worker"(exports, module) {
     module.exports = {};
   }
 });
@@ -6723,22 +6737,24 @@ var route3 = __toESM(require_route2());
 var route4 = __toESM(require_categories_id_edit());
 var route5 = __toESM(require_customers_id_edit());
 var route6 = __toESM(require_route3());
-var route7 = __toESM(require_route4());
-var route8 = __toESM(require_categories_create());
-var route9 = __toESM(require_action_set_theme());
-var route10 = __toESM(require_route5());
-var route11 = __toESM(require_customers_create());
-var route12 = __toESM(require_route6());
-var route13 = __toESM(require_route7());
-var route14 = __toESM(require_products_create());
-var route15 = __toESM(require_route8());
-var route16 = __toESM(require_categories_id());
-var route17 = __toESM(require_route9());
-var route18 = __toESM(require_index());
-var route19 = __toESM(require_logout());
+var route7 = __toESM(require_suppliers_id_edit());
+var route8 = __toESM(require_route4());
+var route9 = __toESM(require_categories_create());
+var route10 = __toESM(require_action_set_theme());
+var route11 = __toESM(require_route5());
+var route12 = __toESM(require_customers_create());
+var route13 = __toESM(require_route6());
+var route14 = __toESM(require_suppliers_create());
+var route15 = __toESM(require_route7());
+var route16 = __toESM(require_products_create());
+var route17 = __toESM(require_route8());
+var route18 = __toESM(require_categories_id());
+var route19 = __toESM(require_route9());
+var route20 = __toESM(require_index());
+var route21 = __toESM(require_logout());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-QTEVWBZO.js", "/build/manifest-D8898080.js", "/build/entry.client-XLH24P5Z.js", "/build/__remix_entry_dev-6MVRUNKX.js", "/build/routes/suppliers._index-3QMATLZB.js", "/build/routes/reset-password.$token-3TYKQ4BQ.js", "/build/routes/register._index-IQIFI3YH.js", "/build/routes/products.create-XVPA3LOL.js", "/build/routes/products._index-JCN6KDGK.js", "/build/routes/organization.create-OBG3U2LP.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-L3FJGXU6.js", "/build/routes/forgot-password._index-WNKA35BO.js", "/build/routes/customers.create-F66RSDI2.js", "/build/routes/customers._index-FRY5IM2K.js", "/build/routes/customers.$id_.edit-3WADSY5J.js", "/build/routes/categories.create-LMMKQ6EQ.js", "/build/routes/categories._index-WYH6R43I.js", "/build/routes/categories.$id_.edit-AZLZ6VUR.js", "/build/routes/categories.$id-CSWA6ZE3.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-DXGRW43C.js", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-W245ZYLB.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-Y4ARLSJS.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-XB63IJ5T.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-VZME5YH4.js", "/build/_shared/chunk-UW7QL3TY.js", "/build/_shared/chunk-QZQMSB4Y.js", "/build/_shared/chunk-QGKHTIQU.js", "/build/_shared/chunk-QA2Z5E2E.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-PXCRUEJY.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-MTYXSIS6.js", "/build/_shared/chunk-MICWTQ3O.js", "/build/_shared/chunk-LCHI3VDA.js", "/build/_shared/chunk-KXGP3KCR.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-IOM4H53A.js", "/build/_shared/chunk-IMOP7NVL.js", "/build/_shared/chunk-HWFPIN6U.js", "/build/_shared/chunk-DGB4DYNK.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-CEHSY5YA.js", "/build/_shared/chunk-BMD6WZNA.js", "/build/_shared/chunk-7VJGUC3D.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-3NFZM3F2.js", "/build/_shared/chunk-2QJY4JOV.js", "/build/_assets/tailwind-VMAU5MI7.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg"];
+var assets = ["/build/root-2Q25WKEG.js", "/build/manifest-55F05969.js", "/build/entry.client-JOIIQ352.js", "/build/__remix_entry_dev-PZAPHAVQ.js", "/build/routes/suppliers.create-3FBOXDNL.js", "/build/routes/suppliers._index-WMPMOKJA.js", "/build/routes/suppliers.$id_.edit-3JLE5DPX.js", "/build/routes/reset-password.$token-X4N6TY2R.js", "/build/routes/register._index-Q36OCNNB.js", "/build/routes/products.create-J66NBPZX.js", "/build/routes/products._index-ADNQABNZ.js", "/build/routes/organization.create-32EIIEFU.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-SOE2OS34.js", "/build/routes/forgot-password._index-4GFE3EB4.js", "/build/routes/customers.create-BQL6HZ3Z.js", "/build/routes/customers._index-BDAWPDY7.js", "/build/routes/customers.$id_.edit-XXGKLMVS.js", "/build/routes/categories.create-JDEM6BW2.js", "/build/routes/categories._index-BVQSQOWG.js", "/build/routes/categories.$id_.edit-27YE235W.js", "/build/routes/categories.$id-LWL42L7A.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-GB7VOPIQ.js", "/build/_assets/tailwind-VMAU5MI7.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-A6FAPIPE.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-Y5OKHUGG.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-VOWLWRIL.js", "/build/_shared/chunk-SG7HU7RP.js", "/build/_shared/chunk-RH7K45TN.js", "/build/_shared/chunk-Q5JTOA4A.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-MF7U7Q26.js", "/build/_shared/chunk-JULI2MY2.js", "/build/_shared/chunk-JS4L3IQR.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-IOM4H53A.js", "/build/_shared/chunk-IHDBENT3.js", "/build/_shared/chunk-HWFPIN6U.js", "/build/_shared/chunk-H5SQ42KV.js", "/build/_shared/chunk-G4OJBBFK.js", "/build/_shared/chunk-FOHGMWI6.js", "/build/_shared/chunk-FKBIQBQQ.js", "/build/_shared/chunk-EHZ3L4FJ.js", "/build/_shared/chunk-DQBHYTTV.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-CEHSY5YA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-4DGF4QRE.js", "/build/_shared/chunk-42GVARX5.js", "/build/_shared/chunk-2QJY4JOV.js", "/build/_shared/chunk-2PGHFVYW.js"];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {
@@ -6798,13 +6814,21 @@ var routes = {
     caseSensitive: void 0,
     module: route6
   },
+  "routes/suppliers.$id_.edit": {
+    id: "routes/suppliers.$id_.edit",
+    parentId: "root",
+    path: "suppliers/:id/edit",
+    index: void 0,
+    caseSensitive: void 0,
+    module: route7
+  },
   "routes/categories._index": {
     id: "routes/categories._index",
     parentId: "root",
     path: "categories",
     index: true,
     caseSensitive: void 0,
-    module: route7
+    module: route8
   },
   "routes/categories.create": {
     id: "routes/categories.create",
@@ -6812,7 +6836,7 @@ var routes = {
     path: "categories/create",
     index: void 0,
     caseSensitive: void 0,
-    module: route8
+    module: route9
   },
   "routes/action.set-theme": {
     id: "routes/action.set-theme",
@@ -6820,7 +6844,7 @@ var routes = {
     path: "action/set-theme",
     index: void 0,
     caseSensitive: void 0,
-    module: route9
+    module: route10
   },
   "routes/customers._index": {
     id: "routes/customers._index",
@@ -6828,7 +6852,7 @@ var routes = {
     path: "customers",
     index: true,
     caseSensitive: void 0,
-    module: route10
+    module: route11
   },
   "routes/customers.create": {
     id: "routes/customers.create",
@@ -6836,7 +6860,7 @@ var routes = {
     path: "customers/create",
     index: void 0,
     caseSensitive: void 0,
-    module: route11
+    module: route12
   },
   "routes/suppliers._index": {
     id: "routes/suppliers._index",
@@ -6844,7 +6868,15 @@ var routes = {
     path: "suppliers",
     index: true,
     caseSensitive: void 0,
-    module: route12
+    module: route13
+  },
+  "routes/suppliers.create": {
+    id: "routes/suppliers.create",
+    parentId: "root",
+    path: "suppliers/create",
+    index: void 0,
+    caseSensitive: void 0,
+    module: route14
   },
   "routes/products._index": {
     id: "routes/products._index",
@@ -6852,7 +6884,7 @@ var routes = {
     path: "products",
     index: true,
     caseSensitive: void 0,
-    module: route13
+    module: route15
   },
   "routes/products.create": {
     id: "routes/products.create",
@@ -6860,7 +6892,7 @@ var routes = {
     path: "products/create",
     index: void 0,
     caseSensitive: void 0,
-    module: route14
+    module: route16
   },
   "routes/register._index": {
     id: "routes/register._index",
@@ -6868,7 +6900,7 @@ var routes = {
     path: "register",
     index: true,
     caseSensitive: void 0,
-    module: route15
+    module: route17
   },
   "routes/categories.$id": {
     id: "routes/categories.$id",
@@ -6876,7 +6908,7 @@ var routes = {
     path: "categories/:id",
     index: void 0,
     caseSensitive: void 0,
-    module: route16
+    module: route18
   },
   "routes/login._index": {
     id: "routes/login._index",
@@ -6884,7 +6916,7 @@ var routes = {
     path: "login",
     index: true,
     caseSensitive: void 0,
-    module: route17
+    module: route19
   },
   "routes/_index": {
     id: "routes/_index",
@@ -6892,7 +6924,7 @@ var routes = {
     path: void 0,
     index: true,
     caseSensitive: void 0,
-    module: route18
+    module: route20
   },
   "routes/logout": {
     id: "routes/logout",
@@ -6900,7 +6932,7 @@ var routes = {
     path: "logout",
     index: void 0,
     caseSensitive: void 0,
-    module: route19
+    module: route21
   }
 };
 var entry = { module: entry_worker_exports };

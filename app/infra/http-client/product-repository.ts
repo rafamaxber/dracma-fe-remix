@@ -21,8 +21,8 @@ export interface ProductType {
   description: string
   weight: number
   stock: boolean
-  stock_min: number
-  stock_max: number
+  stock_min?: number
+  stock_max?: number
   removeFeedstockFromStock: boolean
   updatedAt: string
   unitId: number | null

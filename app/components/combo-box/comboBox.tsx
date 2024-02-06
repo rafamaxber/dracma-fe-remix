@@ -44,8 +44,9 @@ type ComboBoxProps = {
   defaultValue?: string
   placeholderText?: string
   commandEmpty?: string
-  selectedOption: ComboBoxListType | null
+  selectedOption: ComboBoxListType
   setSelectedOption: (status: ComboBoxListType) => void
+  withHiddenInput?: boolean
 }
 
 export function ComboBox({
@@ -57,22 +58,35 @@ export function ComboBox({
   commandEmpty = "Nenhum resultado encontrado",
   selectedOption,
   setSelectedOption,
+  withHiddenInput = false,
 }: ComboBoxProps) {
   const [open, setOpen] = useState(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
+
+  function renderLabel() {
+    if (selectedOption?.label) {
+      return selectedOption.label
+    }
+
+    if (selectedOption?.value) {
+      return selectedOption?.value
+    }
+
+    return label;
+  }
 
   if (isDesktop) {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" className="justify-between w-full shadow">
-            {selectedOption ? <>{selectedOption.label}</> : <>{label}</>}
+            {renderLabel()}
             <LuChevronDown className="ml-2" />
-            <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
+            {withHiddenInput && <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="start">
-          <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
+          <ComboBoxList setOpen={setOpen} setSelectedOption={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
         </PopoverContent>
       </Popover>
     )
@@ -82,14 +96,14 @@ export function ComboBox({
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant="outline" className="justify-between w-full">
-          {selectedOption ? <>{selectedOption.label}</> : <>{label}</>}
+          {renderLabel()}
           <LuChevronDown className="ml-2" />
-          <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />
+          {withHiddenInput && <input type="hidden" name={name} value={selectedOption?.value} defaultValue={defaultValue} />}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <div className="mt-4 border-t">
-          <ComboBoxList setOpen={setOpen} setSelectedStatus={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
+          <ComboBoxList setOpen={setOpen} setSelectedOption={setSelectedOption} options={options} placeholderText={placeholderText} commandEmpty={commandEmpty} />
         </div>
       </DrawerContent>
     </Drawer>
@@ -98,13 +112,13 @@ export function ComboBox({
 
 function ComboBoxList({
   setOpen,
-  setSelectedStatus,
+  setSelectedOption,
   options,
   placeholderText,
   commandEmpty,
 }: {
   setOpen: (open: boolean) => void
-  setSelectedStatus: (status: ComboBoxListType | null) => void,
+  setSelectedOption: (status: ComboBoxListType) => void,
   options: ComboBoxListType[],
   placeholderText: string,
   commandEmpty: string,
@@ -121,8 +135,8 @@ function ComboBoxList({
               value={option.value}
               disabled={option.disabled}
               onSelect={(value) => {
-                setSelectedStatus(
-                  options.find((priority) => priority.value === value) || null
+                setSelectedOption(
+                  options.find((priority) => priority.value === value) as ComboBoxListType
                 )
                 setOpen(false)
               }}

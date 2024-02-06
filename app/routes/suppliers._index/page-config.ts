@@ -15,6 +15,7 @@ export const pageConfig: PageConfigType = {
     delete: `delete-${entity}`,
     search: `search-${entity}`,
   },
+  formViewTitleTxt: 'Visualizar fornecedor',
   formEditTitleTxt: 'Editar fornecedor',
   formCreateTitleTxt: 'Cadastro de fornecedor',
   formSubtitleTxt: 'Preencha os campos abaixo para cadastrar um novo fornecedor',
@@ -33,18 +34,27 @@ export const pageConfig: PageConfigType = {
       header: 'Telefone',
     },
     {
-      accessorKey: 'document',
+      accessorKey: 'cnpj',
       header: 'CPF/CNPJ',
     },
   ]
 }
 
+export const environmentSchemaCreate = z.object({
+  accessToken: z.string(),
+})
+
+export const environmentSchema = z.object({
+  accessToken: z.string(),
+  id: z.number(),
+})
+
 export const schema = z.object({
   name: z.string().min(3),
-  email: z.string().email().nullable(),
-  phone: z.string().nullable(),
-  document: z.string().nullable(),
-  description: z.string().nullable(),
+  email: z.string().email().optional(),
+  phone: z.string().optional(),
+  cnpj: z.string().optional(),
+  description: z.string().optional(),
 })
 
 export const formConfig: FormConfigListType = [
@@ -72,7 +82,7 @@ export const formConfig: FormConfigListType = [
       className: 'flex-[2]'
     },
     {
-      name: 'document',
+      name: 'cnpj',
       label: 'CPF/CNPJ',
       placeholder: '999.999.999-99',
       type: 'number',
