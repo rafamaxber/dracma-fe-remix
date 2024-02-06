@@ -34,24 +34,27 @@ export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNam
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex items-center justify-between gap-4 p-2">
-        {
-          openedMenu ? (
-            <LuX size="28px" className="text-slate-500 w-7" />
-            ) : (
-            <LuMenu size="28px" className="text-slate-500 w-7" onClick={handleOpenMenu} />
-          )
-        }
+        <div>
+          {openedMenu ? (
+              <LuX size="28px" className="text-slate-500 w-7" />
+              ) : (
+              <LuMenu size="28px" className="text-slate-500 w-7" onClick={handleOpenMenu} />
+          )}
+        </div>
         <CommandBar />
-        <NotificationIcon size="28px" hasNewMessages={hasNewMessages} />
+        <div>
+          <NotificationIcon size="28px" hasNewMessages={hasNewMessages} />
+        </div>
         <Menu>
           <AvatarIcon avatarUrl={avatarUrl} userName={userName} />
         </Menu>
       </div>
       {openedMenu && (
-        <div ref={ref} className="fixed border-t border-r shadow-sm z-10 left-0 side-bar-mobile h-screen top-[64px] sm:top-14 p-2 w-[300px] overflow-y-auto overflow-auto border-border/40 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/95">
+        <div ref={ref} className="fixed border-t border-r shadow-sm z-10 left-0 side-bar-mobile h-screen top-[64px] sm:top-14 p-2 w-[300px] overflow-y-auto overflow-auto border-border/40 bg-background">
           <SideBarNavigation />
         </div>
       )}
+      {openedMenu && <div className="fixed z-0 w-screen h-screen backdrop-blur bg-black/55"></div>}
     </header>
   );
 }
