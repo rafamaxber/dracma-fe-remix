@@ -62,13 +62,14 @@ function FormPageHeader({
   backButtonLink: string,
 }) {
   return (
-    <div className="px-2 bg-blue-950 mb-[-42px] md:mb-[-44px]">
-      <div className="w-full max-w-[610px] m-auto md:py-4 h-28 md:h-48 flex md:flex-col md:pt-10 justify-start">
-        <Link className="relative z-10 flex items-center justify-center w-8 h-8 mt-5 bg-white rounded-full text-blue-950 md:mt-0 md:hidden" to={backButtonLink}>
+    <div className="w-full dark:bg-grid-white/[0.2] bg-dot-black/[0.2] relative flex items-center justify-center">
+      <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_20%,white)]"></div>
+      <div className="w-full max-w-[610px] m-auto md:py-4 h-28 md:h-48 flex md:flex-col md:pt-10 justify-start relative z-20 py-8 text-4xl font-bold text-transparent sm:text-7xl bg-clip-text bg-gradient-to-b from-neutral-200 to-neutral-500">
+        <Link className="relative z-10 flex items-center justify-center w-8 h-8 mt-5 rounded-full bg-background text-foreground md:mt-0 md:hidden" to={backButtonLink}>
           <LuArrowLeft size="20" className="inline-block mr-1"/>
         </Link>
         <div className="absolute left-0 w-full text-center md:block md:text-left md:left-auto md:max-w-[610px] md:m-auto">
-          <h1 className="mt-5 text-xl font-semibold text-white md:mt-0 md:text-2xl">{title}</h1>
+          <h1 className="mt-5 text-xl font-semibold text-foreground md:mt-0 md:text-2xl">{title}</h1>
         </div>
       </div>
     </div>

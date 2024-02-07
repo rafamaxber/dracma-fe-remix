@@ -22,7 +22,6 @@ export const meta: MetaFunction = () => [
 ];
 
 const mutation = makeDomainFunction(schema)(async (body) => {
-console.log(body);
   try {
     const userRepository = new UserRepository();
     const result = await new ResetPassword(userRepository).execute(body)
@@ -61,9 +60,11 @@ export default function Index() {
     <div className="mx-4">
       <div className="max-w-[440px] sm:max-w-[1260px] m-auto rounded-2xl shadow-2xl overflow-hidden md:mt-20 mt-8">
         <div className="flex flex-row justify-center md:min-h-[600px] text-card-foreground">
+
           <div className="bg-black flex-[2] hidden sm:flex justify-center items-center">
             <img src={teamImage} alt="register" className="object-cover h-2/3" />
           </div>
+
           <div className="w-full max-w-[400px] md:max-w-none md:w-auto md:flex-[2] pb-10 md:pb-0 bg-card">
 
             <div className="w-full px-4 m-auto my-8 lg:px-0 lg:w-8/12">
