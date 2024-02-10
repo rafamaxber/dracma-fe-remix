@@ -19,20 +19,30 @@ export function Pagination({
 
   if (pages.length === 1) return null;
 
+  function hasNextPage() {
+    return (Number(page) + 1) <= totalPages;
+  }
+
+  function hasPreviousPage() {
+    if (Number(page) - 1 <= 0) return false;
+
+    return (Number(page) - 1) <= totalPages;
+  }
+
   return (
     <PaginationBase className="mt-4">
       <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious to={`?page=${page-1}`}>Previous</PaginationPrevious>
-        </PaginationItem>
+        {hasPreviousPage() && <PaginationItem>
+          <PaginationPrevious to={`?page=${+page-1}`}>Previous</PaginationPrevious>
+        </PaginationItem>}
         {pages.map((page) => (
           <PaginationItem key={page}>
-            <PaginationLink to={`?page=${page}`}>{page}</PaginationLink>
+            <PaginationLink to={`?page=${+page}`}>{page}</PaginationLink>
           </PaginationItem>
         ))}
-        <PaginationItem>
-          <PaginationNext to={`?page=${page+1}`}>Next</PaginationNext>
-        </PaginationItem>
+        {hasNextPage() && <PaginationItem>
+          <PaginationNext to={`?page=${+page+1}`}>Next</PaginationNext>
+        </PaginationItem>}
       </PaginationContent>
     </PaginationBase>
   )
