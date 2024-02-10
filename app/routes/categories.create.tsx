@@ -27,10 +27,10 @@ export const action: ActionFunction = async ({ request }) => {
     request,
     schema,
     mutation: mutation,
-    successPath: pageConfig.path,
+    successPath: request.url,
     environment: {
       accessToken,
-    }
+    },
   })
 }
 

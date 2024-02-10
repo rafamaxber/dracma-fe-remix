@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {
   LuSearch
@@ -13,12 +11,9 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from "~/components/ui/command"
-import { Input } from "../ui/input"
 import { Button } from "../ui/button"
-import { Link } from "lucide-react"
-import { useNavigate, useNavigation } from "@remix-run/react"
+import { useNavigate } from "@remix-run/react"
 import { navigationItems } from "./navigationItems"
 
 export function CommandBar() {
