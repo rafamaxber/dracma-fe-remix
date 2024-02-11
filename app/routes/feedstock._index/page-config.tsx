@@ -2,8 +2,35 @@ import { z } from "zod";
 import { routes } from "~/components/navigation/navigationItems";
 import { FormConfigListType, PageConfigType } from "~/lib/pageConfigTypes";
 
+export interface FeedstockType {
+  id: number;
+  name: string;
+  description: string;
+  unitId: number;
+  quantity: number;
+  stockQuantity: number;
+  supplierId: number;
+  price: number;
+  isFeedstock: boolean;
+}
+
+export interface FeedstockTypeList extends FeedstockType {
+  supplier: {
+    id: number;
+    name: string;
+  },
+  unit: {
+    id: number;
+    name: string;
+  }
+}
+
+export interface QueryType {
+  name: string;
+}
+
 const entity = 'feedstock';
-export const pageConfig: PageConfigType = {
+export const pageConfig: PageConfigType<FeedstockTypeList> = {
   entity: entity,
   path: routes.feedstock,
   createBtnTxt: 'Novo insumo',
@@ -24,6 +51,17 @@ export const pageConfig: PageConfigType = {
     {
       accessorKey: 'name',
       header: 'Nome',
+      cell: (props) => {
+        const { name, supplier: { name: supplierName } } = props.row.original;
+
+        return (
+          <>
+            <div className="mb-1 font-medium">{name}</div>
+            <div className="text-xs">{supplierName}</div>
+
+          </>
+        )
+      }
     },
     {
       accessorKey: 'stockQuantity',
@@ -35,11 +73,20 @@ export const pageConfig: PageConfigType = {
     },
     {
       accessorKey: 'isFeedstock',
-      header: 'Preço de compra',
+      header: 'É materia prima?',
+      cell: (props) => {
+        const { isFeedstock } = props.row.original;
+        return isFeedstock ? 'Sim' : 'Não'
+      }
     },
     {
       accessorKey: 'quantidade e peso',
       header: 'Quantidade unitária',
+      cell: (props) => {
+        const { quantity, unit: { name: unitName } } = props.row.original;
+
+        return `${quantity}${unitName}`
+      }
     },
   ]
 }
@@ -55,13 +102,13 @@ export const environmentSchema = z.object({
 
 export const schema = z.object({
   name: z.string().min(3),
-  description: z.string().min(3).max(252).optional(),
-  unitId: z.number().int().min(0),
-  quantity: z.number().int().positive(),
-  stockQuantity: z.number().int().positive(),
   supplierId: z.number().int().min(0).optional(),
+  description: z.string().min(3).max(252).optional(),
+  isFeedstock: z.boolean().optional(),
+  stockQuantity: z.number().int().positive(),
+  quantity: z.number().int().positive(),
+  unitId: z.number().int().min(0),
   price: z.number().gt(0),
-  isFeedstock: z.boolean().default(false).optional(),
 })
 
 export const formConfig: FormConfigListType = [
@@ -75,11 +122,17 @@ export const formConfig: FormConfigListType = [
       className: 'md:w-full'
     },
     {
+      name: 'price',
+      label: 'Preço de compra',
+      type: 'number',
+      className: 'flex-[2]'
+    },
+    {
       name: 'supplierId',
       label: 'Fornecedor',
       placeholder: 'jose@silva.com',
       type: 'combobox',
-      className: 'w-full'
+      className: 'flex-[2]'
     },
     {
       name: 'description',

@@ -7,31 +7,16 @@ import { LuPlusCircle } from "react-icons/lu";
 import { DataTable } from "~/components/data-table/DataTable";
 import { FilterBar } from "~/components/filter-bar/FilterBar";
 import MasterPage from "~/components/master-page/MasterPage";
-import { Pagination, PaginationType } from "~/components/pagination/Pagination";
+import { Pagination } from "~/components/pagination/Pagination";
 import { Button } from "~/components/ui/button";
 import { SearchForm } from "./SearchForm";
 import { DataTableMenuProvider } from "~/components/data-table/DataTableContext";
 import {  DataTableMenu } from "~/components/data-table/DataTableCells";
 import { DataTableMobileMenu } from "~/components/data-table/DataTableMobileMenu";
 import { DataTableConfirmDeleteDialog } from "~/components/data-table/DataTableConfirmDeleteDialog";
-import { pageConfig } from "./page-config";
+import { FeedstockTypeList, QueryType, pageConfig } from "./page-config";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
 import { CrudBaseRepository, RESOURCE_LIST } from "~/infra/http-client/crud-base-repository";
-
-export interface FeedstockType {
-  id: number;
-  name: string;
-  description: string;
-  unitId: number;
-  quantity: number;
-  stockQuantity: number;
-  supplierId: number;
-  price: number;
-}
-
-export interface QueryType {
-  name: string;
-}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const accessToken = await AuthCookie.requireAuthCookie(request);
@@ -51,7 +36,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const query = {
     q: String(searchParams.get('q') || ''),
   }
-  const result = await new CrudBaseRepository(RESOURCE_LIST.v1.feedstock, String(accessToken)).listAll<FeedstockType, QueryType>({
+  const result = await new CrudBaseRepository(RESOURCE_LIST.v1.feedstock, String(accessToken)).listAll<FeedstockTypeList, QueryType>({
     name: String(searchParams.get('q') || ''),
     page: Number(searchParams.get('page') || 1),
     perPage: Number(searchParams.get('perPage') || 10),
@@ -60,7 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({...result, query });
 };
 
-const dataTableColumns: ColumnDef<FeedstockType>[] = [
+const dataTableColumns: ColumnDef<FeedstockTypeList>[] = [
   ...pageConfig.dataTableColumns,
   {
     id: 'actions',

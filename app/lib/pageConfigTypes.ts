@@ -1,3 +1,5 @@
+import { ColumnDef } from "@tanstack/react-table"
+
 export interface FormConfigType {
   sectionTitle?: string,
   layout?: string,
@@ -11,7 +13,7 @@ export interface FormConfigType {
 }
 export type FormConfigListType = Array<FormConfigType>
 
-export interface PageConfigType {
+export interface PageConfigType<T> {
   entity: string,
   path: string,
   createBtnTxt: string,
@@ -28,8 +30,5 @@ export interface PageConfigType {
   formCreateTitleTxt: string,
   formSubtitleTxt: string,
   listTitleTxt: string,
-  dataTableColumns: Array<{
-    accessorKey: string,
-    header: string,
-  }>
+  dataTableColumns: ColumnDef<T>[]
 }
