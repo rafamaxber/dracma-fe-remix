@@ -149,3 +149,26 @@ function ComboBoxList({
     </Command>
   )
 }
+
+export function SingleComboBox({ options, defaultSelectedOption, onSelectedOption, name }: {
+  options: ComboBoxListType[],
+  defaultSelectedOption: ComboBoxListType,
+  onSelectedOption: (option: ComboBoxListType) => void,
+  name: string
+}) {
+  const { selectedOption, setSelectedOption } = useComboBox();
+
+  function handleSelectOption(option: ComboBoxListType) {
+    setSelectedOption(option);
+    onSelectedOption(option);
+  }
+
+  return (
+    <ComboBox
+      options={options}
+      selectedOption={selectedOption || defaultSelectedOption}
+      setSelectedOption={handleSelectOption}
+      name={name}
+    />
+  )
+}

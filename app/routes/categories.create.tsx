@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
     request,
     schema,
     mutation: mutation,
-    successPath: request.url,
+    successPath: pageConfig.path,
     environment: {
       accessToken,
     },

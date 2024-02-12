@@ -9,6 +9,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useRouteError,
 } from "@remix-run/react";
 import { useSWEffect , LiveReload } from '@remix-pwa/sw';
 import { useChangeLanguage } from "remix-i18next";
@@ -63,7 +64,7 @@ export default function AppWithProviders() {
 }
 
 export function App() {
-  useSWEffect();
+  // useSWEffect();
 
   const data = useLoaderData<typeof loader>()
   const { i18n } = useTranslation();
@@ -96,6 +97,29 @@ export function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const data = useLoaderData<typeof loader>()
+  const { i18n } = useTranslation();
+  const error = useRouteError();
+  console.log('useRouteError: \n');
+  console.error(error);
+  console.log('\n');
+
+  return (
+    <html lang={data.locale} dir={i18n.dir()}>
+      <head>
+        <title>Oh no!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body className="h-screen bg-customBg">
+      Error
+        <Scripts />
       </body>
     </html>
   );

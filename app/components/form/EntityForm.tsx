@@ -2,14 +2,13 @@ import { z } from "zod"
 import { FormCard } from "~/components/form-card/FormCard"
 import { Form } from "~/components/form/Form"
 import { PageConfigType, FormConfigListType } from "~/lib/pageConfigTypes"
-import { ComboBox, ComboBoxListType } from "../combo-box/comboBox"
-import { useState } from "react"
+import { ComboBoxListType, SingleComboBox } from "../combo-box/comboBox"
 import { Switch } from "../ui/switch"
 
 interface Props<T> {
   isEditing?: boolean,
-  formData?: Partial<T>,
-  pageConfig: PageConfigType,
+  formData?: any,
+  pageConfig: PageConfigType<T>,
   schema: z.ZodObject<any, any>,
   formConfig: FormConfigListType,
   formBuilderData?: {
@@ -29,7 +28,6 @@ export function EntityForm<T>({
     submit: isEditing ? pageConfig.updateTxt : pageConfig.createTxt,
     intent: isEditing ? pageConfig.intent.update : pageConfig.intent.create,
   }
-  const [selectedComboboxOptions, setSelectedComboboxOptions] = useState({})
   const comboboxDefaultValue = { label: 'Selecione', value: '' }
 
   function Layout({ type, children }: { type: string, children: React.ReactNode }) {
@@ -46,7 +44,7 @@ export function EntityForm<T>({
 
   return (
     <Form schema={schema} values={formData}>
-      {({ Field, Errors, Button, submit, register, setValue }) => {
+      {({ Field, Errors: GErrors, Button, submit, register, setValue }) => {
         const isLast = (index: number) => index === formConfig.length - 1
 
         const formFields = formConfig.map((row, i) => (
@@ -56,23 +54,19 @@ export function EntityForm<T>({
               {row.fields.map((field, i) => {
                 const isMultiline = field.type === 'textarea'
 
-                if (field.type === 'combobox') {
+                if (field.type === 'switch') {
                   return (
-                    <Field name={field.name} label={field.label} key={i} className={field.className}>
+                    <Field name={field.name} key={i}>
                       {
-                        ({ Label, Errors }) => (
+                        ({ Label, Errors, value }) => (
                           <>
-                            <Label>{field.label}</Label>
-                            <ComboBox
-                              options={formBuilderData && formBuilderData[field.name]}
-                              selectedOption={selectedComboboxOptions?.[field.name] || comboboxDefaultValue}
-                              setSelectedOption={(value) => {
-                                setSelectedComboboxOptions((prev) => ({ ...prev, [field.name]: value }))
-                                setValue(field.name, Number(value.value))
-                              }}
-                            />
+                            <div className="flex items-center space-x-2">
+                              <Switch {...register(field.name)} defaultChecked={value} onCheckedChange={(value) => {
+                                setValue(field.name, value)
+                              }} />
+                              <Label>{field.label}</Label>
+                            </div>
                             <Errors />
-                            <input type="hidden" {...register(field.name)} />
                           </>
                         )
                       }
@@ -80,17 +74,25 @@ export function EntityForm<T>({
                   )
                 }
 
-                if (field.type === 'switch') {
+                if (field.type === 'combobox') {
+                  const defaultSelectedOption = formBuilderData && formBuilderData[field.name]
+                    ?.find((option) => option.value === String(formData?.[field.name])) || comboboxDefaultValue
                   return (
-                    <Field name={field.name} key={i}>
+                    <Field name={field.name} label={field.label} key={i} className={field.className}>
                       {
                         ({ Label, Errors }) => (
                           <>
-                            <div className="flex items-center space-x-2">
-                              <Switch {...register(field.name)} />
-                              <Label>{field.label}</Label>
-                            </div>
+                            <Label>{field.label}</Label>
+                            <SingleComboBox
+                              name={field.name}
+                              options={formBuilderData ? formBuilderData[field.name] : [] as ComboBoxListType[]}
+                              defaultSelectedOption={defaultSelectedOption}
+                              onSelectedOption={(option: ComboBoxListType) => {
+                                setValue(field.name, Number(option.value))
+                              }}
+                            />
                             <Errors />
+                            <input type="hidden" {...register(field.name)} />
                           </>
                         )
                       }
@@ -131,7 +133,7 @@ export function EntityForm<T>({
 
         return (
           <>
-            <Errors />
+            <GErrors />
             {formFields}
           </>
         )

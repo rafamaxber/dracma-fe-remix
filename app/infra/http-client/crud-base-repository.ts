@@ -39,7 +39,7 @@ export class CrudBaseRepository {
   }
 
   async delete(id: number): Promise<void> {
-    await dracmaApiClient.delete(`${this.resource}/${id}`, {
+    return dracmaApiClient.delete(`${this.resource}/${id}`, {
       headers: {
         Authorization: `Bearer ${this.accessToken}`
       }
@@ -47,7 +47,7 @@ export class CrudBaseRepository {
   }
 
   async update<Data>(id: number, values: Data): Promise<void> {
-    await dracmaApiClient.patch(`${this.resource}/${id}`, values, {
+    return dracmaApiClient.patch(`${this.resource}/${id}`, values, {
       headers: {
         Authorization: `Bearer ${this.accessToken}`
       },

@@ -2,20 +2,33 @@ import { ActionFunction, LoaderFunctionArgs, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import MasterPage from "~/components/master-page/MasterPage";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
-import { pageConfig, schema, environmentSchema } from "./feedstock._index/page-config";
+import { pageConfig, schema, environmentSchema, FeedstockType } from "./feedstock._index/page-config";
 import { Form } from "./feedstock._index/Form";
-import { makeDomainFunction } from "domain-functions";
+import { makeDomainFunction,  } from "domain-functions";
 import { formAction } from "~/form-action.server";
 import { CrudBaseRepository, RESOURCE_LIST } from "~/infra/http-client/crud-base-repository";
-import { FeedstockType } from "./feedstock._index/route";
 import { MeasurementUnitsListAll } from "~/data/measurement-units/measurement-units-list-all";
 import { SupplierListAll } from "~/data/supplier/supplier-list-all";
+import z from "zod";
 
-const mutation = makeDomainFunction(schema, environmentSchema)(async (values, { accessToken, id }) =>
-  new CrudBaseRepository(
+const mutation = makeDomainFunction(schema, environmentSchema)(async (values, { accessToken, id }) => {
+  return new CrudBaseRepository(
     RESOURCE_LIST.v1.feedstock, String(accessToken)
-  ).update(id, values)
-)
+  ).update<z.infer<typeof schema>>(id, {
+    name: String(values?.name || ''),
+    description: String(values?.description || ''),
+    unitId: Number(values.unitId),
+    supplierId: Number(values.supplierId),
+    price: Number(values.price),
+    isFeedstock: Boolean(values.isFeedstock),
+    quantity: Number(values.quantity),
+    stockQuantity: Number(values.stockQuantity || 0),
+  }).catch((error) => {
+    const dataMessage = error.response.data?.message;
+    console.log('error.response.data:: ', dataMessage);
+    throw dataMessage;
+  });
+})
 
 export const action: ActionFunction = async ({ request, params }) => {
   const accessToken = await AuthCookie.requireAuthCookie(request);
@@ -30,7 +43,7 @@ export const action: ActionFunction = async ({ request, params }) => {
       accessToken,
       id: Number(id),
     }
-  })
+  });
 }
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
