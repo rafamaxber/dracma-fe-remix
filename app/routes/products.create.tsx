@@ -16,7 +16,7 @@ import { AuthCookie } from "~/data/auth/user-auth-cookie";
 import { CategoryListAll } from "~/data/category/category-list-all";
 import { MeasurementUnitsListAll } from "~/data/measurement-units/measurement-units-list-all";
 import { ProductCreate } from "~/data/product/product-create";
-import { makeDomainFunction } from "domain-functions";
+import { ResultError, makeDomainFunction } from "domain-functions";
 import { formAction } from "~/form-action.server";
 import { SupplierListAll } from "~/data/supplier/supplier-list-all";
 
@@ -52,7 +52,7 @@ const schema = z.object({
   canBeResold: z.boolean().default(false),
   manufacturer: z.boolean().default(false),
   // status: z.enum(['active', 'inactive', 'pending', 'blocked']).default('active'),
-  supplierId: z.number().int().min(0),
+  supplierId: z.number().int().min(0).optional(),
   // images: z.array(z.object({
   //   url: z.string(),
   //   main: z.boolean()
@@ -74,27 +74,36 @@ function stringToNumberSchema() {
 
 const mutation = makeDomainFunction(schema, environmentSchemaCreate)(async (data, { accessToken }) => {
 
-  return new ProductCreate().create(String(accessToken), {
-    name: data.name,
-    categories: data.categories.map((category) => Number(category)),
-    description: String(data?.description),
-    barcode: data.barcode,
-    code: data.code,
-    weight: data.weight,
-    unitId: data.unitId ? Number(data.unitId) : null,
-    price_sell: data.price_sell,
-    price_cost: data.price_cost,
-    stock: data.stock,
-    stock_min: data.stock_min,
-    stock_max: data.stock_max,
-    removeFeedstockFromStock: Boolean(data.removeFeedstockFromStock),
-    quantity: data.quantity,
-    canBeResold: data.canBeResold,
-    manufacturer: data.manufacturer,
-    status: data.status,
-    supplierId: data.supplierId ? Number(data.supplierId) : null,
-    images: data?.images || [],
-  })
+  try {
+    const result = await new ProductCreate().create(String(accessToken), {
+      name: data.name,
+      categories: data.categories.map((category) => Number(category)),
+      description: String(data?.description || ''),
+      barcode: data.barcode,
+      code: data.code,
+      weight: data.weight,
+      unitId: Number(data.unitId),
+      price_sell: data.price_sell,
+      price_cost: data.price_cost,
+      stock: data.stock,
+      stock_min: data.stock_min,
+      stock_max: data.stock_max,
+      removeFeedstockFromStock: Boolean(data?.removeFeedstockFromStock),
+      quantity: data.quantity,
+      canBeResold: Boolean(data?.canBeResold),
+      manufacturer: Boolean(data?.manufacturer),
+      status: 'active',
+      supplierId: data.supplierId ? Number(data.supplierId) : null,
+      images: data?.images || [],
+    })
+
+    return result;
+  } catch (error) {
+    console.error('error: ', error)
+    throw new ResultError({
+      errors: [{ message: 'Erro ao criar produto' }],
+    })
+  }
 })
 
 export const action: ActionFunction = async ({ request }) => {

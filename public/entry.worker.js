@@ -2073,6 +2073,13 @@ var require_route10 = __commonJS({
   }
 });
 
+// routes-module:routes/order.create.tsx?worker
+var require_order_create = __commonJS({
+  "routes-module:routes/order.create.tsx?worker"(exports, module) {
+    module.exports = {};
+  }
+});
+
 // routes-module:routes/_index.tsx?worker
 var require_index = __commonJS({
   "routes-module:routes/_index.tsx?worker"(exports, module) {
@@ -6774,11 +6781,12 @@ var route19 = __toESM(require_products_create());
 var route20 = __toESM(require_route9());
 var route21 = __toESM(require_categories_id());
 var route22 = __toESM(require_route10());
-var route23 = __toESM(require_index());
-var route24 = __toESM(require_logout());
+var route23 = __toESM(require_order_create());
+var route24 = __toESM(require_index());
+var route25 = __toESM(require_logout());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-VYATMDEA.js", "/build/manifest-1C698D4E.js", "/build/entry.client-Y46SH5AQ.js", "/build/__remix_entry_dev-GDTVHVA7.js", "/build/routes/suppliers.create-6YYZY22X.js", "/build/routes/suppliers._index-55PNZIR4.js", "/build/routes/suppliers.$id_.edit-3PEPVLZT.js", "/build/routes/reset-password.$token-WQBS4V6E.js", "/build/routes/register._index-LWER4RPI.js", "/build/routes/products.create-66UTREV5.js", "/build/routes/products._index-E2UOHTB5.js", "/build/routes/organization.create-H6YHO34Z.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-ZMEVYWTQ.js", "/build/routes/forgot-password._index-OLIPHY3F.js", "/build/routes/feedstock.create-2JGL65U3.js", "/build/routes/feedstock._index-JIQS3ZHX.js", "/build/routes/feedstock.$id_.edit-HPD46YM5.js", "/build/routes/customers.create-A6H4INJ3.js", "/build/routes/customers._index-NJFSSNTS.js", "/build/routes/customers.$id_.edit-T4OU7LMH.js", "/build/routes/categories.create-NGALHNHW.js", "/build/routes/categories._index-BSRSVRSH.js", "/build/routes/categories.$id_.edit-VL2ZX2ZX.js", "/build/routes/categories.$id-QSKV7YBA.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-AEX2MQHX.js", "/build/_assets/tailwind-NMMCUAFM.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-A6FAPIPE.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-WOOQY2VK.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-V2NJISEW.js", "/build/_shared/chunk-TMYR57CX.js", "/build/_shared/chunk-RZFLPGJT.js", "/build/_shared/chunk-RSR3V4W3.js", "/build/_shared/chunk-RMURQGTA.js", "/build/_shared/chunk-RMEKWMDG.js", "/build/_shared/chunk-RH7K45TN.js", "/build/_shared/chunk-QKEVML5V.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-PRPSTIYK.js", "/build/_shared/chunk-PHET6TMY.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-LCNQ3UPJ.js", "/build/_shared/chunk-KSILMYPM.js", "/build/_shared/chunk-KASNDWDT.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-J6HLBLU3.js", "/build/_shared/chunk-ISPTN3EA.js", "/build/_shared/chunk-G3TZGBBD.js", "/build/_shared/chunk-FFWOOSSB.js", "/build/_shared/chunk-EZAOE2CI.js", "/build/_shared/chunk-EHZ3L4FJ.js", "/build/_shared/chunk-DMBIDZ3I.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-BRZZNC4C.js", "/build/_shared/chunk-BMD6WZNA.js", "/build/_shared/chunk-AXSEPESD.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-63JR4SOE.js", "/build/_shared/chunk-5WUULYDK.js", "/build/_shared/chunk-2QJY4JOV.js"];
+var assets = ["/build/root-LDB373NE.js", "/build/manifest-88B7BF72.js", "/build/entry.client-LGYMBNZ5.js", "/build/__remix_entry_dev-RIE2FCQO.js", "/build/_assets/tailwind-HJLNTWXL.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/routes/suppliers.create-EKF4FR4Q.js", "/build/routes/suppliers._index-ZY3P76SI.js", "/build/routes/suppliers.$id_.edit-FQGNCDBL.js", "/build/routes/reset-password.$token-AWCCVSPG.js", "/build/routes/register._index-GGTCETYB.js", "/build/routes/products.create-M3YV5Y5P.js", "/build/routes/products._index-TFHULD3W.js", "/build/routes/organization.create-EAVNIAKS.js", "/build/routes/order.create-B7J264LE.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-LJ2LAI3L.js", "/build/routes/forgot-password._index-LCAFY4BX.js", "/build/routes/feedstock.create-GJGPLI54.js", "/build/routes/feedstock._index-YVMUYUVF.js", "/build/routes/feedstock.$id_.edit-26QRWNKL.js", "/build/routes/customers.create-XJ6ZCKFF.js", "/build/routes/customers._index-NTDU7CNN.js", "/build/routes/customers.$id_.edit-M7TSFJ7F.js", "/build/routes/categories.create-RJ6KLVLK.js", "/build/routes/categories._index-EJ5IAGG3.js", "/build/routes/categories.$id_.edit-GJER2HNQ.js", "/build/routes/categories.$id-BZMYA45P.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-QQVYEH5W.js", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-A6FAPIPE.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-WTNA4ZJB.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-V362ZNNA.js", "/build/_shared/chunk-SLKGOFZM.js", "/build/_shared/chunk-RZFLPGJT.js", "/build/_shared/chunk-RRAFDOTW.js", "/build/_shared/chunk-RMURQGTA.js", "/build/_shared/chunk-RMEKWMDG.js", "/build/_shared/chunk-RH7K45TN.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-PRPSTIYK.js", "/build/_shared/chunk-P22BAKKO.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-N7VVVONB.js", "/build/_shared/chunk-LCNQ3UPJ.js", "/build/_shared/chunk-KSILMYPM.js", "/build/_shared/chunk-KDFERTU6.js", "/build/_shared/chunk-KASNDWDT.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-IZKTA2LV.js", "/build/_shared/chunk-F3V4YXQ3.js", "/build/_shared/chunk-EHZ3L4FJ.js", "/build/_shared/chunk-DYUC42OA.js", "/build/_shared/chunk-DMBIDZ3I.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-BQ6LC2ZH.js", "/build/_shared/chunk-BMD6WZNA.js", "/build/_shared/chunk-B3YHXDYZ.js", "/build/_shared/chunk-7WFH5LUA.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-6UQEC32G.js", "/build/_shared/chunk-6PN22ID3.js", "/build/_shared/chunk-2QJY4JOV.js", "/build/_shared/chunk-22E6X6SZ.js"];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {
@@ -6966,13 +6974,21 @@ var routes = {
     caseSensitive: void 0,
     module: route22
   },
+  "routes/order.create": {
+    id: "routes/order.create",
+    parentId: "root",
+    path: "order/create",
+    index: void 0,
+    caseSensitive: void 0,
+    module: route23
+  },
   "routes/_index": {
     id: "routes/_index",
     parentId: "root",
     path: void 0,
     index: true,
     caseSensitive: void 0,
-    module: route23
+    module: route24
   },
   "routes/logout": {
     id: "routes/logout",
@@ -6980,7 +6996,7 @@ var routes = {
     path: "logout",
     index: void 0,
     caseSensitive: void 0,
-    module: route24
+    module: route25
   }
 };
 var entry = { module: entry_worker_exports };

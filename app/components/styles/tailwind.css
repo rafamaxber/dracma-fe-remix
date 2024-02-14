@@ -71,6 +71,10 @@
   }
 }
 
+.h-real-full {
+  height: calc(100vh - 56px);
+}
+
 .search-input-combo-box:focus {
   box-shadow: none!important;
 }

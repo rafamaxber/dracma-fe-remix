@@ -32,7 +32,7 @@ export function MobileSideBar({ avatarUrl = 'https://i.pravatar.cc/100', userNam
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-14">
       <div className="flex items-center justify-between gap-4 p-2">
         <div>
           {openedMenu ? (
