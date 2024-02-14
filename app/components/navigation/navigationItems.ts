@@ -1,6 +1,7 @@
 export const routes = {
   dashboard: "/",
   register: "/register",
+  order: "/order",
   sales: "/sales",
   purchases: "/purchases",
   stock: "/stock",
@@ -36,6 +37,7 @@ export const navigationItems = [
       { label: "Outras receitas", url: routes.other_revenues },
     ]
   },
+  { id: 'orders', label: 'Pedidos', url: routes.order },
   { id: 'sales', label: 'Vendas', url: routes.sales },
   { id: 'purchases', label: 'Compras', url: routes.purchases },
   { id: 'stock', label: 'Estoque', url: routes.stock },
