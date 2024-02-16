@@ -49,7 +49,7 @@ export function CommandBar() {
               navigationItems.map((item, index) => {
                 if (item.id !== 'register') {
                   return (
-                    <CommandItem key={index} onSelect={(value) => navigate(value)} value={item.url}>
+                    <CommandItem key={index} onSelect={(value) => navigate(value)} value={item.label}>
                       <span>{item.label}</span>
                     </CommandItem>
                   )

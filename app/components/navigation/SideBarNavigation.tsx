@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { navigationItems } from "./navigationItems";
 import { NavLink } from "@remix-run/react";
+import { navigationItems } from "./navigationItems";
+import Logo from '~/components/logo.svg';
+import { Separator } from "../ui/separator";
 
 export function SideBarNavigation() {
   const [navigationState, setNavigationState] = useState<{ [key: string]: { visibility: boolean; }; }>({});
@@ -12,6 +14,12 @@ export function SideBarNavigation() {
 
   return (
     <nav>
+      <div className="w-full m-auto lg:w-8/12">
+        <img src={Logo} alt="logo" className="relative m-auto w-36" />
+      </div>
+
+      <Separator orientation="horizontal" className="w-full my-2" />
+
       <ul className="pl-4">
         {navigationItems.map((item) => (
           <li key={item.id}>

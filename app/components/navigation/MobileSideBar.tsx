@@ -125,9 +125,8 @@ export function Menu({ children }: { children: React.ReactNode }) {
           </DropdownMenuPortal>
         </DropdownMenuSub>
 
-
-
         <DropdownMenuSeparator />
+
         <DropdownMenuItem>
           <LuLogOut className="w-4 h-4 mr-2" />
           <Form className="block w-full" action="/logout" method="post">
