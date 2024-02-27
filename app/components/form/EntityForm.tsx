@@ -1,9 +1,12 @@
+import React from "react"
 import { z } from "zod"
 import { FormCard } from "~/components/form-card/FormCard"
 import { Form } from "~/components/form/Form"
 import { PageConfigType, FormConfigListType } from "~/lib/pageConfigTypes"
 import { ComboBoxListType, SingleComboBox } from "../combo-box/comboBox"
 import { Switch } from "../ui/switch"
+import { Uploader } from "./Uploader"
+import { Layout } from "./Layout"
 
 interface Props<T> {
   isEditing?: boolean,
@@ -23,27 +26,18 @@ export function EntityForm<T>({
   pageConfig,
   schema,
   formConfig,
+  ...props
 }: Props<T>) {
+
   const customFormData = {
     submit: isEditing ? pageConfig.updateTxt : pageConfig.createTxt,
     intent: isEditing ? pageConfig.intent.update : pageConfig.intent.create,
   }
   const comboboxDefaultValue = { label: 'Selecione', value: '' }
 
-  function Layout({ type, children }: { type: string, children: React.ReactNode }) {
-    if (type === 'flex-2') {
-      return (
-        <div className='flex-wrap gap-4 space-y-4 md:space-y-0 md:flex'>
-          {children}
-        </div>
-      )
-    }
-
-    return children;
-  }
 
   return (
-    <Form schema={schema} values={formData}>
+    <Form {...props} schema={schema} values={formData}>
       {({ Field, Errors: GErrors, Button, submit, register, setValue }) => {
         const isLast = (index: number) => index === formConfig.length - 1
 
@@ -93,6 +87,22 @@ export function EntityForm<T>({
                             />
                             <Errors />
                             <input type="hidden" {...register(field.name)} />
+                          </>
+                        )
+                      }
+                    </Field>
+                  )
+                }
+
+                if (field.type === 'file') {
+                  return (
+                    <Field name={field.name} label={field.label} key={i} className={field.className}>
+                      {
+                        ({ Label, Errors }) => (
+                          <>
+                            <Label />
+                            <Uploader id={field.name} {...register(field.name)} />
+                            <Errors />
                           </>
                         )
                       }

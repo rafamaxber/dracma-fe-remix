@@ -9,6 +9,7 @@ export interface FormConfigType {
     placeholder?: string,
     type?: string,
     className?: string,
+    isMultiple?: boolean,
   }>
 }
 export type FormConfigListType = Array<FormConfigType>

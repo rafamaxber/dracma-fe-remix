@@ -1,6 +1,7 @@
 import { TypedResponse, createCookie, redirect } from "@remix-run/node";
 import { routes } from "~/components/navigation/navigationItems";
 import { JwtService } from "./jtw";
+import { env } from "~/infra/env.server";
 
 export interface UserAuthType {
   id: string;
@@ -16,19 +17,19 @@ export type UserDataType = Pick<UserAuthType, 'firstName' | 'nickName'>;
 
 export class AuthCookie {
   static get() {
-    const secret = process.env.COOKIE_SECRET;
+    const secret = env.COOKIE_SECRET;
 
     if (!secret) {
       throw new Error("Missing COOKIE_SECRET environment variable");
     }
 
     return createCookie("auth", {
-      // domain: process.env.DOMAIN,
+      // domain: env.DOMAIN,
       httpOnly: true,
       path: "/",
       sameSite: "lax",
       secrets: [secret],
-      secure: process.env.NODE_ENV === "production",
+      secure: env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24, // 1 day
     });
   }
