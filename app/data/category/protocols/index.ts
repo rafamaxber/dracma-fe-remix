@@ -2,6 +2,8 @@ import { ListAllFilterType, ListAllResponse } from "~/domain/general-types";
 
 export type CategoryCreateDto = {
   name: string;
+  color?: string;
+  image?: string;
 }
 
 export interface CategoryFilterDto extends ListAllFilterType {

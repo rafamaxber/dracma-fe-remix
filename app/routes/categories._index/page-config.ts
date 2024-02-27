@@ -30,6 +30,8 @@ export const pageConfig: PageConfigType = {
 
 export const schema = z.object({
   name: z.string().min(2),
+  color: z.string().optional(),
+  images: z.string().optional(),
 })
 
 export const environmentSchema = z.object({
@@ -50,6 +52,20 @@ export const formConfig: FormConfigListType = [
       label: 'Categoria',
       placeholder: 'Bolo',
       className: 'md:w-full'
+    },
+    {
+      name: 'color',
+      label: 'Cor da categoria',
+      placeholder: '#ffe',
+      className: 'md:w-full',
+      type: 'color'
+    },
+    {
+      name: 'images',
+      label: 'Imagem da categoria',
+      className: 'md:w-full',
+      type: 'file',
+      isMultiple: true
     }]
   },
 ]

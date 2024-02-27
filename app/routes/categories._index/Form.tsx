@@ -7,7 +7,7 @@ interface Props {
   formData?: ProductCategoryResponse
 }
 
-export const Form = ({ isEditing, formData }: Props) => {
+export const Form = ({ isEditing, formData, ...props }: Props  & React.HTMLAttributes<HTMLFormElement>) => {
   return (
     <EntityForm<ProductCategoryResponse>
       isEditing={isEditing}
@@ -15,6 +15,7 @@ export const Form = ({ isEditing, formData }: Props) => {
       pageConfig={pageConfig}
       schema={schema}
       formConfig={formConfig}
+      {...props}
     />
   )
 }
