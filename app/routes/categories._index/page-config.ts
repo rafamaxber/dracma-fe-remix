@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { routes } from "~/components/navigation/navigationItems";
+import { ProductCategoryResponse } from "~/data/category/protocols";
 import { FormConfigListType, PageConfigType } from "~/lib/pageConfigTypes";
 
 const entity = 'category';
-export const pageConfig: PageConfigType = {
+export const pageConfig: PageConfigType<ProductCategoryResponse> = {
   entity: entity,
   path: routes.categories,
   createBtnTxt: 'Nova categoria',
@@ -30,6 +31,9 @@ export const pageConfig: PageConfigType = {
 
 export const schema = z.object({
   name: z.string().min(2),
+  color: z.string().optional(),
+  // images: z.instanceof(FileList).optional(),
+  images: z.unknown().optional(),
 })
 
 export const environmentSchema = z.object({
@@ -49,6 +53,17 @@ export const formConfig: FormConfigListType = [
       name: 'name',
       label: 'Categoria',
       placeholder: 'Bolo',
+      className: 'md:w-full'
+    }, {
+      name: 'color',
+      label: 'Cor',
+      placeholder: '#000000',
+      className: 'md:w-full'
+    }, {
+      name: 'images',
+      label: 'Imagens',
+      type: 'file',
+      accept: 'image/*',
       className: 'md:w-full'
     }]
   },

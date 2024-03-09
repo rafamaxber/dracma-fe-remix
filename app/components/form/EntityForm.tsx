@@ -4,6 +4,7 @@ import { Form } from "~/components/form/Form"
 import { PageConfigType, FormConfigListType } from "~/lib/pageConfigTypes"
 import { ComboBoxListType, SingleComboBox } from "../combo-box/comboBox"
 import { Switch } from "../ui/switch"
+import { Layout } from "./Layout"
 
 interface Props<T> {
   isEditing?: boolean,
@@ -29,18 +30,6 @@ export function EntityForm<T>({
     intent: isEditing ? pageConfig.intent.update : pageConfig.intent.create,
   }
   const comboboxDefaultValue = { label: 'Selecione', value: '' }
-
-  function Layout({ type, children }: { type: string, children: React.ReactNode }) {
-    if (type === 'flex-2') {
-      return (
-        <div className='flex-wrap gap-4 space-y-4 md:space-y-0 md:flex'>
-          {children}
-        </div>
-      )
-    }
-
-    return children;
-  }
 
   return (
     <Form schema={schema} values={formData}>

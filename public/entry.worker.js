@@ -2470,6 +2470,7 @@ function getUrlBasedHistory(getLocation, createHref, validateLocation, options) 
   function createURL(to) {
     let base = window2.location.origin !== "null" ? window2.location.origin : window2.location.href;
     let href = typeof to === "string" ? to : createPath(to);
+    href = href.replace(/ $/, "%20");
     invariant(base, "No window.location.(origin|href) available to create URL for href: " + href);
     return new URL(href, base);
   }
@@ -2558,16 +2559,8 @@ function matchRoutes(routes2, locationArg, basename) {
   rankRouteBranches(branches);
   let matches = null;
   for (let i = 0; matches == null && i < branches.length; ++i) {
-    matches = matchRouteBranch(
-      branches[i],
-      // Incoming pathnames are generally encoded from either window.location
-      // or from router.navigate, but we want to match against the unencoded
-      // paths in the route definitions.  Memory router locations won't be
-      // encoded here but there also shouldn't be anything to decode so this
-      // should be a safe operation.  This avoids needing matchRoutes to be
-      // history-aware.
-      safelyDecodeURI(pathname)
-    );
+    let decoded = decodePath(pathname);
+    matches = matchRouteBranch(branches[i], decoded);
   }
   return matches;
 }
@@ -2773,7 +2766,7 @@ function matchPath(pattern, pathname) {
     if (isOptional && !value) {
       memo[paramName] = void 0;
     } else {
-      memo[paramName] = safelyDecodeURIComponent(value || "", paramName);
+      memo[paramName] = (value || "").replace(/%2F/g, "/");
     }
     return memo;
   }, {});
@@ -2814,19 +2807,11 @@ function compilePath(path, caseSensitive, end) {
   let matcher = new RegExp(regexpSource, caseSensitive ? void 0 : "i");
   return [matcher, params];
 }
-function safelyDecodeURI(value) {
+function decodePath(value) {
   try {
-    return decodeURI(value);
+    return value.split("/").map((v) => decodeURIComponent(v).replace(/\//g, "%2F")).join("/");
   } catch (error) {
     warning(false, 'The URL path "' + value + '" could not be decoded because it is is a malformed URL segment. This is probably due to a bad percent ' + ("encoding (" + error + ")."));
-    return value;
-  }
-}
-function safelyDecodeURIComponent(value, paramName) {
-  try {
-    return decodeURIComponent(value);
-  } catch (error) {
-    warning(false, 'The value for the URL param "' + paramName + '" will not be decoded because' + (' the string "' + value + '" is a malformed URL segment. This is probably') + (" due to a bad percent encoding (" + error + ")."));
     return value;
   }
 }
@@ -3557,6 +3542,17 @@ function createRouter(init) {
         }
       });
     });
+    if (future.v7_partialHydration && initialHydration && state.errors) {
+      Object.entries(state.errors).filter((_ref2) => {
+        let [id] = _ref2;
+        return !matchesToLoad.some((m) => m.route.id === id);
+      }).forEach((_ref3) => {
+        let [routeId, error] = _ref3;
+        errors = Object.assign(errors || {}, {
+          [routeId]: error
+        });
+      });
+    }
     let updatedFetchers = markFetchRedirectsDone();
     let didAbortFetchLoads = abortStaleFetchLoads(pendingNavigationLoadId);
     let shouldUpdateFetchers = updatedFetchers || didAbortFetchLoads || revalidatingFetchers.length > 0;
@@ -4021,12 +4017,12 @@ function createRouter(init) {
       blockers
     });
   }
-  function shouldBlockNavigation(_ref2) {
+  function shouldBlockNavigation(_ref4) {
     let {
       currentLocation,
       nextLocation,
       historyAction
-    } = _ref2;
+    } = _ref4;
     if (blockerFunctions.size === 0) {
       return;
     }
@@ -4523,8 +4519,8 @@ function normalizeNavigateOptions(normalizeFormMethod, isFetcher, path, opts) {
       }
       let text = typeof opts.body === "string" ? opts.body : opts.body instanceof FormData || opts.body instanceof URLSearchParams ? (
         // https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#plain-text-form-data
-        Array.from(opts.body.entries()).reduce((acc, _ref3) => {
-          let [name, value] = _ref3;
+        Array.from(opts.body.entries()).reduce((acc, _ref5) => {
+          let [name, value] = _ref5;
           return "" + acc + name + "=" + value + "\n";
         }, "")
       ) : String(opts.body);
@@ -6786,7 +6782,7 @@ var route24 = __toESM(require_index());
 var route25 = __toESM(require_logout());
 
 // assets-module:@remix-pwa/dev?assets
-var assets = ["/build/root-WR7HKSC3.js", "/build/manifest-772289C8.js", "/build/entry.client-LGYMBNZ5.js", "/build/__remix_entry_dev-RIE2FCQO.js", "/build/_assets/tailwind-NCAGGO76.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/routes/suppliers.create-MW6RLGVW.js", "/build/routes/suppliers._index-53HTA66B.js", "/build/routes/suppliers.$id_.edit-VN7POZ66.js", "/build/routes/reset-password.$token-XPDS5IAB.js", "/build/routes/register._index-RVUQXU2J.js", "/build/routes/products.create-6X2TRRQN.js", "/build/routes/products._index-RDN6EP44.js", "/build/routes/organization.create-UB53ZG4S.js", "/build/routes/order.create-46IOO6CD.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-GFNDSV33.js", "/build/routes/forgot-password._index-TSKTIGLZ.js", "/build/routes/feedstock.create-NE6KFVI2.js", "/build/routes/feedstock._index-N7VSPX36.js", "/build/routes/feedstock.$id_.edit-HFL2FHM4.js", "/build/routes/customers.create-KJOPKCRB.js", "/build/routes/customers._index-N5CDIIRF.js", "/build/routes/customers.$id_.edit-XDQHNUUS.js", "/build/routes/categories.create-EFJOFDXL.js", "/build/routes/categories._index-DFFDZR6P.js", "/build/routes/categories.$id_.edit-SQ7OT6DQ.js", "/build/routes/categories.$id-YMBCL6JH.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-OXIGO7Q3.js", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-A6FAPIPE.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-ZMWBZEZF.js", "/build/_shared/chunk-YSJMGTXM.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XQLQXFPM.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-V7G7AX2M.js", "/build/_shared/chunk-UX4BJKSM.js", "/build/_shared/chunk-TTCCF4SF.js", "/build/_shared/chunk-TIDIDNTI.js", "/build/_shared/chunk-RH7K45TN.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-P3DKWF4V.js", "/build/_shared/chunk-OXQYITD6.js", "/build/_shared/chunk-OIGBW7MO.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NVUV4HBX.js", "/build/_shared/chunk-NL3MV7FM.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-MU7J5OQ4.js", "/build/_shared/chunk-LO7XWEJP.js", "/build/_shared/chunk-KASNDWDT.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-HEONRXCA.js", "/build/_shared/chunk-HCPISEGD.js", "/build/_shared/chunk-EHZ3L4FJ.js", "/build/_shared/chunk-DMBIDZ3I.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-BMD6WZNA.js", "/build/_shared/chunk-B4ZSVDBR.js", "/build/_shared/chunk-ASXDFRWX.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-6PN22ID3.js", "/build/_shared/chunk-6BALAISE.js", "/build/_shared/chunk-46LXPBAA.js", "/build/_shared/chunk-2QJY4JOV.js", "/build/_shared/chunk-2FPNZIWI.js"];
+var assets = ["/build/root-XR7SRXYV.js", "/build/manifest-B434E11B.js", "/build/entry.client-KC5EGTMG.js", "/build/__remix_entry_dev-UNK65IIB.js", "/build/routes/suppliers.create-EZL6N6X5.js", "/build/routes/suppliers._index-AUO5YICI.js", "/build/routes/suppliers.$id_.edit-EVZ647LF.js", "/build/routes/reset-password.$token-QM3QOOSJ.js", "/build/routes/register._index-AGK5XJP2.js", "/build/routes/products.create-RDJS6X34.js", "/build/routes/products._index-P4DWRVVG.js", "/build/routes/organization.create-6EHSAZSJ.js", "/build/routes/order.create-LRAXEB35.js", "/build/routes/manifest[.]webmanifest-5TSLQ42N.js", "/build/routes/logout-5GTPI7EF.js", "/build/routes/login._index-CLVIR3IW.js", "/build/routes/forgot-password._index-EL33YGUE.js", "/build/routes/feedstock.create-LPD2LH2Q.js", "/build/routes/feedstock._index-JRZBITXC.js", "/build/routes/feedstock.$id_.edit-662DYSTU.js", "/build/routes/customers.create-ODAWJ3QB.js", "/build/routes/customers._index-WSGAS3CA.js", "/build/routes/customers.$id_.edit-T3SI72DT.js", "/build/routes/categories.create-BXTU7V23.js", "/build/routes/categories._index-2VPXWXLC.js", "/build/routes/categories.$id_.edit-ZIPBA3N2.js", "/build/routes/categories.$id-7VWOAQ4C.js", "/build/routes/action.set-theme-IU7WWOLJ.js", "/build/routes/_index-5FH6VKL2.js", "/build/_assets/tailwind-VWYFFBWR.css", "/build/_assets/logo-AA7GT2MS.svg", "/build/_assets/img1-ZEDNPSJ4.svg", "/build/_assets/img1-CEVD3PPG.svg", "/build/_assets/img1-7KUROILZ.svg", "/build/_assets/img1-6ICCYPHW.svg", "/build/_assets/img1-4WCVI7CV.svg", "/build/_shared/runtime-AOYBQQV3.js", "/build/_shared/remix_hmr-VHB2BHKE.js", "/build/_shared/react-dom-KI7SRK6J.js", "/build/_shared/react-OSJATDAR.js", "/build/_shared/jsx-runtime-H4Z6N6S5.js", "/build/_shared/jsx-dev-runtime-6VDVYW7E.js", "/build/_shared/esm-R6JO7DVI.js", "/build/_shared/client-XOAAUMFP.js", "/build/_shared/chunk-ZY25L3ML.js", "/build/_shared/chunk-Z47XGMKE.js", "/build/_shared/chunk-XW5YMC3P.js", "/build/_shared/chunk-XNMGNL4S.js", "/build/_shared/chunk-XLQC3ZBF.js", "/build/_shared/chunk-WEAPBHQG.js", "/build/_shared/chunk-V2OVQWFC.js", "/build/_shared/chunk-TIDIDNTI.js", "/build/_shared/chunk-S4VZREOI.js", "/build/_shared/chunk-RHEJV3KK.js", "/build/_shared/chunk-QAJ2LALX.js", "/build/_shared/chunk-PZDJHGND.js", "/build/_shared/chunk-P4CNRPGW.js", "/build/_shared/chunk-OXQYITD6.js", "/build/_shared/chunk-OSAFQWYP.js", "/build/_shared/chunk-OIGBW7MO.js", "/build/_shared/chunk-OAPPX4FA.js", "/build/_shared/chunk-NL3MV7FM.js", "/build/_shared/chunk-NBK3JKR7.js", "/build/_shared/chunk-NBEH4DGX.js", "/build/_shared/chunk-LUJMQLB6.js", "/build/_shared/chunk-LORO7X2B.js", "/build/_shared/chunk-KLEXMDOD.js", "/build/_shared/chunk-KASNDWDT.js", "/build/_shared/chunk-JV3ZRGA5.js", "/build/_shared/chunk-JTV23V22.js", "/build/_shared/chunk-JR22VO6P.js", "/build/_shared/chunk-I4CERCDI.js", "/build/_shared/chunk-HQLM4CUK.js", "/build/_shared/chunk-HEONRXCA.js", "/build/_shared/chunk-GQ6IFJDB.js", "/build/_shared/chunk-DRUIJYHH.js", "/build/_shared/chunk-DMBIDZ3I.js", "/build/_shared/chunk-D7JSJFBB.js", "/build/_shared/chunk-CJ4MY3PQ.js", "/build/_shared/chunk-BMD6WZNA.js", "/build/_shared/chunk-A2EO3UGT.js", "/build/_shared/chunk-7PHB3BFD.js", "/build/_shared/chunk-74LLV22L.js", "/build/_shared/chunk-6PN22ID3.js", "/build/_shared/chunk-2QJY4JOV.js"];
 
 // entry-module:@remix-pwa/build/magic
 var routes = {
@@ -7229,7 +7225,7 @@ buffer/index.js:
 
 @remix-run/router/dist/router.js:
   (**
-   * @remix-run/router v1.15.0
+   * @remix-run/router v1.15.2
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7241,7 +7237,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/mode.js:
   (**
-   * @remix-run/server-runtime v2.6.0
+   * @remix-run/server-runtime v2.8.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7253,7 +7249,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/errors.js:
   (**
-   * @remix-run/server-runtime v2.6.0
+   * @remix-run/server-runtime v2.8.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -7265,7 +7261,7 @@ buffer/index.js:
 
 @remix-run/server-runtime/dist/responses.js:
   (**
-   * @remix-run/server-runtime v2.6.0
+   * @remix-run/server-runtime v2.8.0
    *
    * Copyright (c) Remix Software Inc.
    *
