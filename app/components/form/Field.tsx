@@ -1,9 +1,13 @@
 import { cn } from '~/lib/utils'
 
+type Props = {
+  className?: string
+} & JSX.IntrinsicElements['fieldset']
+
 export function Field({
   className,
   ...props
-}): JSX.IntrinsicElements['fieldset'] {
+}: Props) {
   return (
     <fieldset className={cn("flex-grow w-full", className)} {...props} />
   )
