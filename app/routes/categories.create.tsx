@@ -9,29 +9,17 @@ import {
   LoaderFunctionArgs,
   UploadHandler,
   UploadHandlerPart,
+  redirect,
+  LinksFunction,
 } from "@remix-run/node";
 import { useActionData } from "@remix-run/react";
 
-import { formAction } from '~/form-action.server'
 import MasterPage from '~/components/master-page/MasterPage'
 import { pageConfig, schema, environmentSchemaCreate } from './categories._index/page-config'
 import { Form } from './categories._index/Form'
 import { AuthCookie } from '~/data/auth/user-auth-cookie'
 import { CategoryCreate } from '~/data/category/category-create'
 import { uploadImage } from '~/lib/cloudinary-upload.server';
-
-const mutation = makeDomainFunction(schema, environmentSchemaCreate)(async (values, { accessToken }) => {
-  // console.log('makeDomainFunction:values:', values)
-  try {
-    // const result = await new CategoryCreate().create(accessToken, values);
-
-    // return result;
-  } catch (error) {
-    throw new ResultError({
-      errors: [{ message: 'Erro ao criar categoria' }],
-    })
-  }
-})
 
 export const action: ActionFunction = async ({ request }) => {
   const accessToken = await AuthCookie.requireAuthCookie(request);
@@ -47,16 +35,6 @@ export const action: ActionFunction = async ({ request }) => {
         return undefined;
       }
 
-//       const fileRoute = await uploadFiles({
-//         name,
-//         filename,
-//         data,
-//         contentType,
-//         bodyLength
-//       })
-// console.log('fileRoute => ', fileRoute)
-//       return fileRoute.key;
-
       const uploadedImage = await uploadImage(data);
 
       return uploadedImage.secure_url;
@@ -69,23 +47,19 @@ export const action: ActionFunction = async ({ request }) => {
 
   console.log('images:', images)
 
-  return formAction({
-    request,
-    schema,
-    mutation,
-    // transformValues(values) {
-    //   console.log('values:', values)
-    //   return {
-    //     color: values.color || '',
-    //     name: values.name || '',
-    //     images: values.images || '',
-    //   }
-    // },
-    // successPath: pageConfig.path,
-    environment: {
-      accessToken,
-    },
-  })
+  try {
+    const result = await new CategoryCreate().create(String(accessToken), {
+      name: String(formData.get('name')),
+      color: String(formData.get('color')),
+      images,
+    });
+
+    return redirect(pageConfig.path);
+  } catch (error) {
+    throw new ResultError({
+      errors: [{ message: 'Erro ao criar categoria' }],
+    })
+  }
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -93,6 +67,15 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return null;
 };
+
+export const links: LinksFunction = () => [
+  {
+    rel: "preload",
+    as: "script",
+    href: "https://widget.cloudinary.com/v2.0/global/all.js",
+    type: "text/javascript",
+  }
+]
 
 export default function Index() {
   return (
@@ -103,6 +86,12 @@ export default function Index() {
           backButtonLink={pageConfig.path}
         />
         <Form encType="multipart/form-data" />
+
+        <button
+          id="upload_widget"
+          className="cloudinary-button">
+            Upload files
+        </button>
       </MasterPage.ContentFull>
     </MasterPage>
   )
