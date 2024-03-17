@@ -7,7 +7,6 @@ import { Switch } from "../ui/switch"
 import { UploadWidget } from "../uploadWidget/UploadWidget"
 import { memo, useState } from "react"
 import { LuImagePlus, LuUpload } from "react-icons/lu"
-import { Button } from "../ui/button"
 
 interface Props<T> {
   isEditing?: boolean,

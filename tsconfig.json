@@ -1,21 +1,18 @@
 {
-  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx", "sw.ts"],
-  "ts-node": {
-    "compilerOptions": {
-      "target": "ES2022",
-      "module": "ES2020"
-    }
-  },
+  "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "sw.ts"],
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "types": ["@remix-run/node", "vite/client"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
     "resolveJsonModule": true,
     "target": "ES2022",
     "strict": true,
     "allowJs": true,
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {

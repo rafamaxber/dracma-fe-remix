@@ -53,10 +53,6 @@ export function UploadWidget({ children, onUpload }) {
     }
   }, [])
 
-  // return (
-  //   <Button onClick={open}>Upload</Button>
-  // )
-
   return children({
     widget,
     open,
