@@ -36,6 +36,10 @@ export const handle = {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const ENV = {
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_UPLOAD_PRESET: process.env.CLOUDINARY_UPLOAD_PRESET,
+  }
   const [userData, { getTheme }, locale] = await Promise.all([
     AuthCookie.getUserAuthData(request),
     themeSessionResolver(request),
@@ -46,6 +50,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     userData,
     locale,
     theme: getTheme(),
+    ENV,
   }
 }
 
@@ -97,6 +102,8 @@ export function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+
+        <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
       </body>
     </html>
   );
