@@ -4,6 +4,10 @@ import { Form } from "~/components/form/Form"
 import { PageConfigType, FormConfigListType } from "~/lib/pageConfigTypes"
 import { ComboBoxListType, SingleComboBox } from "../combo-box/comboBox"
 import { Switch } from "../ui/switch"
+import { UploadWidget } from "../uploadWidget/UploadWidget"
+import { memo, useState } from "react"
+import { LuImagePlus, LuUpload } from "react-icons/lu"
+import { Button } from "../ui/button"
 
 interface Props<T> {
   isEditing?: boolean,
@@ -14,6 +18,65 @@ interface Props<T> {
   formBuilderData?: {
     [keyName: string]: { label: string, value: string }[],
   }
+}
+
+function ImageUploadWidget({ field, formSetValue }) {
+  const [uploadError, setUploadError] = useState(null);
+  const [uploadResult, setUploadResult] = useState<Array<{ url?: string}>>([]);
+
+  function handleUpload(error, result) {
+    if (error) {
+      setUploadError(error);
+    } else {
+      setUploadResult(prev => [...prev, {
+        url: result.info.secure_url,
+      }]);
+      formSetValue(field.name, [
+        ...uploadResult.map(image => image.url),
+        result.info.secure_url,
+      ])
+    }
+  }
+
+  return (
+    <>
+      <UploadWidget onUpload={handleUpload}>
+        {({ open }) => (
+          <div className="space-x-2">
+            <a href="#" onClick={open} className="flex justify-between p-3 px-4 transition rounded-sm shadow-sm cursor-pointer bg-none outline-1 outline-dashed bg-blend-overlay outline-primary hover:outline-2">
+              <LuImagePlus size="30" />
+              <LuUpload  size="30" />
+            </a>
+            {uploadError ? <span className="text-red-500">{uploadError}</span> : null}
+          </div>
+        )}
+      </UploadWidget>
+      {
+        uploadResult.length > 0 ? (
+          <div className="flex flex-wrap items-start gap-1 mt-4">
+          {
+            uploadResult.map((image, index) => {
+              if (image?.url) {
+                return (
+                  <div className="p-4 border-2 rounded-sm shadow-sm w-36 border-primary" key={image.url}>
+                    <input
+                      type="hidden"
+                      name={`${field.name}[${index}]`}
+                      value={image.url}
+                    />
+                    <img src={image.url} alt="Imagem da categoria" />
+                  </div>
+                )
+              }
+
+              return null;
+            })
+          }
+          </div>
+        ) : null
+      }
+    </>
+  )
 }
 
 export function EntityForm<T>({
@@ -93,6 +156,22 @@ export function EntityForm<T>({
                             />
                             <Errors />
                             <input type="hidden" {...register(field.name)} />
+                          </>
+                        )
+                      }
+                    </Field>
+                  )
+                }
+
+                if (field.type === 'image-upload') {
+                  return (
+                    <Field name={field.name} label={field.label} key={i} className={field.className}>
+                      {
+                        ({ Label, Errors }) => (
+                          <>
+                            <Errors />
+                            <Label>{field.label}</Label>
+                            <ImageUploadWidget field={field} formSetValue={setValue} />
                           </>
                         )
                       }
