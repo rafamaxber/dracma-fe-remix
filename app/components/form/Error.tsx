@@ -1,4 +1,4 @@
-import { LuAlertCircle } from 'react-icons/lu'
+import { LuAlertCircle } from "react-icons/lu"
 
 import {
   Alert,
@@ -13,7 +13,6 @@ export function Error(props: JSX.IntrinsicElements['div']) {
 
 export function Errors(props: JSX.IntrinsicElements['div']) {
   return (
-
     <Alert variant="destructive" className={cn("w-full max-w-[610px] m-auto mb-4 py-4 bg-white rounded-md shadow-md p-4 relative", props.className)}>
       <LuAlertCircle className="w-4 h-4" />
       <AlertTitle>Erro:</AlertTitle>

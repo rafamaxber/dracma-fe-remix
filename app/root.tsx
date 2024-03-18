@@ -1,6 +1,5 @@
 import { PreventFlashOnWrongTheme, ThemeProvider, useTheme } from "remix-themes"
 
-import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import {
   Links,
@@ -11,12 +10,11 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import { useSWEffect , LiveReload } from '@remix-pwa/sw';
-import { useChangeLanguage } from "remix-i18next";
+import { useChangeLanguage } from "remix-i18next/react";
 import { useTranslation } from "react-i18next";
 
 import { themeSessionResolver } from "./sessions.server";
-import styles from "~/components/styles/tailwind.css";
+import styles from "~/components/styles/tailwind.css?url";
 import { cn } from "~/lib/utils";
 import { AuthCookie } from "~/data/auth/user-auth-cookie";
 import { UserDataProvider } from "~/components/user-auth-data";
@@ -24,7 +22,6 @@ import i18next from "~/i18next.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ]
 
 export const handle = {
@@ -101,7 +98,6 @@ export function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
 
         <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
       </body>
